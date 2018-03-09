@@ -13,15 +13,16 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.Dark" />
+            />
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".TransactionEntry"></activity>
+        <activity android:name=".TransactionConfirmActivity"></activity>
     </application>
 
 </manifest>

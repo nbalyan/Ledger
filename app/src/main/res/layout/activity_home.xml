@@ -4,37 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context="btventures.ledger.HomeActivity">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/RecDep"
         android:layout_width="250dp"
         android:layout_height="75dp"
-        android:layout_above="@+id/button3"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/LICbutton"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dp"
+        android:layout_alignStart="@+id/LICbutton"
         android:text="Recurring Deposit" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/FIXDep"
         android:layout_width="250dp"
         android:layout_height="75dp"
-        android:layout_above="@+id/button4"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/LICbutton"
+        android:layout_alignStart="@+id/LICbutton"
+        android:layout_below="@+id/RecDep"
         android:text="Fixed Deposit" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/LICbutton"
         android:layout_width="250dp"
         android:layout_height="75dp"
-        android:layout_above="@+id/button5"
+        android:layout_below="@+id/FIXDep"
         android:layout_centerHorizontal="true"
         android:text="LIC" />
 
-    <Button
+    <!--<Button
         android:id="@+id/button5"
         android:layout_width="250dp"
         android:layout_height="75dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="Deposits in post office for RD." />
+        android:layout_alignLeft="@+id/LICbutton"
+        android:layout_alignStart="@+id/LICbutton"
+        android:layout_below="@+id/LICbutton"
+        android:text="Deposits in post office for RD." />-->
 </RelativeLayout>
