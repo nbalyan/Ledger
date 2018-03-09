@@ -1,9 +1,9 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/unselected_background_color</item>
+        <item name="colorPrimaryDark">@color/unselected_background_color</item>
         <item name="colorAccent">@color/popup_menu_item_text_color</item>
         <item name="android:editTextColor">@color/cardview_light_background</item>
         <item name="android:textColorHint">@color/popup_menu_item_text_color</item>

@@ -20,6 +20,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/unselected_background_color"
+
 
             >
 
@@ -29,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="Testing this"
+                android:textColor="@color/popup_menu_item_text_color"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp" />
@@ -38,6 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/account"
+                android:textColor="@color/popup_menu_item_text_color"
                 android:layout_below="@+id/account"
                 android:layout_marginBottom="10dp"
                 android:text="TextView"
@@ -47,6 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/account"
+                android:textColor="@color/popup_menu_item_text_color"
                 android:layout_below="@+id/name"
                 android:layout_marginBottom="10dp"
                 android:text="TextView"
@@ -56,6 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/account"
+                android:textColor="@color/popup_menu_item_text_color"
                 android:layout_below="@+id/address"
                 android:layout_marginBottom="10dp"
                 android:text="TextView"

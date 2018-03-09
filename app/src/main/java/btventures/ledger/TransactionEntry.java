@@ -90,6 +90,7 @@ public class TransactionEntry extends AppCompatActivity {
                     Intent intent1 = new Intent(mContext, TransactionConfirmActivity.class);
                     intent1.putExtras(extras);
                     startActivity(intent1);
+                    finish();
                 }
             }
         });

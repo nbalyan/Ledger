@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(homeActivity);
             }
-
+            finish();
 
         }else{
             Intent intent = new Intent(this, LoginActivity.class);
