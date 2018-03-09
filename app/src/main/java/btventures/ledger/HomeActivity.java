@@ -11,6 +11,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button LICButton;
     private Button FixDepButton;
     private Button RecDepButton;
+    private Button CustomerModify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +20,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         LICButton = findViewById(R.id.LICbutton);
         FixDepButton = findViewById(R.id.FIXDep);
         RecDepButton = findViewById(R.id.RecDep);
+        CustomerModify = findViewById(R.id.CustomerModify);
 
         LICButton.setOnClickListener(this);
         FixDepButton.setOnClickListener(this);
         RecDepButton.setOnClickListener(this);
+        CustomerModify.setOnClickListener(this);
 
     }
 
@@ -33,8 +36,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             extras.putString("CATEGORY", "FIX");
         }else if(view.getId()==R.id.RecDep){
             extras.putString("CATEGORY", "REC");
-        }else{
+        }else if(view.getId()==R.id.LICbutton){
             extras.putString("CATEGORY", "LIC");
+        }else{
+            Intent launchActivity = new Intent(getApplicationContext(), TransactionEntry.class);
+            launchActivity.putExtras(extras);
+            startActivity(launchActivity);
+
         }
         Intent launchActivity = new Intent(getApplicationContext(), TransactionEntry.class);
         launchActivity.putExtras(extras);

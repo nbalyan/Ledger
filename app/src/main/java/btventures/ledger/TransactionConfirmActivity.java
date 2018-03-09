@@ -1,9 +1,11 @@
 package btventures.ledger;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.view.View;
 import android.widget.EditText;
 
 /**
@@ -41,6 +43,24 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
         editButton = findViewById(R.id.btn_edit);
+
+        editButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(mContext, TransactionEntry.class);
+                intent1.putExtras(getIntent().getExtras());
+                startActivity(intent1);
+                finish();
+
+            }
+        });
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO
+            }
+        });
 
         Bundle b= getIntent().getExtras();
         accountEdit.setText(b.getString("account"));

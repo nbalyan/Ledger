@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class TransactionEntry extends AppCompatActivity {
+import btventures.ledger.tableview.CustomerCompleteDetails;
+
+public class ModifyCustomer extends AppCompatActivity {
     private PopupWindow pw;
     private GridView rv;
     private ImageButton accountButton;
@@ -37,8 +39,19 @@ public class TransactionEntry extends AppCompatActivity {
     private EditText nameEdit;
     private EditText phoneEdit;
     private EditText addressEdit;
-    private EditText recieptEdit;
+    private EditText dateEdit;
     private EditText amountEdit;
+
+    private EditText codeEdit;
+    private EditText CIFedit;
+    private EditText aadharEdit;
+    private EditText PANEdit;
+    private EditText jointNameEdit;
+    private EditText aadharJointEdit;
+    private EditText jointCIFedit;
+    private EditText nominationEdit;
+
+
     private Activity mContext;
     private ProgressBar progressBar;
     private Toast mToast;
@@ -58,9 +71,18 @@ public class TransactionEntry extends AppCompatActivity {
         addressEdit = findViewById(R.id.input_address);
         phoneEdit = findViewById(R.id.input_mobile);
         progressBar = findViewById(R.id.progress);
-        recieptEdit = findViewById(R.id.input_reciept);
+        dateEdit = findViewById(R.id.input_date);
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
+        codeEdit = findViewById(R.id.input_code);
+        CIFedit = findViewById(R.id.input_cif);
+        aadharEdit = findViewById(R.id.input_aadhar);
+        PANEdit = findViewById(R.id.input_pan);
+        jointNameEdit = findViewById(R.id.input_jointAccountHolder);
+        aadharJointEdit = findViewById(R.id.input_aadharJoint);
+        jointCIFedit = findViewById(R.id.input_secondaryCIF);
+        nominationEdit = findViewById(R.id.input_nomination);
+
         Bundle b= getIntent().getExtras();
 
         actPerformed = b.getString("CATEGORY");
@@ -70,7 +92,7 @@ public class TransactionEntry extends AppCompatActivity {
             nameEdit.setText(b.getString("name"));
             phoneEdit.setText(b.getString("phone"));
             addressEdit.setText(b.getString("address"));
-            recieptEdit.setText(b.getString("receipt"));
+            dateEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
         }
 
@@ -78,7 +100,7 @@ public class TransactionEntry extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Customer> customers = fetchListByAccount();
+                ArrayList<CustomerCompleteDetails> customers = fetchListByAccount();
                 if(customers==null || customers.size()!=1){
                     //showAToast("Please enter a valid customer account");
                     accountEdit.setError("Enter a Valid Account");
@@ -94,7 +116,7 @@ public class TransactionEntry extends AppCompatActivity {
                     extras.putString("name",customers.get(0).getName());
                     extras.putString("address",customers.get(0).getAddress());
                     extras.putString("phone",customers.get(0).getPhone());
-                    extras.putString("receipt",recieptEdit.getText().toString());
+                    extras.putString("openingDate",dateEdit.getText().toString());
                     extras.putString("amount",amountEdit.getText().toString());
                     extras.putString("CATEGORY",actPerformed);
                     Intent intent1 = new Intent(mContext, TransactionConfirmActivity.class);
@@ -115,7 +137,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByAccount();
+                ArrayList<CustomerCompleteDetails> customers = fetchListByAccount();
                 handleResult(customers);
                 progressBar.setVisibility(View.GONE);
 
@@ -130,7 +152,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByName();
+                ArrayList<CustomerCompleteDetails> customers = fetchListByName();
                 handleResult(customers);
                 progressBar.setVisibility(View.GONE);
 
@@ -145,7 +167,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByAddress();
+                ArrayList<CustomerCompleteDetails> customers = fetchListByAddress();
                 handleResult(customers);
                 progressBar.setVisibility(View.GONE);
 
@@ -160,7 +182,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByPhone();
+                ArrayList<CustomerCompleteDetails> customers = fetchListByPhone();
                 handleResult(customers);
                 progressBar.setVisibility(View.GONE);
 
@@ -172,19 +194,41 @@ public class TransactionEntry extends AppCompatActivity {
 
     public boolean validate() {
         boolean valid = true;
-        String recieptNo = recieptEdit.getText().toString();
+        String accountNo = accountEdit.getText().toString();
+        String name = nameEdit.getText().toString();
+        String address = addressEdit.getText().toString();
+        String phone = phoneEdit.getText().toString();
         String amount =amountEdit.getText().toString();
-        if (recieptNo.isEmpty()) {
-            recieptEdit.setError("Enter Valid Address");
+        if (name.isEmpty()) {
+            nameEdit.setError("Enter Valid Receipt No.");
             valid = false;
         } else {
-            recieptEdit.setError(null);
+            nameEdit.setError(null);
+        }
+        if (phone.isEmpty() || phone.length()!=10) {
+            phoneEdit.setError("Enter Valid Phone No.");
+            valid = false;
+        } else {
+            phoneEdit.setError(null);
+        }
+        if (address.isEmpty()) {
+            addressEdit.setError("Enter Valid Address");
+            valid = false;
+        } else {
+            addressEdit.setError(null);
         }
         if (amount.isEmpty() || ((Double)Double.parseDouble(amount)).compareTo(new Double(0))==0) {
             amountEdit.setError("Enter Valid Amount");
             valid = false;
         } else {
             amountEdit.setError(null);
+        }
+
+        if (accountNo.isEmpty() || ((Double)Double.parseDouble(accountNo)).compareTo(new Double(0))==0) {
+            accountEdit.setError("Enter Valid Account No.");
+            valid = false;
+        } else {
+            accountEdit.setError(null);
         }
 
         return valid;
@@ -198,7 +242,7 @@ public class TransactionEntry extends AppCompatActivity {
         mToast.show();
     }
 
-    private void handleResult(ArrayList<Customer> customers){
+    private void handleResult(ArrayList<CustomerCompleteDetails> customers){
         if(customers == null || customers.size()==0){
             showAToast("No Record found");
             //TO-DO
@@ -208,6 +252,18 @@ public class TransactionEntry extends AppCompatActivity {
             nameEdit.setText(customers.get(0).getName());
             phoneEdit.setText(customers.get(0).getPhone());
             addressEdit.setText(customers.get(0).getAddress());
+            dateEdit.setText(customers.get(0).getOpeningDate());
+            amountEdit.setText(customers.get(0).getAmount());
+
+            codeEdit.setText(customers.get(0).getCode());
+            CIFedit.setText(customers.get(0).getCif());
+            aadharEdit.setText(customers.get(0).getAadhar());
+            PANEdit.setText(customers.get(0).getPan_no());
+            jointNameEdit.setText(customers.get(0).getJointAccountName());
+            jointCIFedit.setText(customers.get(0).getJointAccountCIF());
+            aadharJointEdit.setText(customers.get(0).getJointAccountAadharNo());
+            nominationEdit.setText(customers.get(0).getNomination());
+
             /*addressEdit.setFreezesText(true);
             addressEdit.setFocusable(false);
             */
@@ -221,32 +277,32 @@ public class TransactionEntry extends AppCompatActivity {
         rv.setNumColumns(1);
     }
 
-    private ArrayList<Customer> fetchListByName(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+    private ArrayList<CustomerCompleteDetails> fetchListByName(){
+        ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
+        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
         return list;
     }
-    private ArrayList<Customer> fetchListByAccount(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+    private ArrayList<CustomerCompleteDetails> fetchListByAccount(){
+        ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
+        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
         return list;
     }
-    private ArrayList<Customer> fetchListByAddress(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
-        list.add(new Customer("Neeraj Balyan","5595691","Testing All Fields including address, this is random xyz1","9884895294"));
+    private ArrayList<CustomerCompleteDetails> fetchListByAddress(){
+        ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
+        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+        list.add(new CustomerCompleteDetails("Neeraj Balyan","5595691","Testing All Fields including address, this is random xyz1","9884895294"));
         return list;
     }
-    private ArrayList<Customer> fetchListByPhone(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+    private ArrayList<CustomerCompleteDetails> fetchListByPhone(){
+        ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
+        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
         return list;
     }
 
-    private void initializeAdapter(Context mContext,ArrayList<Customer> customers){
-       // DatabaseHandler db = new DatabaseHandler(this);
-      //  ArrayList<HashMap<String,String>> list= gridSetup();
-        final ArrayList<Customer> list= customers;
+    private void initializeAdapter(Context mContext,ArrayList<CustomerCompleteDetails> customers){
+        // DatabaseHandler db = new DatabaseHandler(this);
+        //  ArrayList<HashMap<String,String>> list= gridSetup();
+        final ArrayList<CustomerCompleteDetails> list= customers;
         CustomerAdapter adapter = new CustomerAdapter(mContext, R.layout.popup_items, list);
         rv.setAdapter(adapter);
         rv.setOnItemClickListener(new GridView.OnItemClickListener() {
@@ -290,9 +346,9 @@ public class TransactionEntry extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    private void showPopup(ArrayList<Customer> list) {
+    private void showPopup(ArrayList<CustomerCompleteDetails> list) {
         try {
-            LayoutInflater inflater = (LayoutInflater) TransactionEntry.this
+            LayoutInflater inflater = (LayoutInflater) ModifyCustomer.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = inflater.inflate(R.layout.popup,
                     (ViewGroup) findViewById(R.id.popup_1));

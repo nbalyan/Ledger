@@ -190,7 +190,7 @@
                     android:layout_gravity="fill_vertical"
                     android:layout_marginBottom="24dp"
                     android:layout_marginTop="24dp"
-                    android:padding="12dp"
+                    android:padding="15dp"
                     android:text="Edit Transaction" />
 
                 <!-- Signup Button -->
@@ -202,7 +202,7 @@
                     android:layout_gravity="fill_vertical"
                     android:layout_marginBottom="24dp"
                     android:layout_marginTop="24dp"
-                    android:padding="12dp"
+                    android:padding="15dp"
                     android:text="Confirm Transaction" />
             </LinearLayout>
 
