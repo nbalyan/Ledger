@@ -18,6 +18,107 @@ public class UserInfo {
     private String mMobile;
     private String mFax;
 
+    public String getmJointAccountHolder() {
+        return mJointAccountHolder;
+    }
+
+    public void setmJointAccountHolder(String mJointAccountHolder) {
+        this.mJointAccountHolder = mJointAccountHolder;
+    }
+
+    private String mJointAccountHolder;
+
+    public String getmAccountNo() {
+        return mAccountNo;
+    }
+
+    public void setmAccountNo(String mAccountNo) {
+        this.mAccountNo = mAccountNo;
+    }
+
+    private String mAccountNo;
+
+    public String getmAmount() {
+        return mAmount;
+    }
+
+    public void setmAmount(String mAmount) {
+        this.mAmount = mAmount;
+    }
+
+    private String mAmount;
+
+    public String getmOpeningDate() {
+        return mOpeningDate;
+    }
+
+    public void setmOpeningDate(String mOpeningDate) {
+        this.mOpeningDate = mOpeningDate;
+    }
+
+    private String mOpeningDate;
+
+    public String getmAgentCode() {
+        return mAgentCode;
+    }
+
+    public void setmAgentCode(String mAgentCode) {
+        this.mAgentCode = mAgentCode;
+    }
+
+    private String mAgentCode;
+
+    public String getmCifNo() {
+        return mCifNo;
+    }
+
+    public void setmCifNo(String mCifNo) {
+        this.mCifNo = mCifNo;
+    }
+
+    private String mCifNo;
+
+    public String getmAadharCardNo() {
+        return mAadharCardNo;
+    }
+
+    public void setmAadharCardNo(String mAadharCardNo) {
+        this.mAadharCardNo = mAadharCardNo;
+    }
+
+    private String mAadharCardNo;
+
+    public String getmPanNo() {
+        return mPanNo;
+    }
+
+    public void setmPanNo(String mPanNo) {
+        this.mPanNo = mPanNo;
+    }
+
+    private String mPanNo;
+
+    public String getmScecondCIF() {
+        return mScecondCIF;
+    }
+
+    public void setmScecondCIF(String mScecondCIF) {
+        this.mScecondCIF = mScecondCIF;
+    }
+
+    private String mScecondCIF;
+
+    public String getmNomination() {
+        return mNomination;
+    }
+
+    public void setmNomination(String mNomination) {
+        this.mNomination = mNomination;
+    }
+
+    private String mNomination;
+
+
     public void setId(int mId) {
         this.mId = mId;
     }

@@ -24,6 +24,7 @@
         <activity android:name=".TableActivity"></activity>
         <activity android:name=".TransactionEntry"></activity>
         <activity android:name=".TransactionConfirmActivity"></activity>
+        <activity android:name=".ModifyCustomer"></activity>
     </application>
 
 </manifest>

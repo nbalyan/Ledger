@@ -8,6 +8,11 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.EditText;
 
+import com.parse.Parse;
+import com.parse.ParseUser;
+
+import btventures.ledger.json.ParseService;
+
 /**
  * Created by HP on 09-03-2018.
  */
@@ -44,6 +49,21 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.btn_submit);
         editButton = findViewById(R.id.btn_edit);
 
+        Bundle b= getIntent().getExtras();
+        accountEdit.setText(b.getString("account"));
+        nameEdit.setText(b.getString("name"));
+        phoneEdit.setText(b.getString("phone"));
+        addressEdit.setText(b.getString("address"));
+        recieptEdit.setText(b.getString("receipt"));
+        amountEdit.setText(b.getString("amount"));
+        final String accountType = b.getString("CATEGORY");
+        disableField(accountEdit);
+        disableField(nameEdit);
+        disableField(phoneEdit);
+        disableField(addressEdit);
+        disableField(recieptEdit);
+        disableField(amountEdit);
+
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -58,22 +78,18 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ParseService service = new ParseService();
+                Customer newTransaction = new Customer();
+                newTransaction.setAccount(accountEdit.getText().toString());
+                newTransaction.setAccountType(accountType);
+                newTransaction.setCifno(recieptEdit.getText().toString());
+                newTransaction.setAgentCode(ParseUser.getCurrentUser().toString());
+                newTransaction.setmAmount(amountEdit.getText().toString());
+                service.saveTransaction(newTransaction);
                 //TODO
             }
         });
 
-        Bundle b= getIntent().getExtras();
-        accountEdit.setText(b.getString("account"));
-        nameEdit.setText(b.getString("name"));
-        phoneEdit.setText(b.getString("phone"));
-        addressEdit.setText(b.getString("address"));
-        recieptEdit.setText(b.getString("receipt"));
-        amountEdit.setText(b.getString("amount"));
-        disableField(accountEdit);
-        disableField(nameEdit);
-        disableField(phoneEdit);
-        disableField(addressEdit);
-        disableField(recieptEdit);
-        disableField(amountEdit);
+
     }
 }

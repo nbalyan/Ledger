@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import btventures.ledger.json.ParseService;
 import btventures.ledger.tableview.CustomerCompleteDetails;
 
 public class ModifyCustomer extends AppCompatActivity {
@@ -53,14 +55,14 @@ public class ModifyCustomer extends AppCompatActivity {
 
 
     private Activity mContext;
-    private ProgressBar progressBar;
+    public ProgressBar progressBar;
     private Toast mToast;
     private String actPerformed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_entry);
+        setContentView(R.layout.activity_modifycustomer);
         mContext = this;
         accountButton = findViewById(R.id.search_account);
         nameButton = findViewById(R.id.search_name);
@@ -74,13 +76,9 @@ public class ModifyCustomer extends AppCompatActivity {
         dateEdit = findViewById(R.id.input_date);
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
-        codeEdit = findViewById(R.id.input_code);
-        CIFedit = findViewById(R.id.input_cif);
         aadharEdit = findViewById(R.id.input_aadhar);
         PANEdit = findViewById(R.id.input_pan);
         jointNameEdit = findViewById(R.id.input_jointAccountHolder);
-        aadharJointEdit = findViewById(R.id.input_aadharJoint);
-        jointCIFedit = findViewById(R.id.input_secondaryCIF);
         nominationEdit = findViewById(R.id.input_nomination);
 
         Bundle b= getIntent().getExtras();
@@ -97,7 +95,7 @@ public class ModifyCustomer extends AppCompatActivity {
         }
 
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+       /* submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ArrayList<CustomerCompleteDetails> customers = fetchListByAccount();
@@ -125,7 +123,7 @@ public class ModifyCustomer extends AppCompatActivity {
                     finish();
                 }
             }
-        });
+        });*/
 
 
         accountButton.setOnClickListener(new View.OnClickListener() {
@@ -183,8 +181,8 @@ public class ModifyCustomer extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<CustomerCompleteDetails> customers = fetchListByPhone();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+               // progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -242,7 +240,46 @@ public class ModifyCustomer extends AppCompatActivity {
         mToast.show();
     }
 
-    private void handleResult(ArrayList<CustomerCompleteDetails> customers){
+    public void submitData(View view){
+        /*
+        *
+        accountEdit = findViewById(R.id.input_account);
+        nameEdit = findViewById(R.id.input_name);
+        addressEdit = findViewById(R.id.input_address);
+        phoneEdit = findViewById(R.id.input_mobile);
+        progressBar = findViewById(R.id.progress);
+        dateEdit = findViewById(R.id.input_date);
+        amountEdit = findViewById(R.id.input_amount);
+        submitButton = findViewById(R.id.btn_submit);
+        codeEdit = findViewById(R.id.input_code);
+        CIFedit = findViewById(R.id.input_cif);
+        aadharEdit = findViewById(R.id.input_aadhar);
+        PANEdit = findViewById(R.id.input_pan);
+        jointNameEdit = findViewById(R.id.input_jointAccountHolder);
+        aadharJointEdit = findViewById(R.id.input_aadharJoint);
+        jointCIFedit = findViewById(R.id.input_secondaryCIF);
+        nominationEdit = findViewById(R.id.input_nomination);
+        * */
+
+        CustomerCompleteDetails newData = new CustomerCompleteDetails();
+        newData.setAccount(accountEdit.getText().toString());
+        newData.setName(nameEdit.getText().toString());
+        newData.setPhone(phoneEdit.getText().toString());
+        newData.setOpeningDate(dateEdit.getText().toString());
+        newData.setAddress(addressEdit.getText().toString());
+        newData.setAmount(amountEdit.getText().toString());
+        newData.setAadhar(aadharEdit.getText().toString());
+        newData.setPan_no(PANEdit.getText().toString());
+        newData.setJointAccountName(jointNameEdit.getText().toString());
+        newData.setNomination(nominationEdit.getText().toString());
+        ParseService newService = new ParseService();
+        Log.d("herein click", newData.getAccount());
+        newService.addCustomerData(newData);
+
+
+    }
+
+    public void handleResult(ArrayList<CustomerCompleteDetails> customers){
         if(customers == null || customers.size()==0){
             showAToast("No Record found");
             //TO-DO
@@ -255,13 +292,13 @@ public class ModifyCustomer extends AppCompatActivity {
             dateEdit.setText(customers.get(0).getOpeningDate());
             amountEdit.setText(customers.get(0).getAmount());
 
-            codeEdit.setText(customers.get(0).getCode());
-            CIFedit.setText(customers.get(0).getCif());
+//            codeEdit.setText(customers.get(0).getCode());
+   //         CIFedit.setText(customers.get(0).getCif());
             aadharEdit.setText(customers.get(0).getAadhar());
             PANEdit.setText(customers.get(0).getPan_no());
             jointNameEdit.setText(customers.get(0).getJointAccountName());
-            jointCIFedit.setText(customers.get(0).getJointAccountCIF());
-            aadharJointEdit.setText(customers.get(0).getJointAccountAadharNo());
+      //      jointCIFedit.setText(customers.get(0).getJointAccountCIF());
+       //     aadharJointEdit.setText(customers.get(0).getJointAccountAadharNo());
             nominationEdit.setText(customers.get(0).getNomination());
 
             /*addressEdit.setFreezesText(true);
@@ -279,23 +316,26 @@ public class ModifyCustomer extends AppCompatActivity {
 
     private ArrayList<CustomerCompleteDetails> fetchListByName(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+        ParseService newService = new ParseService();
+        list = newService.getDatabyName(nameEdit.getText().toString());
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByAccount(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+        ParseService newService = new ParseService();
+        list = newService.getDatabyAccount(accountEdit.getText().toString());
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByAddress(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
-        list.add(new CustomerCompleteDetails("Neeraj Balyan","5595691","Testing All Fields including address, this is random xyz1","9884895294"));
+        ParseService newService = new ParseService();
+        list = newService.getDatabyAddress(addressEdit.getText().toString());
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByPhone(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        list.add(new CustomerCompleteDetails("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+        ParseService newService = new ParseService();
+        list = newService.getDatabyMobile(phoneEdit.getText().toString());
         return list;
     }
 
@@ -303,9 +343,9 @@ public class ModifyCustomer extends AppCompatActivity {
         // DatabaseHandler db = new DatabaseHandler(this);
         //  ArrayList<HashMap<String,String>> list= gridSetup();
         final ArrayList<CustomerCompleteDetails> list= customers;
-        CustomerAdapter adapter = new CustomerAdapter(mContext, R.layout.popup_items, list);
-        rv.setAdapter(adapter);
-        rv.setOnItemClickListener(new GridView.OnItemClickListener() {
+        //CustomerAdapter adapter = new CustomerAdapter(mContext, R.layout.popup_items, list);
+        //rv.setAdapter(adapter);
+        /*rv.setOnItemClickListener(new GridView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //((TextView)findViewById(R.id.hello)).setText("YIPEEEEE");
@@ -325,9 +365,9 @@ public class ModifyCustomer extends AppCompatActivity {
                 intent1.putExtras(extras);
                 startActivity(intent1);
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                finish();*/
+                finish();
             }
-        });
+        });*/
     }
 
     @Override

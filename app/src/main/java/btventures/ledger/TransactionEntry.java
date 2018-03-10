@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import btventures.ledger.json.ParseService;
+import btventures.ledger.tableview.CustomerCompleteDetails;
+
 public class TransactionEntry extends AppCompatActivity {
     private PopupWindow pw;
     private GridView rv;
@@ -40,9 +44,11 @@ public class TransactionEntry extends AppCompatActivity {
     private EditText recieptEdit;
     private EditText amountEdit;
     private Activity mContext;
-    private ProgressBar progressBar;
+    public ProgressBar progressBar;
     private Toast mToast;
     private String actPerformed;
+    ArrayList<Customer> customerfinal;
+    Customer customerf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +84,8 @@ public class TransactionEntry extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<Customer> customers = fetchListByAccount();
-                if(customers==null || customers.size()!=1){
+                //ArrayList<Customer> customers = fetchListByAccount();
+                if(customerf==null ){
                     //showAToast("Please enter a valid customer account");
                     accountEdit.setError("Enter a Valid Account");
                     return;
@@ -87,13 +93,15 @@ public class TransactionEntry extends AppCompatActivity {
                     accountEdit.setError(null);
 
                 }
+                if (customerf == null){
 
+                }
                 if(validate()){
                     Bundle extras = new Bundle();
-                    extras.putString("account",customers.get(0).getAccount());
-                    extras.putString("name",customers.get(0).getName());
-                    extras.putString("address",customers.get(0).getAddress());
-                    extras.putString("phone",customers.get(0).getPhone());
+                    extras.putString("account",customerf.getAccount());
+                    extras.putString("name",customerf.getName());
+                    extras.putString("address",customerf.getAddress());
+                    extras.putString("phone",customerf.getPhone());
                     extras.putString("receipt",recieptEdit.getText().toString());
                     extras.putString("amount",amountEdit.getText().toString());
                     extras.putString("CATEGORY",actPerformed);
@@ -116,8 +124,8 @@ public class TransactionEntry extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<Customer> customers = fetchListByAccount();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -198,7 +206,7 @@ public class TransactionEntry extends AppCompatActivity {
         mToast.show();
     }
 
-    private void handleResult(ArrayList<Customer> customers){
+    public void handleResult(ArrayList<Customer> customers){
         if(customers == null || customers.size()==0){
             showAToast("No Record found");
             //TO-DO
@@ -208,11 +216,13 @@ public class TransactionEntry extends AppCompatActivity {
             nameEdit.setText(customers.get(0).getName());
             phoneEdit.setText(customers.get(0).getPhone());
             addressEdit.setText(customers.get(0).getAddress());
+            customerf = customers.get(0);
             /*addressEdit.setFreezesText(true);
             addressEdit.setFocusable(false);
             */
         }else
             showPopup(customers);
+        customerfinal = customers;
 
     }
 
@@ -223,24 +233,49 @@ public class TransactionEntry extends AppCompatActivity {
 
     private ArrayList<Customer> fetchListByName(){
         ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+        ParseService newService = new ParseService(this);
+        list1 = newService.getDatabyName(nameEdit.getText().toString());
+        if(list1.size() !=0){
+            for(int i=0; i < list1.size(); i++){
+                list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
+            }
+        }
         return list;
     }
     private ArrayList<Customer> fetchListByAccount(){
         ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
-        return list;
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+        ParseService newService = new ParseService(this);
+        list1 = newService.getDatabyAccount(accountEdit.getText().toString());
+        Log.d("totalobj",String.valueOf(list1.size()));
+        if(list1.size() !=0){
+            for(int i=0; i < list1.size(); i++){
+                list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
+            }
+        }return list;
     }
     private ArrayList<Customer> fetchListByAddress(){
         ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
-        list.add(new Customer("Neeraj Balyan","5595691","Testing All Fields including address, this is random xyz1","9884895294"));
-        return list;
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+        ParseService newService = new ParseService(this);
+        list1 = newService.getDatabyAddress(addressEdit.getText().toString());
+        if(list1.size() !=0){
+            for(int i=0; i < list1.size(); i++){
+                list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
+            }
+        }return list;
     }
     private ArrayList<Customer> fetchListByPhone(){
         ArrayList<Customer> list= new ArrayList<Customer>();
-        list.add(new Customer("Ankur Tewatia","5595690","Testing All Fields including address, this is random shit","9884894194"));
-        return list;
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+        ParseService newService = new ParseService(this);
+        list1 = newService.getDatabyMobile(phoneEdit.getText().toString());
+        if(list1.size() !=0){
+            for(int i=0; i < list1.size(); i++){
+                list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
+            }
+        }return list;
     }
 
     private void initializeAdapter(Context mContext,ArrayList<Customer> customers){
@@ -257,6 +292,14 @@ public class TransactionEntry extends AppCompatActivity {
                 nameEdit.setText(list.get(position).getName());
                 phoneEdit.setText(list.get(position).getPhone());
                 addressEdit.setText(list.get(position).getAddress());
+                int j = 0;
+                while(customerfinal.size() !=1 && customerfinal.size()>0){
+                    if(customerfinal.get(j).getAccount() ==  list.get(position).getAccount()){
+                        customerf = customerfinal.get(j);
+                        break;
+                    }
+                    j++;
+                }
                 pw.dismiss();
 
 

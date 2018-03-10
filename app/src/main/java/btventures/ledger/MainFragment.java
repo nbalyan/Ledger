@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.evrencoskun.tableview.TableView;
+
+import btventures.ledger.json.ParseService;
 import btventures.ledger.json.UserInfo;
 import btventures.ledger.json.WebServiceHandler;
 import btventures.ledger.tableview.MyTableAdapter;
@@ -27,7 +29,9 @@ public class MainFragment extends Fragment {
     private MyTableAdapter mTableAdapter;
 
     private ProgressDialog mProgressDialog;
-    private WebServiceHandler mWebServiceHandler;
+    //private WebServiceHandler mWebServiceHandler;
+
+    private ParseService mParseService;
 
     // For TableView
     private List<List<CellModel>> mCellList;
@@ -61,8 +65,11 @@ public class MainFragment extends Fragment {
         mTableView.setTableViewListener(new MyTableViewListener(mTableView));
 
         // UserInfo data will be getting from a web server.
-        mWebServiceHandler = new WebServiceHandler(this);
-        mWebServiceHandler.loadUserInfoList();
+       // mWebServiceHandler = new WebServiceHandler(this);
+        mParseService = new ParseService(this);
+        ParseService parseService = new ParseService(this);
+        parseService.loadCustomerData();
+       // mWebServiceHandler.loadUserInfoList();
 
         return view;
     }
@@ -82,21 +89,18 @@ public class MainFragment extends Fragment {
         List<ColumnHeaderModel> list = new ArrayList<>();
 
         // Create Column Headers
-        list.add(new ColumnHeaderModel("Id"));
+        list.add(new ColumnHeaderModel("AccountNo."));
         list.add(new ColumnHeaderModel("Name"));
-        list.add(new ColumnHeaderModel("Nickname"));
-        list.add(new ColumnHeaderModel("Email"));
-        list.add(new ColumnHeaderModel("Birthday"));
-        list.add(new ColumnHeaderModel("Sex"));
-        list.add(new ColumnHeaderModel("Age"));
-        list.add(new ColumnHeaderModel("Job"));
-        list.add(new ColumnHeaderModel("Salary"));
-        list.add(new ColumnHeaderModel("CreatedAt"));
-        list.add(new ColumnHeaderModel("UpdatedAt"));
+        list.add(new ColumnHeaderModel("Amount"));
+        list.add(new ColumnHeaderModel("OpeningDate"));
         list.add(new ColumnHeaderModel("Address"));
-        list.add(new ColumnHeaderModel("Zip Code"));
-        list.add(new ColumnHeaderModel("Phone"));
-        list.add(new ColumnHeaderModel("Fax"));
+        list.add(new ColumnHeaderModel("Agent Code"));
+        list.add(new ColumnHeaderModel("CifNo"));
+        list.add(new ColumnHeaderModel("PhoneNumber"));
+        list.add(new ColumnHeaderModel("AadharNo"));
+        list.add(new ColumnHeaderModel("PanNo"));
+        list.add(new ColumnHeaderModel("SecondCif"));
+        list.add(new ColumnHeaderModel("Nomination"));
 
         return list;
     }
@@ -113,21 +117,18 @@ public class MainFragment extends Fragment {
             List<CellModel> list = new ArrayList<>();
 
             // The order should be same with column header list;
-            list.add(new CellModel("1-" + i, userInfo.getId()));       // "Id"
+            list.add(new CellModel("1-" + i, userInfo.getmAccountNo()));       // "Account No"
             list.add(new CellModel("2-" + i, userInfo.getName()));     // "Name"
-            list.add(new CellModel("3-" + i, userInfo.getNickName())); // "Nickname"
-            list.add(new CellModel("4-" + i, userInfo.getEmail()));    // "Email"
-            list.add(new CellModel("5-" + i, userInfo.getBirthDay())); // "BirthDay"
-            list.add(new CellModel("6-" + i, userInfo.getGender()));   // "Gender"
-            list.add(new CellModel("7-" + i, userInfo.getAge()));      // "Age"
-            list.add(new CellModel("8-" + i, userInfo.getJob()));      // "Job"
-            list.add(new CellModel("9-" + i, userInfo.getSalary()));   // "Salary"
-            list.add(new CellModel("10-" + i, userInfo.getCreatedAt()));// "CreatedAt"
-            list.add(new CellModel("11-" + i, userInfo.getUpdatedAt()));// "UpdatedAt"
-            list.add(new CellModel("12-" + i, userInfo.getAddress()));  // "Address"
-            list.add(new CellModel("13-" + i, userInfo.getZipCode()));  // "Zip Code"
-            list.add(new CellModel("14-" + i, userInfo.getMobile()));   // "Phone"
-            list.add(new CellModel("15-" + i, userInfo.getFax()));      // "Fax"
+            list.add(new CellModel("3-" + i, userInfo.getmAmount())); // "Amount"
+            list.add(new CellModel("4-" + i, userInfo.getmOpeningDate()));    // "Opening Date"
+            list.add(new CellModel("5-" + i, userInfo.getAddress())); // "Address"
+            list.add(new CellModel("6-" + i, userInfo.getmAgentCode()));   // "Agent Code"
+            list.add(new CellModel("7-" + i, userInfo.getmCifNo()));      // "Cif No"
+            list.add(new CellModel("8-" + i, userInfo.getMobile()));      // "phone"
+            list.add(new CellModel("9-" + i, userInfo.getmAadharCardNo()));   // "aadhar"
+            list.add(new CellModel("10-" + i, userInfo.getmPanNo()));// "pan"
+            list.add(new CellModel("11-" + i, userInfo.getmScecondCIF()));// "secondcif"
+            list.add(new CellModel("12-" + i, userInfo.getmNomination()));  // "nomination"
 
             // Add
             lists.add(list);

@@ -39,14 +39,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else if(view.getId()==R.id.LICbutton){
             extras.putString("CATEGORY", "LIC");
         }else{
-            Intent launchActivity = new Intent(getApplicationContext(), TransactionEntry.class);
+            extras.putString("CATEGORY","ADDMODIFY");
+
+        }
+        if(extras.get("CATEGORY") == "ADDMODIFY"){
+            Intent launchActivity = new Intent(getApplicationContext(), ModifyCustomer.class);
             launchActivity.putExtras(extras);
             startActivity(launchActivity);
 
+        }else {
+            Intent launchActivity = new Intent(getApplicationContext(), TransactionEntry.class);
+            launchActivity.putExtras(extras);
+            startActivity(launchActivity);
         }
-        Intent launchActivity = new Intent(getApplicationContext(), TransactionEntry.class);
-        launchActivity.putExtras(extras);
-        startActivity(launchActivity);
-
     }
 }

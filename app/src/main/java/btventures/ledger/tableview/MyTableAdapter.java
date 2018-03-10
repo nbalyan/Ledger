@@ -136,13 +136,7 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
     @Override
     public int getCellItemViewType(int position) {
-        // 5. column header is gender.
-        if (position == 5) {
-            return GENDER_TYPE;
-        } else if (position == 8) {
-            // 8. column header is Salary.
-            return MONEY_TYPE;
-        }
+
         /*
         "Id"
         "Name"

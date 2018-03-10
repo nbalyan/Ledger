@@ -21,6 +21,18 @@ public class CustomerCompleteDetails {
     private String jointAccountCIF;
     private String nomination;
 
+    public String getObjectID() {
+        return objectID;
+    }
+
+    public void setObjectID(String objectID) {
+        this.objectID = objectID;
+    }
+
+    private String objectID;
+
+    public CustomerCompleteDetails(){}
+
 
     public CustomerCompleteDetails(String name, String account, String address, String phone) {
         this.name = name;
