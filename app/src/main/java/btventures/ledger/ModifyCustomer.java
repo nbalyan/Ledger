@@ -136,8 +136,8 @@ public class ModifyCustomer extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<CustomerCompleteDetails> customers = fetchListByAccount();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -151,8 +151,8 @@ public class ModifyCustomer extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<CustomerCompleteDetails> customers = fetchListByName();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -166,8 +166,8 @@ public class ModifyCustomer extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<CustomerCompleteDetails> customers = fetchListByAddress();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -272,7 +272,7 @@ public class ModifyCustomer extends AppCompatActivity {
         newData.setPan_no(PANEdit.getText().toString());
         newData.setJointAccountName(jointNameEdit.getText().toString());
         newData.setNomination(nominationEdit.getText().toString());
-        ParseService newService = new ParseService();
+        ParseService newService = new ParseService(this);
         Log.d("herein click", newData.getAccount());
         newService.addCustomerData(newData);
 
@@ -316,25 +316,25 @@ public class ModifyCustomer extends AppCompatActivity {
 
     private ArrayList<CustomerCompleteDetails> fetchListByName(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        ParseService newService = new ParseService();
+        ParseService newService = new ParseService(this);
         list = newService.getDatabyName(nameEdit.getText().toString());
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByAccount(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        ParseService newService = new ParseService();
+        ParseService newService = new ParseService(this);
         list = newService.getDatabyAccount(accountEdit.getText().toString());
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByAddress(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        ParseService newService = new ParseService();
+        ParseService newService = new ParseService(this);
         list = newService.getDatabyAddress(addressEdit.getText().toString());
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByPhone(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
-        ParseService newService = new ParseService();
+        ParseService newService = new ParseService(this);
         list = newService.getDatabyMobile(phoneEdit.getText().toString());
         return list;
     }

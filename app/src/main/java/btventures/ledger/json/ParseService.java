@@ -82,20 +82,20 @@ public class ParseService {
                     for (int i = 0; i < objects.size(); i++) {
                         CustomerCompleteDetails userInfo = createCustomerInfoFromParseObject(objects.get(i));
                         customerCompleteDetailsList.add(userInfo);
+                    }
 
-                        if(modifyCustomer != null){
-                            modifyCustomer.handleResult(customerCompleteDetailsList);
-                            modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                    if(modifyCustomer != null){
+                        modifyCustomer.handleResult(customerCompleteDetailsList);
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    if(transactionEntry!= null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
                         }
-                        if(transactionEntry!= null){
-                            ArrayList<Customer> list= new ArrayList<Customer>();
-                            ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
-                            for(int j=0; j < list1.size(); j++){
-                                list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
-                            }
-                            transactionEntry.handleResult(list);
-                            transactionEntry.progressBar.setVisibility(View.INVISIBLE);
-                        }
+                        transactionEntry.handleResult(list);
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
@@ -114,23 +114,25 @@ public class ParseService {
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                Log.d("data returnnkb","nkb");
+                Log.d("data returnnkb","nkb" + String.valueOf(objects.size()));
                 if(e==null) {
                     for (int i = 0; i < objects.size(); i++) {
                         Log.d("data returnnkb","nkb");
                         CustomerCompleteDetails userInfo = createCustomerInfoFromParseObject(objects.get(i));
                         customerCompleteDetailsList.add(userInfo);
-                        if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
-                            modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
-                        if(transactionEntry!= null){
-                            ArrayList<Customer> list= new ArrayList<Customer>();
-                            ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
-                            for(int j=0; j < list1.size(); j++){
-                                list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
-                            }
-                            transactionEntry.handleResult(list);
-                            transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                    if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
+                    Log.d("hello", "hello");
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
+                    if(transactionEntry!= null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
                         }
+                        transactionEntry.handleResult(list);
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
@@ -155,17 +157,18 @@ public class ParseService {
                     for (int i = 0; i < objects.size(); i++) {
                         CustomerCompleteDetails userInfo = createCustomerInfoFromParseObject(objects.get(i));
                         customerCompleteDetailsList.add(userInfo);
-                        if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
-                            modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
-                        if(transactionEntry!= null){
-                            ArrayList<Customer> list= new ArrayList<Customer>();
-                            ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
-                            for(int j=0; j < list1.size(); j++){
-                                list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
-                            }
-                            transactionEntry.handleResult(list);
-                            transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                    if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
+                    if(transactionEntry!= null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
                         }
+                        transactionEntry.handleResult(list);
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
@@ -187,17 +190,17 @@ public class ParseService {
                     for (int i = 0; i < objects.size(); i++) {
                         CustomerCompleteDetails userInfo = createCustomerInfoFromParseObject(objects.get(i));
                         customerCompleteDetailsList.add(userInfo);
-                        if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
-                            modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
-                        if(transactionEntry!= null){
-                            ArrayList<Customer> list= new ArrayList<Customer>();
-                            ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
-                            for(int j=0; j < list1.size(); j++){
-                                list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
-                            }
-                            transactionEntry.handleResult(list);
-                            transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
+                    if(transactionEntry!= null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
                         }
+                        transactionEntry.handleResult(list);
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
@@ -209,12 +212,13 @@ public class ParseService {
     public void addCustomerData(final CustomerCompleteDetails newData){
         final ParseObject newCustomer = new ParseObject("CustomerData");
         CustomerCompleteDetails data = new CustomerCompleteDetails();
-        Log.d("beforefetch","newdat");
+        Log.d("beforefetch",newData.getAccount());
         if(getDatabyAccount(newData.getAccount().toString()).size() !=0) {
             data = getDatabyAccount(newData.getAccount().toString()).get(0);
         }
-//        Log.d("data",data.getAccount());
-        if(data.getAccount() == null) {
+        if(data.getAccount()!=null)
+        Log.d("data",data.getAccount().toString());
+        if(data.getAccount() != null) {
             newCustomer.put("Name", newData.getName());
             newCustomer.put("AccountNo", newData.getAccount());
             newCustomer.put("Mobile", newData.getPhone());
@@ -229,11 +233,16 @@ public class ParseService {
         }
         else{
 
+            Log.d("niggaupdate","there");
             ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
-            query.getInBackground(data.getObjectID(),new GetCallback<ParseObject>() {
+            final ParseObject abc = new ParseObject("CustomerData");
+            query.whereEqualTo("AccountNo", newData.getAccount());
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
-
+                    if(object == null){
+                        object = abc;
+                    }
                     object.put("Name", newData.getName());
                     object.put("AccountNo", newData.getAccount());
                     object.put("Mobile", newData.getPhone());
