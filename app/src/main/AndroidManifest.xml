@@ -25,6 +25,8 @@
         <activity android:name=".TransactionEntry"></activity>
         <activity android:name=".TransactionConfirmActivity"></activity>
         <activity android:name=".ModifyCustomer"></activity>
+        <activity android:name=".AgentFilterCritreria"></activity>
+        <activity android:name=".AdminHomeActivity"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package btventures.ledger;
 
+import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +18,10 @@ public class TableActivity extends AppCompatActivity {
         Bundle b= getIntent().getExtras();
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.activity_container, new
-                    MainFragment(), MainFragment.class.getSimpleName()).commit();
+            MainFragment mainf = new MainFragment();
+            mainf.setArguments(b);
+            getSupportFragmentManager().beginTransaction().add(R.id.activity_container, mainf
+                    , MainFragment.class.getSimpleName()).commit();
         }
 
         hideNavigationBar();

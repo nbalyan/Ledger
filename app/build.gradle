@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "btventures.ledger"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -33,4 +33,5 @@ dependencies {
     compile 'com.evrencoskun.library:tableview:0.8.6'
     compile 'org.fabiomsr:moneytextview:1.1.0'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.savvi.datepicker:rangepicker:1.2.0'
 }

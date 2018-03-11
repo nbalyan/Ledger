@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     int role = ParseUser.getCurrentUser().getInt("role");// 0 for admin, 1 for agent
                     if(role == 0){
-                        Intent adminActivity = new Intent(getApplicationContext(), AdminActivity.class);
+                        Intent adminActivity = new Intent(getApplicationContext(), AdminHomeActivity.class);
                         startActivity(adminActivity);
                     }
                     else if(role == 1){

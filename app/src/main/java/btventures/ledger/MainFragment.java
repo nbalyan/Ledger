@@ -3,6 +3,7 @@ package btventures.ledger;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getArguments();
-        category = b.getString("ReportType");
+        category = b.getString("Category");
     }
 
     @Override
@@ -72,11 +73,12 @@ public class MainFragment extends Fragment {
        // mWebServiceHandler = new WebServiceHandler(this);
         mParseService = new ParseService(this);
         ParseService parseService = new ParseService(this);
-        if(category =="Customer") {
+        Log.d("Cattty", category);
+        if(category.intern()=="Customer".intern()) {
             parseService.loadCustomerData();
-        }else if(category == "Agent"){
+        }else if(category.intern() == "Agent".intern()){
             parseService.loadAgentData();
-        }else if (category == "Transaction"){
+        }else if (category.intern() == "Transaction".intern()){
             parseService.loadTransactionData();
         }
        // mWebServiceHandler.loadUserInfoList();
