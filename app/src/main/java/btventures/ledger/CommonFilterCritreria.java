@@ -69,7 +69,6 @@ public class CommonFilterCritreria extends AppCompatActivity {
         fromdate = findViewById(R.id.input_from_date);
         todate = findViewById(R.id.input_to_date);
 
-
         progressBar = findViewById(R.id.progress);
         submitButton = findViewById(R.id.btn_submit);
 

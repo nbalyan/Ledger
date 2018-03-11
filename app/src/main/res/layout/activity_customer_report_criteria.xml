@@ -212,7 +212,7 @@
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="24dp"
                 android:padding="24dp"
-                android:text="Submit Transaction" />
+                android:text="Show Report" />
         </LinearLayout>
     </ScrollView>
 

@@ -83,7 +83,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-               //fetchListByName();
+               fetchListByName();
             }
         });
         mailButton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-               // fetchListByMail();
+                fetchListByMail();
             }
         });
         submitButton.setOnClickListener(new View.OnClickListener() {
