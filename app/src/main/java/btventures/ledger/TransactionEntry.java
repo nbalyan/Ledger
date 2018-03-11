@@ -139,8 +139,8 @@ public class TransactionEntry extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<Customer> customers = fetchListByName();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -154,8 +154,8 @@ public class TransactionEntry extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<Customer> customers = fetchListByAddress();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });
@@ -169,8 +169,8 @@ public class TransactionEntry extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 ArrayList<Customer> customers = fetchListByPhone();
-                handleResult(customers);
-                progressBar.setVisibility(View.GONE);
+                //handleResult(customers);
+                //progressBar.setVisibility(View.GONE);
 
             }
         });

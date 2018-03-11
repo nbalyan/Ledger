@@ -277,6 +277,7 @@ public class ModifyCustomer extends AppCompatActivity {
         newService.addCustomerData(newData);
 
 
+
     }
 
     public void handleResult(ArrayList<CustomerCompleteDetails> customers){
@@ -304,9 +305,15 @@ public class ModifyCustomer extends AppCompatActivity {
             /*addressEdit.setFreezesText(true);
             addressEdit.setFocusable(false);
             */
-        }else
-            showPopup(customers);
+        }else {
+            ArrayList<Customer> list= new ArrayList<Customer>();
 
+            ArrayList<CustomerCompleteDetails> list1 = customers;
+            for(int j=0; j < list1.size(); j++) {
+                list.add(new Customer(list1.get(j).getName(), list1.get(j).getAccount(), list1.get(j).getAddress(), list1.get(j).getPhone()));
+            }
+            showPopup(list);
+        }
     }
 
     private void setupPopUpLayoutManager(View layout){
@@ -339,13 +346,13 @@ public class ModifyCustomer extends AppCompatActivity {
         return list;
     }
 
-    private void initializeAdapter(Context mContext,ArrayList<CustomerCompleteDetails> customers){
+    private void initializeAdapter(Context mContext,ArrayList<Customer> customers){
         // DatabaseHandler db = new DatabaseHandler(this);
         //  ArrayList<HashMap<String,String>> list= gridSetup();
-        final ArrayList<CustomerCompleteDetails> list= customers;
-        //CustomerAdapter adapter = new CustomerAdapter(mContext, R.layout.popup_items, list);
-        //rv.setAdapter(adapter);
-        /*rv.setOnItemClickListener(new GridView.OnItemClickListener() {
+        final ArrayList<Customer> list= customers;
+        CustomerAdapter adapter = new CustomerAdapter(mContext, R.layout.popup_items, list);
+        rv.setAdapter(adapter);
+        rv.setOnItemClickListener(new GridView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //((TextView)findViewById(R.id.hello)).setText("YIPEEEEE");
@@ -365,9 +372,9 @@ public class ModifyCustomer extends AppCompatActivity {
                 intent1.putExtras(extras);
                 startActivity(intent1);
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
-                finish();
+                finish();*/
             }
-        });*/
+        });
     }
 
     @Override
@@ -386,7 +393,7 @@ public class ModifyCustomer extends AppCompatActivity {
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-    private void showPopup(ArrayList<CustomerCompleteDetails> list) {
+    private void showPopup(ArrayList<Customer> list) {
         try {
             LayoutInflater inflater = (LayoutInflater) ModifyCustomer.this
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -438,3 +445,4 @@ public class ModifyCustomer extends AppCompatActivity {
     }
 
 }
+

@@ -14,6 +14,8 @@ public class TableActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_table);
 
+        Bundle b= getIntent().getExtras();
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.activity_container, new
                     MainFragment(), MainFragment.class.getSimpleName()).commit();

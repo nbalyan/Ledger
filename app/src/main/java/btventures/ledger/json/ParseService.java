@@ -1,5 +1,6 @@
 package btventures.ledger.json;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -10,13 +11,16 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import btventures.ledger.Customer;
+import btventures.ledger.HomeActivity;
 import btventures.ledger.MainFragment;
 import btventures.ledger.ModifyCustomer;
+import btventures.ledger.TransactionConfirmActivity;
 import btventures.ledger.TransactionEntry;
 import btventures.ledger.tableview.CustomerCompleteDetails;
 
@@ -28,15 +32,17 @@ public class ParseService {
     private MainFragment mainFragment;
     private ModifyCustomer modifyCustomer;
     private TransactionEntry transactionEntry;
+    private TransactionConfirmActivity transactionConfirmActivity;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
     public ParseService(ModifyCustomer modifyCustomer){this.modifyCustomer = modifyCustomer;};
     public ParseService(MainFragment mainFragment){this.mainFragment = mainFragment;}
+    public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
     public ParseService(){};
 
     public void loadCustomerData(){
         mainFragment.showProgressDialog();
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("LLL");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomerData");
         query.setLimit(2000);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -48,7 +54,57 @@ public class ParseService {
                         UserInfo userInfo = createUserInfoFromParseObject(objects.get(i));
                         userInfoList.add(userInfo);
                     }
-                    mainFragment.populatedTableView(userInfoList);
+                    mainFragment.populatedTableViewUser(userInfoList);
+                    mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                    mainFragment.hideProgressDialog();
+                }
+            }
+        });
+    }
+
+    public void loadAgentData(){
+        mainFragment.showProgressDialog();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("AgentData");
+        query.setLimit(50);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                    List<AgentInfo> agentInfoList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        AgentInfo userInfo = createAgentInfoFromParseObject(objects.get(i));
+                        agentInfoList.add(userInfo);
+                    }
+                    mainFragment.populatedTableViewAgent(agentInfoList);
+                    mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                    mainFragment.hideProgressDialog();
+                }
+            }
+        });
+    }
+
+    public void loadTransactionData(){
+        mainFragment.showProgressDialog();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionData");
+        query.setLimit(100);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                    List<Customer> transactionList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        Customer userInfo = createTransactionInfoFromParseObject(objects.get(i));
+                        transactionList.add(userInfo);
+                    }
+                    mainFragment.populatedTableViewTransaction(transactionList);
                     mainFragment.hideProgressDialog();
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
@@ -65,8 +121,28 @@ public class ParseService {
         newTransaction.put("Amount",data.getmAmount());
         newTransaction.put("CustomerAccountNo",data.getAccount());
         newTransaction.put("AccountType", data.getAccountType());
-        newTransaction.saveInBackground();
+        newTransaction.put("CustomerName", data.getName());
+        newTransaction.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e==null){
+                    transactionsaveCallback();
+                }else{
+                    failCallback();
+                }
+            }
+        });
 
+    }
+    
+    public void failCallback(){
+        if(transactionConfirmActivity != null){
+            Toast.makeText(transactionConfirmActivity, "Transaction could not be saved", Toast.LENGTH_LONG).show();
+        }else if(transactionEntry != null){
+            Toast.makeText(transactionEntry, "Could not find entered Account No", Toast.LENGTH_LONG).show();
+        }else if(modifyCustomer != null){
+            Toast.makeText(modifyCustomer, "Could not save/update the user. Please try again.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public ArrayList<CustomerCompleteDetails> getDatabyName(String Name){
@@ -229,7 +305,17 @@ public class ParseService {
             newCustomer.put("Address", newData.getAddress());
             newCustomer.put("JointAccountHolder", newData.getJointAccountName());
             Log.d("about to save","there");
-            newCustomer.saveInBackground();
+            newCustomer.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e==null){
+                        accountsaveCallback();
+
+                    }else{
+                        failCallback();
+                    }
+                }
+            });
         }
         else{
 
@@ -252,15 +338,43 @@ public class ParseService {
                     object.put("Amount", newData.getAmount());
                     object.put("Address", newData.getAddress());
                     object.put("JointAccountHolder", newData.getJointAccountName());
-                    object.saveInBackground();
+                    object.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e==null){
+                                accountupdateCallback();
+
+                            }else{
+                                failCallback();
+                            }
+                        }
+                    });
                 }
             });
         }
     }
 
-    public void loadAgentData(){
-
+    public void transactionsaveCallback(){
+        Toast.makeText(transactionConfirmActivity, "Transaction Saved", Toast.LENGTH_SHORT).show();
+        Intent homeActivity = new Intent(transactionConfirmActivity, HomeActivity.class);
+        transactionConfirmActivity.startActivity(homeActivity);
+        transactionConfirmActivity.finish();
     }
+
+    public void accountsaveCallback(){
+        Toast.makeText(modifyCustomer, "New Customer Created", Toast.LENGTH_SHORT).show();
+        Intent homeActivity = new Intent(modifyCustomer, HomeActivity.class);
+        modifyCustomer.startActivity(homeActivity);
+        modifyCustomer.finish();
+    }
+    public void accountupdateCallback(){
+        Toast.makeText(modifyCustomer, "New Customer Created", Toast.LENGTH_SHORT).show();
+        Intent homeActivity = new Intent(modifyCustomer, HomeActivity.class);
+        modifyCustomer.startActivity(homeActivity);
+        modifyCustomer.finish();
+    }
+
+
     
     private CustomerCompleteDetails createCustomerInfoFromParseObject(ParseObject object){
         CustomerCompleteDetails newCustomer = new CustomerCompleteDetails();
@@ -277,22 +391,42 @@ public class ParseService {
         return newCustomer;
     }
 
+    private AgentInfo createAgentInfoFromParseObject(ParseObject object){
+
+        AgentInfo cellModel = new AgentInfo();
+        cellModel.setAgentName(object.getString("Name"));
+        cellModel.setEmail(object.getString("email"));
+        cellModel.setCode(object.getString("Code"));
+        cellModel.setCode(object.getString("ContactNo"));
+
+        return cellModel;
+    }
+
+    private Customer createTransactionInfoFromParseObject(ParseObject object){
+
+        Customer cellModel = new Customer();
+        cellModel.setAccount(object.getString("CustomerAccountNo"));
+        cellModel.setName(object.getString("CustomerName"));
+        cellModel.setmAmount(object.getString("Amount"));
+        cellModel.setAgentCode(object.getString("AgentCode"));
+        cellModel.setAccountType(object.getString("AccountType"));
+        cellModel.setCifno(object.getString("CIFNO"));
+
+        return cellModel;
+    }
+
     private UserInfo createUserInfoFromParseObject(ParseObject object){
         UserInfo cellModel = new UserInfo();
-        Log.d("Accountno", object.describeContents() + "account no");
         cellModel.setmAccountNo(object.getString("AccountNo"));
-        cellModel.setName(object.getString("AccountHolderName"));
+        cellModel.setName(object.getString("Name"));
         cellModel.setmAmount(String.valueOf(object.getString("Amount")));
-        cellModel.setmOpeningDate(object.getString("OPENINGDATE"));
-        cellModel.setAddress(object.getString("ADDRESS"));
-        cellModel.setmAgentCode(object.getString("CODE"));
-
-        cellModel.setmCifNo(object.getString("CIFNO"));
-        cellModel.setMobile(object.getString("PhoneNumber"));
-        cellModel.setmAadharCardNo(object.getString("AADHARCARDNO"));
-        cellModel.setmPanNo(object.getString("PANNO"));
-        cellModel.setmScecondCIF(object.getString("SECONDCIF"));
-        cellModel.setmNomination(object.getString("NOMINATION"));
+        cellModel.setmOpeningDate(object.getString("createdAt"));
+        cellModel.setAddress(object.getString("Address"));
+        cellModel.setMobile(object.getString("Mobile"));
+        cellModel.setmAadharCardNo(object.getString("AadharNo"));
+        cellModel.setmPanNo(object.getString("PanNo"));
+        cellModel.setmNomination(object.getString("Nomination"));
+        cellModel.setmJointAccountHolder(object.getString("JointAccountHolder"));
 
         return cellModel;
     }

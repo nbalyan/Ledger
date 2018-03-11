@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.evrencoskun.tableview.TableView;
 
+import btventures.ledger.json.AgentInfo;
 import btventures.ledger.json.ParseService;
 import btventures.ledger.json.UserInfo;
 import btventures.ledger.json.WebServiceHandler;
@@ -37,6 +38,7 @@ public class MainFragment extends Fragment {
     private List<List<CellModel>> mCellList;
     private List<ColumnHeaderModel> mColumnHeaderList;
     private List<RowHeaderModel> mRowHeaderList;
+    private String category;
 
 
     public MainFragment() {
@@ -46,6 +48,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle b = getArguments();
+        category = b.getString("ReportType");
     }
 
     @Override
@@ -68,16 +72,42 @@ public class MainFragment extends Fragment {
        // mWebServiceHandler = new WebServiceHandler(this);
         mParseService = new ParseService(this);
         ParseService parseService = new ParseService(this);
-        parseService.loadCustomerData();
+        if(category =="Customer") {
+            parseService.loadCustomerData();
+        }else if(category == "Agent"){
+            parseService.loadAgentData();
+        }else if (category == "Transaction"){
+            parseService.loadTransactionData();
+        }
        // mWebServiceHandler.loadUserInfoList();
 
         return view;
     }
 
-    public void populatedTableView(List<UserInfo> userInfoList) {
+    public void populatedTableViewUser(List<UserInfo> userInfoList) {
         // create Models
-        mColumnHeaderList = createColumnHeaderModelList();
-        mCellList = loadCellModelList(userInfoList);
+        mColumnHeaderList = createColumnHeaderModelListUser();
+        mCellList = loadCellModelListUser(userInfoList);
+        mRowHeaderList = createRowHeaderList();
+
+        // Set all items to the TableView
+        mTableAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);
+    }
+
+    public void populatedTableViewAgent(List<AgentInfo> userInfoList) {
+        // create Models
+        mColumnHeaderList = createColumnHeaderModelListAgent();
+        mCellList = loadCellModelListAgent(userInfoList);
+        mRowHeaderList = createRowHeaderList();
+
+        // Set all items to the TableView
+        mTableAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);
+    }
+
+    public void populatedTableViewTransaction(List<Customer> userInfoList) {
+        // create Models
+        mColumnHeaderList = createColumnHeaderModelListTransaction();
+        mCellList = loadCellModelListTransaction(userInfoList);
         mRowHeaderList = createRowHeaderList();
 
         // Set all items to the TableView
@@ -85,27 +115,51 @@ public class MainFragment extends Fragment {
     }
 
 
-    private List<ColumnHeaderModel> createColumnHeaderModelList() {
+
+    private List<ColumnHeaderModel> createColumnHeaderModelListUser() {
         List<ColumnHeaderModel> list = new ArrayList<>();
 
         // Create Column Headers
-        list.add(new ColumnHeaderModel("AccountNo."));
         list.add(new ColumnHeaderModel("Name"));
+        list.add(new ColumnHeaderModel("AccountNo"));
+        list.add(new ColumnHeaderModel("Mobile"));
         list.add(new ColumnHeaderModel("Amount"));
-        list.add(new ColumnHeaderModel("OpeningDate"));
-        list.add(new ColumnHeaderModel("Address"));
-        list.add(new ColumnHeaderModel("Agent Code"));
-        list.add(new ColumnHeaderModel("CifNo"));
-        list.add(new ColumnHeaderModel("PhoneNumber"));
         list.add(new ColumnHeaderModel("AadharNo"));
+        list.add(new ColumnHeaderModel("Address"));
+        list.add(new ColumnHeaderModel("JointAccountHolder"));
         list.add(new ColumnHeaderModel("PanNo"));
-        list.add(new ColumnHeaderModel("SecondCif"));
-        list.add(new ColumnHeaderModel("Nomination"));
 
         return list;
     }
 
-    private List<List<CellModel>> loadCellModelList(List<UserInfo> userInfoList) {
+
+    private List<ColumnHeaderModel> createColumnHeaderModelListAgent() {
+        List<ColumnHeaderModel> list = new ArrayList<>();
+
+        // Create Column Headers
+        list.add(new ColumnHeaderModel("Name"));
+        list.add(new ColumnHeaderModel("Email"));
+        list.add(new ColumnHeaderModel("Code"));
+        list.add(new ColumnHeaderModel("ContactNo"));
+
+        return list;
+    }
+
+    private List<ColumnHeaderModel> createColumnHeaderModelListTransaction() {
+        List<ColumnHeaderModel> list = new ArrayList<>();
+
+        // Create Column Headers
+        list.add(new ColumnHeaderModel("CustomerAccountNo"));
+        list.add(new ColumnHeaderModel("CustomerName"));
+        list.add(new ColumnHeaderModel("Amount"));
+        list.add(new ColumnHeaderModel("AgentEmail"));
+        list.add(new ColumnHeaderModel("CIFNo"));
+        list.add(new ColumnHeaderModel("AccountType"));
+
+        return list;
+    }
+
+    private List<List<CellModel>> loadCellModelListUser(List<UserInfo> userInfoList) {
         List<List<CellModel>> lists = new ArrayList<>();
 
         // Creating cell model list from UserInfo list for Cell Items
@@ -116,19 +170,77 @@ public class MainFragment extends Fragment {
 
             List<CellModel> list = new ArrayList<>();
 
+
+
             // The order should be same with column header list;
-            list.add(new CellModel("1-" + i, userInfo.getmAccountNo()));       // "Account No"
-            list.add(new CellModel("2-" + i, userInfo.getName()));     // "Name"
-            list.add(new CellModel("3-" + i, userInfo.getmAmount())); // "Amount"
-            list.add(new CellModel("4-" + i, userInfo.getmOpeningDate()));    // "Opening Date"
-            list.add(new CellModel("5-" + i, userInfo.getAddress())); // "Address"
-            list.add(new CellModel("6-" + i, userInfo.getmAgentCode()));   // "Agent Code"
-            list.add(new CellModel("7-" + i, userInfo.getmCifNo()));      // "Cif No"
-            list.add(new CellModel("8-" + i, userInfo.getMobile()));      // "phone"
-            list.add(new CellModel("9-" + i, userInfo.getmAadharCardNo()));   // "aadhar"
-            list.add(new CellModel("10-" + i, userInfo.getmPanNo()));// "pan"
-            list.add(new CellModel("11-" + i, userInfo.getmScecondCIF()));// "secondcif"
-            list.add(new CellModel("12-" + i, userInfo.getmNomination()));  // "nomination"
+            list.add(new CellModel("1-" + i, userInfo.getName()));       //
+            list.add(new CellModel("2-" + i, userInfo.getmAccountNo()));     //
+            list.add(new CellModel("3-" + i, userInfo.getMobile())); //
+            list.add(new CellModel("4-" + i, userInfo.getmAmount()));    //
+            list.add(new CellModel("5-" + i, userInfo.getmAadharCardNo())); //
+            list.add(new CellModel("6-" + i, userInfo.getAddress()));   //
+            list.add(new CellModel("7-" + i, userInfo.getmJointAccountHolder()));      //
+            list.add(new CellModel("8-" + i, userInfo.getmPanNo()));      //
+
+            // Add
+            lists.add(list);
+        }
+
+        return lists;
+    }
+
+    private List<List<CellModel>> loadCellModelListAgent(List<AgentInfo> userInfoList) {
+        List<List<CellModel>> lists = new ArrayList<>();
+
+        // Creating cell model list from UserInfo list for Cell Items
+        // In this example, UserInfo list is populated from web service
+
+        for (int i = 0; i < userInfoList.size(); i++) {
+            AgentInfo userInfo = userInfoList.get(i);
+
+            List<CellModel> list = new ArrayList<>();
+
+
+            // The order should be same with column header list;
+            list.add(new CellModel("1-" + i, userInfo.getAgentName()));       //
+            list.add(new CellModel("2-" + i, userInfo.getEmail()));     //
+            list.add(new CellModel("3-" + i, userInfo.getCode())); //
+            list.add(new CellModel("4-" + i, userInfo.getPhone()));    //
+
+            // Add
+            lists.add(list);
+        }
+
+        return lists;
+    }
+
+    private List<List<CellModel>> loadCellModelListTransaction(List<Customer> userInfoList) {
+        List<List<CellModel>> lists = new ArrayList<>();
+
+        // Creating cell model list from UserInfo list for Cell Items
+        // In this example, UserInfo list is populated from web service
+
+        for (int i = 0; i < userInfoList.size(); i++) {
+            Customer userInfo = userInfoList.get(i);
+
+            List<CellModel> list = new ArrayList<>();
+
+            /*
+            *
+        list.add(new ColumnHeaderModel("CustomerAccountNo"));
+        list.add(new ColumnHeaderModel("CustomerName"));
+        list.add(new ColumnHeaderModel("Amount"));
+        list.add(new ColumnHeaderModel("AgentEmail"));
+        list.add(new ColumnHeaderModel("CIFNo"));
+        list.add(new ColumnHeaderModel("AccountType"));*/
+
+            // The order should be same with column header list;
+            list.add(new CellModel("1-" + i, userInfo.getAccount()));       //
+            list.add(new CellModel("2-" + i, userInfo.getName()));     //
+            list.add(new CellModel("3-" + i, userInfo.getmAmount())); //
+            list.add(new CellModel("4-" + i, userInfo.getAgentCode()));    //
+            list.add(new CellModel("5-" + i, userInfo.getCifno())); //
+            list.add(new CellModel("6-" + i, userInfo.getAccountType()));   //
 
             // Add
             lists.add(list);

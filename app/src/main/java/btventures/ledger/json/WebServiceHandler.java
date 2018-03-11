@@ -50,7 +50,7 @@ public class WebServiceHandler {
                     }
 
                     // we 've got whole user info data. So let's populate the tableView
-                    mainFragment.populatedTableView(userInfoList);
+                    //mainFragment.populatedTableView(userInfoList);
 
 
                 } catch (JSONException e) {

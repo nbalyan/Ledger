@@ -20,6 +20,7 @@ import btventures.ledger.json.ParseService;
 public class TransactionConfirmActivity extends AppCompatActivity {
 
     private Activity mContext;
+    private TransactionConfirmActivity context;
     private EditText accountEdit;
     private EditText nameEdit;
     private EditText phoneEdit;
@@ -40,6 +41,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
         mContext = this;
+        context = this;
         accountEdit = findViewById(R.id.input_account);
         nameEdit = findViewById(R.id.input_name);
         addressEdit = findViewById(R.id.input_address);
@@ -78,12 +80,12 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseService service = new ParseService();
+                ParseService service = new ParseService(context);
                 Customer newTransaction = new Customer();
                 newTransaction.setAccount(accountEdit.getText().toString());
                 newTransaction.setAccountType(accountType);
                 newTransaction.setCifno(recieptEdit.getText().toString());
-                newTransaction.setAgentCode(ParseUser.getCurrentUser().toString());
+                newTransaction.setAgentCode(ParseUser.getCurrentUser().getEmail());
                 newTransaction.setmAmount(amountEdit.getText().toString());
                 service.saveTransaction(newTransaction);
                 //TODO
