@@ -144,6 +144,7 @@ public class ParseService {
     public void failCallback(){
         if(transactionConfirmActivity != null){
             Toast.makeText(transactionConfirmActivity, "Transaction could not be saved", Toast.LENGTH_LONG).show();
+
         }else if(transactionEntry != null){
             Toast.makeText(transactionEntry, "Could not find entered Account No", Toast.LENGTH_LONG).show();
         }else if(modifyCustomer != null){
@@ -167,13 +168,17 @@ public class ParseService {
                         AgentInfo userInfo = createAgentInfoFromParseObject(objects.get(i));
                         agentInfoList.add(userInfo);
                     }
-                    if(agentFilterCritreria != null)
+                    if(agentFilterCritreria != null) {
                         agentFilterCritreria.handleResult(agentInfoList);
+                        agentFilterCritreria.progressBar.setVisibility(View.INVISIBLE);
+                    }
                     //mainFragment.populatedTableViewAgent(agentInfoList);
                     //mainFragment.hideProgressDialog();
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
-                    //mainFragment.hideProgressDialog();
+                    agentFilterCritreria.progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(agentFilterCritreria,"Error performing operation. Please try again. Issue: " + e.getMessage() , Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -195,12 +200,16 @@ public class ParseService {
                         AgentInfo userInfo = createAgentInfoFromParseObject(objects.get(i));
                         agentInfoList.add(userInfo);
                     }
-                    if(agentFilterCritreria != null)
+                    if(agentFilterCritreria != null) {
                         agentFilterCritreria.handleResult(agentInfoList);
+                        agentFilterCritreria.progressBar.setVisibility(View.INVISIBLE);
+                    }
                     //mainFragment.populatedTableViewAgent(agentInfoList);
                     //mainFragment.hideProgressDialog();
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
+                    agentFilterCritreria.progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(agentFilterCritreria,"Error performing operation. Please try again. Issue: " + e.getMessage() , Toast.LENGTH_SHORT).show();
                     //mainFragment.hideProgressDialog();
                 }
             }
@@ -237,6 +246,14 @@ public class ParseService {
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
+                    if(modifyCustomer!= null){
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(modifyCustomer, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if(transactionEntry!=null){
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -274,6 +291,14 @@ public class ParseService {
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
+                    if(modifyCustomer!= null){
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(modifyCustomer, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if(transactionEntry!=null){
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -310,6 +335,14 @@ public class ParseService {
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
+                    if(modifyCustomer!= null){
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(modifyCustomer, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if(transactionEntry!=null){
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -342,6 +375,14 @@ public class ParseService {
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
+                    if(modifyCustomer!= null){
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(modifyCustomer, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if(transactionEntry!=null){
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
