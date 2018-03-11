@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import btventures.ledger.Customer;
+import btventures.ledger.CustomerReportCriteria;
 import btventures.ledger.HomeActivity;
 import btventures.ledger.MainFragment;
 import btventures.ledger.ModifyCustomer;
@@ -33,10 +34,12 @@ public class ParseService {
     private ModifyCustomer modifyCustomer;
     private TransactionEntry transactionEntry;
     private TransactionConfirmActivity transactionConfirmActivity;
+    private CustomerReportCriteria customerReportCriteria;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
     public ParseService(ModifyCustomer modifyCustomer){this.modifyCustomer = modifyCustomer;};
     public ParseService(MainFragment mainFragment){this.mainFragment = mainFragment;}
     public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
+    public ParseService(CustomerReportCriteria customerReportCriteria){this.customerReportCriteria = customerReportCriteria;}
     public ParseService(){};
 
     public void loadCustomerData(){

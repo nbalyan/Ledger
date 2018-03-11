@@ -138,7 +138,6 @@
                         android:layout_height="wrap_content"
                         android:hint="To Date"
                         android:focusable="false"
-
                         android:clickable="true"
                         android:editable="false"
                         android:inputType="date" />
