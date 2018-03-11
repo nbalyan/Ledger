@@ -1,0 +1,57 @@
+<merge>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="220dp"
+    android:layout_height="220dp"
+
+    tools:context="btventures.ledger.AdminHomeActivity">
+
+    <Button
+        android:id="@+id/day_wise"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:text="Day Wise Report"
+        android:layout_alignParentLeft="true" />
+
+    <Button
+        android:id="@+id/agent_wise"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Agent Wise Report"
+         />
+
+    <Button
+        android:id="@+id/customer_wise"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:text="Customer Wise Report"
+        />
+
+    <Button
+        android:id="@+id/pending_payments"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Pending Payments Report"
+         />
+
+    <!--<Button
+        android:id="@+id/button5"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:layout_alignLeft="@+id/LICbutton"
+        android:layout_alignStart="@+id/LICbutton"
+        android:layout_below="@+id/LICbutton"
+        android:text="Deposits in post office for RD." />-->
+</RelativeLayout>
+</merge>
