@@ -100,19 +100,19 @@ public class AgentFilterCritreria extends AppCompatActivity {
 
 
     //TO-DO
-    /*private ArrayList<AgentInfo> fetchListByName(){
+    private ArrayList<AgentInfo> fetchListByName(){
         ArrayList<AgentInfo> list1= new ArrayList<AgentInfo>();
         ParseService newService = new ParseService(this);
-        list1 = newService.getAgentDatabyName(agentName.getText().toString());
+        newService.getAgentDatabyName(agentName.getText().toString());
         return list1;
     }
 
     private ArrayList<AgentInfo> fetchListByMail(){
         ArrayList<AgentInfo> list1= new ArrayList<AgentInfo>();
         ParseService newService = new ParseService(this);
-        list1 = newService.getAgentDatabyMail(agentMail.getText().toString());
+        newService.getAgentDatabyMail(agentMail.getText().toString());
         return list1;
-    }*/
+    }
 
 
     private long fromTime=0;

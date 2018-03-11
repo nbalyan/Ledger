@@ -16,6 +16,7 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import btventures.ledger.AgentFilterCritreria;
 import btventures.ledger.Customer;
 import btventures.ledger.CustomerReportCriteria;
 import btventures.ledger.HomeActivity;
@@ -34,11 +35,13 @@ public class ParseService {
     private ModifyCustomer modifyCustomer;
     private TransactionEntry transactionEntry;
     private TransactionConfirmActivity transactionConfirmActivity;
+    private AgentFilterCritreria agentFilterCritreria;
     private CustomerReportCriteria customerReportCriteria;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
     public ParseService(ModifyCustomer modifyCustomer){this.modifyCustomer = modifyCustomer;};
     public ParseService(MainFragment mainFragment){this.mainFragment = mainFragment;}
     public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
+    public ParseService(AgentFilterCritreria agentFilterCritreria){this.agentFilterCritreria = agentFilterCritreria;}
     public ParseService(CustomerReportCriteria customerReportCriteria){this.customerReportCriteria = customerReportCriteria;}
     public ParseService(){};
 
@@ -146,6 +149,62 @@ public class ParseService {
         }else if(modifyCustomer != null){
             Toast.makeText(modifyCustomer, "Could not save/update the user. Please try again.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void getAgentDatabyName(String name){
+
+        final ArrayList<AgentInfo> agentInfos = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("AgentData");
+        query.whereContains("Name",name);
+        query.setLimit(50);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                    ArrayList<AgentInfo> agentInfoList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        AgentInfo userInfo = createAgentInfoFromParseObject(objects.get(i));
+                        agentInfoList.add(userInfo);
+                    }
+                    if(agentFilterCritreria != null)
+                        agentFilterCritreria.handleResult(agentInfoList);
+                    //mainFragment.populatedTableViewAgent(agentInfoList);
+                    //mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                    //mainFragment.hideProgressDialog();
+                }
+            }
+        });
+    }
+
+    public void getAgentDatabyMail(String name){
+
+        final ArrayList<AgentInfo> agentInfos = new ArrayList<>();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("AgentData");
+        query.whereContains("email",name);
+        query.setLimit(50);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                    ArrayList<AgentInfo> agentInfoList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        AgentInfo userInfo = createAgentInfoFromParseObject(objects.get(i));
+                        agentInfoList.add(userInfo);
+                    }
+                    if(agentFilterCritreria != null)
+                        agentFilterCritreria.handleResult(agentInfoList);
+                    //mainFragment.populatedTableViewAgent(agentInfoList);
+                    //mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                    //mainFragment.hideProgressDialog();
+                }
+            }
+        });
     }
 
     public ArrayList<CustomerCompleteDetails> getDatabyName(String Name){
