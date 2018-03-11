@@ -244,6 +244,16 @@ public class ParseService {
                         transactionEntry.handleResult(list);
                         transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
+                    if(customerReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                        }
+                        customerReportCriteria.handleResult(list);
+                        customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
                     if(modifyCustomer!= null){
@@ -289,6 +299,17 @@ public class ParseService {
                         transactionEntry.handleResult(list);
                         transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
+
+                    if(customerReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                        }
+                        customerReportCriteria.handleResult(list);
+                        customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
                     if(modifyCustomer!= null){
@@ -333,6 +354,16 @@ public class ParseService {
                         transactionEntry.handleResult(list);
                         transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
+                    if(customerReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                        }
+                        customerReportCriteria.handleResult(list);
+                        customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
                     if(modifyCustomer!= null){
@@ -372,6 +403,16 @@ public class ParseService {
                         }
                         transactionEntry.handleResult(list);
                         transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    if(customerReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                        }
+                        customerReportCriteria.handleResult(list);
+                        customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
                     }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");

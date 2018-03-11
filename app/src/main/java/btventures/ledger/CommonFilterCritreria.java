@@ -28,91 +28,55 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import btventures.ledger.AgentAdapter;
+import btventures.ledger.R;
 import btventures.ledger.json.AgentInfo;
-import btventures.ledger.json.ParseService;
-import btventures.ledger.tableview.CustomerCompleteDetails;
 
 /**
  * Created by HP on 11-03-2018.
  */
 
-public class AgentFilterCritreria extends AppCompatActivity {
+public class CommonFilterCritreria extends AppCompatActivity {
 
     private Activity mContext;
     EditText fromdate;
     EditText todate;
     Calendar myCalendar;
-    private EditText agentName;
+    //private EditText agentName;
     private Toast mToast;
-    private EditText agentMail;
-    private PopupWindow pw;
+    //private EditText agentMail;
+    /*private PopupWindow pw;
     private GridView rv;
-    private ImageButton closePopup;
-    private ImageButton nameButton;
-    private ImageButton mailButton;
+    private ImageButton closePopup;*/
+    /*private ImageButton nameButton;
+    private ImageButton mailButton;*/
     private AppCompatButton submitButton;
     public ProgressBar progressBar;
     private DatePickerDialog toDateDialog;
-    ArrayList<AgentInfo> agentfinal;
-    AgentInfo agentf;
+    /*ArrayList<AgentInfo> agentfinal;
+    AgentInfo agentf;*/
 
     public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+        /*InputMethodManager inputMethodManager = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);*/
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_admin_filter);
+        setContentView(R.layout.activity_common_report_criteria);
         mContext = this;
         fromdate = findViewById(R.id.input_from_date);
         todate = findViewById(R.id.input_to_date);
-        agentName = findViewById(R.id.input_name);
-        agentMail = findViewById(R.id.input_mail);
-        nameButton = findViewById(R.id.search_name);
-        mailButton= findViewById(R.id.search_mail);
+
+
         progressBar = findViewById(R.id.progress);
         submitButton = findViewById(R.id.btn_submit);
-        nameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSoftKeyboard(mContext);
-                if(agentName.getText().length()<3){
-                    showAToast("Please enter atleast 3 charchaters");
-                    return;
-                }
-                progressBar.setVisibility(View.VISIBLE);
-               //fetchListByName();
-            }
-        });
-        mailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSoftKeyboard(mContext);
-                if(agentMail.getText().length()<3){
-                    showAToast("Please enter atleast 3 charchaters");
-                    return;
-                }
-                progressBar.setVisibility(View.VISIBLE);
-               // fetchListByMail();
-            }
-        });
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //ArrayList<Customer> customers = fetchListByAccount();
-                if(agentf==null ){
-                    //showAToast("Please enter a valid customer account");
-                    agentName.setError("Enter a Valid Agent");
-                    return;
-                }else{
-                    agentName.setError(null);
-
-                }
-                if (agentf == null){
-
-                }
                 if(validate()){
                     /*Bundle extras = new Bundle();
                     extras.putString("account",customerf.getAccount());
@@ -145,19 +109,19 @@ public class AgentFilterCritreria extends AppCompatActivity {
 
 
     //TO-DO
-    private ArrayList<AgentInfo> fetchListByName(){
+    /*private ArrayList<AgentInfo> fetchListByName(){
         ArrayList<AgentInfo> list1= new ArrayList<AgentInfo>();
         ParseService newService = new ParseService(this);
-        newService.getAgentDatabyName(agentName.getText().toString());
+        list1 = newService.getAgentDatabyName(agentName.getText().toString());
         return list1;
     }
 
     private ArrayList<AgentInfo> fetchListByMail(){
         ArrayList<AgentInfo> list1= new ArrayList<AgentInfo>();
         ParseService newService = new ParseService(this);
-        newService.getAgentDatabyMail(agentMail.getText().toString());
+        list1 = newService.getAgentDatabyMail(agentMail.getText().toString());
         return list1;
-    }
+    }*/
 
 
     private long fromTime=0;
@@ -255,7 +219,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
         mToast.show();
     }
 
-    public void handleResult(ArrayList<AgentInfo> customers){
+    /*public void handleResult(ArrayList<AgentInfo> customers){
         if(customers == null || customers.size()==0){
             showAToast("No Record found");
             //TO-DO
@@ -264,75 +228,14 @@ public class AgentFilterCritreria extends AppCompatActivity {
             agentName.setText(customers.get(0).getAgentName());
             agentMail.setText(customers.get(0).getEmail());
             agentf = customers.get(0);
-            /*addressEdit.setFreezesText(true);
+            *//*addressEdit.setFreezesText(true);
             addressEdit.setFocusable(false);
-            */
+            *//*
         }else
             showPopup(customers);
             agentfinal = customers;
 
-    }
+    }*/
 
-    private void setupPopUpLayoutManager(View layout){
-        rv=(GridView) layout.findViewById(R.id.rv);
-        rv.setNumColumns(1);
-    }
 
-    private void initializeAdapter(Context mContext,ArrayList<AgentInfo> customers){
-        // DatabaseHandler db = new DatabaseHandler(this);
-        //  ArrayList<HashMap<String,String>> list= gridSetup();
-        final ArrayList<AgentInfo> list= customers;
-        AgentAdapter adapter = new AgentAdapter(mContext, R.layout.popup_agent_items, list);
-        rv.setAdapter(adapter);
-        rv.setOnItemClickListener(new GridView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //((TextView)findViewById(R.id.hello)).setText("YIPEEEEE");
-                agentName.setText(list.get(position).getAgentName());
-                agentMail.setText(list.get(position).getEmail());
-
-                int j = 0;
-                while(agentfinal.size() !=1 && agentfinal.size()>0){
-                    if(agentfinal.get(j).getEmail() ==  list.get(position).getEmail()){
-                        agentf = agentfinal.get(j);
-                        break;
-                    }
-                    j++;
-                }
-                pw.dismiss();
-            }
-        });
-    }
-
-    private void showPopup(ArrayList<AgentInfo> list) {
-        try {
-            LayoutInflater inflater = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.popup_agent,
-                    (ViewGroup) findViewById(R.id.popup_1));
-            layout.setAnimation(AnimationUtils.loadAnimation(this, R.anim.popupanim));
-            pw = new PopupWindow(layout);
-            pw.setWidth(FrameLayout.LayoutParams.WRAP_CONTENT);
-            pw.setHeight(FrameLayout.LayoutParams.WRAP_CONTENT);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                pw.setElevation(100);
-            }
-            pw.setOutsideTouchable(true);
-            pw.setFocusable(true);
-            pw.showAtLocation(layout, Gravity.TOP, 0, 0);
-            setupPopUpLayoutManager(layout);
-            initializeAdapter(layout.getContext(),list);
-            //progressBar.setVisibility(View.GONE);
-            closePopup = (ImageButton) layout.findViewById(R.id.ib_close);
-            closePopup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    pw.dismiss();
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -1,6 +1,7 @@
 package btventures.ledger;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -23,7 +25,10 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import btventures.ledger.json.ParseService;
 import btventures.ledger.tableview.CustomerCompleteDetails;
@@ -41,14 +46,18 @@ public class CustomerReportCriteria extends AppCompatActivity {
     private EditText nameEdit;
     private EditText phoneEdit;
     private EditText addressEdit;
-    private EditText recieptEdit;
-    private EditText amountEdit;
+    /*private EditText recieptEdit;
+    private EditText amountEdit;*/
     private Activity mContext;
     public ProgressBar progressBar;
     private Toast mToast;
     private String actPerformed;
     ArrayList<Customer> customerfinal;
     Customer customerf;
+    private DatePickerDialog toDateDialog;
+    EditText fromdate;
+    EditText todate;
+    Calendar myCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +73,23 @@ public class CustomerReportCriteria extends AppCompatActivity {
         addressEdit = findViewById(R.id.input_address);
         phoneEdit = findViewById(R.id.input_mobile);
         progressBar = findViewById(R.id.progress);
-        recieptEdit = findViewById(R.id.input_reciept);
-        amountEdit = findViewById(R.id.input_amount);
+        /*recieptEdit = findViewById(R.id.input_reciept);
+        amountEdit = findViewById(R.id.input_amount);*/
+        fromdate = findViewById(R.id.input_from_date);
+        todate = findViewById(R.id.input_to_date);
         submitButton = findViewById(R.id.btn_submit);
         Bundle b= getIntent().getExtras();
 
         actPerformed = b.getString("CATEGORY");
 
-        if(b.getString("account")!=null) {
+        /*if(b.getString("account")!=null) {
             accountEdit.setText(b.getString("account"));
             nameEdit.setText(b.getString("name"));
             phoneEdit.setText(b.getString("phone"));
             addressEdit.setText(b.getString("address"));
             recieptEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
-        }
+        }*/
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +124,6 @@ public class CustomerReportCriteria extends AppCompatActivity {
                 }
             }
         });
-
 
         accountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +185,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
 
             }
         });
+        initiliazeDate();
 
         //showPopup();
     }
@@ -183,9 +194,96 @@ public class CustomerReportCriteria extends AppCompatActivity {
 
     }
 
+    private long fromTime=0;
+    private void updateLabelFrom() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        fromdate.setText(sdf.format(myCalendar.getTime()));
+        fromTime = myCalendar.getTimeInMillis();
+        /*if(toDateDialog!=null)
+            toDateDialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis());*/
+
+    }
+
+    private void updateLabelTo() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        todate.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    private void initiliazeDate(){
+
+        myCalendar = Calendar.getInstance();
+        fromdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                hideSoftKeyboard(mContext);
+                DatePickerDialog mDatePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabelFrom();
+                    }
+
+                }, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                mDatePickerDialog.show();
+
+                /*new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabelFrom();
+                    }
+
+                }, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();*/
+            }
+        });
+        todate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideSoftKeyboard(mContext);
+                // TODO Auto-generated method stub
+                toDateDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabelTo();
+                    }
+
+                }, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                if(fromTime!=0)
+                    toDateDialog.getDatePicker().setMinDate(fromTime);
+                toDateDialog.show();
+            }
+        });
+
+    }
+
     public boolean validate() {
         boolean valid = true;
-        String recieptNo = recieptEdit.getText().toString();
+        /*String recieptNo = recieptEdit.getText().toString();
         String amount =amountEdit.getText().toString();
         if (recieptNo.isEmpty()) {
             recieptEdit.setError("Enter Valid Address");
@@ -198,7 +296,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
             valid = false;
         } else {
             amountEdit.setError(null);
-        }
+        }*/
 
         return valid;
     }

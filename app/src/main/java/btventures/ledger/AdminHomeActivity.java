@@ -33,20 +33,25 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         Bundle extras = new Bundle();
         if(view.getId()==R.id.day_wise){
-            extras.putString("Category", "Customer");
+            extras.putString("Category", "day_wise");
+            Intent launchActivity = new Intent(getApplicationContext(), CommonFilterCritreria.class);
+            launchActivity.putExtras(extras);
+            startActivity(launchActivity);
         }else if(view.getId()==R.id.agent_wise){
             extras.putString("Category", "Agent");
-            Intent launchActivity = new Intent(getApplicationContext(), TableActivity.class);
+            Intent launchActivity = new Intent(getApplicationContext(), AgentFilterCritreria.class);
             launchActivity.putExtras(extras);
             startActivity(launchActivity);
         }else if(view.getId()==R.id.customer_wise){//AgentFilterCritreria
             extras.putString("Category", "Transaction");
-            Intent launchActivity = new Intent(getApplicationContext(), AgentFilterCritreria.class);
+            Intent launchActivity = new Intent(getApplicationContext(), CustomerReportCriteria.class);
             launchActivity.putExtras(extras);
             startActivity(launchActivity);
         }else{
-            extras.putString("Category","ADDMODIFY");
-
+            extras.putString("Category","pending_report");
+            Intent launchActivity = new Intent(getApplicationContext(), CommonFilterCritreria.class);
+            launchActivity.putExtras(extras);
+            startActivity(launchActivity);
         }
 
         /*Intent launchActivity = new Intent(getApplicationContext(), TableActivity.class);
