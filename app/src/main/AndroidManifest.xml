@@ -27,6 +27,8 @@
         <activity android:name=".ModifyCustomer"></activity>
         <activity android:name=".AgentFilterCritreria"></activity>
         <activity android:name=".AdminHomeActivity"></activity>
+        <activity android:name=".CustomerReportCriteria"></activity>
+        <activity android:name=".CommonFilterCritreria"></activity>
     </application>
 
 </manifest>
