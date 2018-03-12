@@ -21,6 +21,8 @@ import btventures.ledger.tableview.model.ColumnHeaderModel;
 import btventures.ledger.tableview.model.RowHeaderModel;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainFragment extends Fragment {
@@ -40,17 +42,32 @@ public class MainFragment extends Fragment {
     private List<ColumnHeaderModel> mColumnHeaderList;
     private List<RowHeaderModel> mRowHeaderList;
     private String category;
+    private HashMap<String,String> filters;
+    private Date startDate;
+    private Date endDate;
 
 
-    public MainFragment() {
+    /*public MainFragment(HashMap<String,String> filters, Date startDate, Date endDate) {
         // Required empty public constructor
-    }
+        this.filters = filters;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        Log.d("BKNMainFragment","initialized");
+    }*/
 
+    public MainFragment(){
+
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle b = getArguments();
         category = b.getString("Category");
+        filters = (HashMap<String,String>)b.getSerializable("FiltersMap");
+        startDate = new Date();
+        startDate.setTime(b.getLong("startDate",-1));
+        endDate = new Date();
+        endDate.setTime(b.getLong("endDate",-1));
     }
 
     @Override
@@ -73,13 +90,17 @@ public class MainFragment extends Fragment {
        // mWebServiceHandler = new WebServiceHandler(this);
         mParseService = new ParseService(this);
         ParseService parseService = new ParseService(this);
-        Log.d("Cattty", category);
+        //Log.d("Cattty", category);
         if(category.intern()=="Customer".intern()) {
             parseService.loadCustomerData();
         }else if(category.intern() == "Agent".intern()){
             parseService.loadAgentData();
         }else if (category.intern() == "Transaction".intern()){
             parseService.loadTransactionData();
+        }else if(category.intern() == "TransactionAgentWise".intern()){
+
+            Log.d("BKNMainFragment","Calling Parse");
+            parseService.loadTransactionDataWithFilter(filters,startDate,endDate);
         }
        // mWebServiceHandler.loadUserInfoList();
 

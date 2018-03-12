@@ -3,10 +3,12 @@ package btventures.ledger;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import btventures.ledger.AgentAdapter;
@@ -53,6 +57,8 @@ public class CommonFilterCritreria extends AppCompatActivity {
     private AppCompatButton submitButton;
     public ProgressBar progressBar;
     private DatePickerDialog toDateDialog;
+    private Date startDateFilter;
+    private Date endDateFilter;
     /*ArrayList<AgentInfo> agentfinal;
     AgentInfo agentf;*/
 
@@ -103,6 +109,26 @@ public class CommonFilterCritreria extends AppCompatActivity {
     }
 
     private void generateReport(){
+        HashMap<String,String> filters = new HashMap<>();
+//            if(agentf.getEmail() != null){
+//                filters.put("email",agentf.getEmail());
+//            }
+                //ParseService serviceData = new ParseService(this);
+                //serviceData.loadTransactionDataWithFilter(filters);
+                /*Bundle b = new Bundle();
+                b.putString("Category","TransactionAgentWise");
+                MainFragment mainf = new MainFragment(filters,startDateFilter,endDateFilter);
+                Log.d("BKNMainFragment","Created");
+                mainf.setArguments(b);
+                getSupportFragmentManager().beginTransaction().add(R.id.activity_containerCommon, mainf
+                        , MainFragment.class.getSimpleName()).commit();*/
+
+                Intent tableActivity = new Intent(this,TableActivity.class);
+                tableActivity.putExtra("FiltersMap",filters);
+                tableActivity.putExtra("startDate", startDateFilter.getTime());
+                tableActivity.putExtra("endDate",endDateFilter.getTime());
+                tableActivity.putExtra("Category","TransactionAgentWise");
+                startActivity(tableActivity);
 
     }
 
@@ -157,6 +183,11 @@ public class CommonFilterCritreria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 0);
+                        myCalendar.set(Calendar.MINUTE, 0);
+                        myCalendar.set(Calendar.HOUR, 0);
+                        startDateFilter = myCalendar.getTime();
                         updateLabelFrom();
                     }
 
@@ -196,6 +227,11 @@ public class CommonFilterCritreria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 59);
+                        myCalendar.set(Calendar.MINUTE, 59);
+                        myCalendar.set(Calendar.HOUR_OF_DAY, 23);
+                        endDateFilter = myCalendar.getTime();
                         updateLabelTo();
                     }
 

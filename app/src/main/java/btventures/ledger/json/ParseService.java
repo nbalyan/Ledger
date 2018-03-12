@@ -14,6 +14,8 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import btventures.ledger.AgentFilterCritreria;
@@ -115,6 +117,46 @@ public class ParseService {
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
                     mainFragment.hideProgressDialog();
+                }
+            }
+        });
+    }
+    
+    public void loadTransactionDataWithFilter(HashMap<String,String> filters, Date startDate, Date endDate){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionData");
+        query.setLimit(100);
+        Log.d("startDate", String.valueOf(startDate.getTime()));
+        Log.d("startDate", String.valueOf(endDate.getTime()));
+//        mealPlan.whereGreaterThanOrEqualTo("createdAt", today);
+//        mealPlan.whereLessThan("createdAt", tomorrow);
+
+        query.whereGreaterThanOrEqualTo("createdAt", startDate);
+        query.whereLessThan("createdAt", endDate);
+
+        Log.d("BKNMainFragment","In Parse");
+        for(String key: filters.keySet()){
+            query.whereContains(key,filters.get(key));
+            Log.d("DDDFilterAdded",key + " " + filters.get(key));
+        }
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                Log.d("BKNMainFragment","Done");
+                if(e==null){
+                    List<Customer> transactionList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        Customer userInfo = createTransactionInfoFromParseObject(objects.get(i));
+                        transactionList.add(userInfo);
+                    }
+
+                    Log.d("BKNMainFragment","Here");
+                   mainFragment.populatedTableViewTransaction(transactionList);
+                    mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                        mainFragment.hideProgressDialog();
                 }
             }
         });

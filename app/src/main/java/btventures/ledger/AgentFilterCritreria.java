@@ -3,6 +3,7 @@ package btventures.ledger;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +22,14 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import btventures.ledger.json.AgentInfo;
@@ -53,8 +57,11 @@ public class AgentFilterCritreria extends AppCompatActivity {
     private AppCompatButton submitButton;
     public ProgressBar progressBar;
     private DatePickerDialog toDateDialog;
+    private ScrollView scrollView;
     ArrayList<AgentInfo> agentfinal;
     AgentInfo agentf;
+    private Date startDateFilter;
+    private Date endDateFilter;
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -74,6 +81,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
         mailButton= findViewById(R.id.search_mail);
         progressBar = findViewById(R.id.progress);
         submitButton = findViewById(R.id.btn_submit);
+        scrollView = findViewById(R.id.scrollView2);
         nameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,7 +148,35 @@ public class AgentFilterCritreria extends AppCompatActivity {
     }
 
     private void generateReport(){
+        HashMap<String,String> filters = new HashMap<>();
+        if(agentf !=null){
+            if(agentf.getEmail() != null){
+                filters.put("AgentCode", agentf.getEmail());
+            }
+//            if(agentf.getEmail() != null){
+//                filters.put("email",agentf.getEmail());
+//            }
+            if(filters.size() !=0){
+                //ParseService serviceData = new ParseService(this);
+                //serviceData.loadTransactionDataWithFilter(filters);
+                /*Bundle b = new Bundle();
+                b.putString("Category","TransactionAgentWise");
+                    MainFragment mainf = new MainFragment(filters,startDateFilter,endDateFilter);
+                    mainf.setArguments(b);
+                    getSupportFragmentManager().beginTransaction().add(R.id.activity_containerAgent, mainf
+                            , MainFragment.class.getSimpleName()).commit();*/
 
+                Intent tableActivity = new Intent(this,TableActivity.class);
+                tableActivity.putExtra("FiltersMap",filters);
+                tableActivity.putExtra("startDate", startDateFilter.getTime());
+                tableActivity.putExtra("endDate",endDateFilter.getTime());
+                tableActivity.putExtra("Category","TransactionAgentWise");
+                startActivity(tableActivity);
+            }
+            else {
+                Toast.makeText(mContext, "Invalid Agent Data.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 
@@ -194,6 +230,11 @@ public class AgentFilterCritreria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 0);
+                        myCalendar.set(Calendar.MINUTE, 0);
+                        myCalendar.set(Calendar.HOUR, 0);
+                        startDateFilter = myCalendar.getTime();
                         updateLabelFrom();
                     }
 
@@ -233,6 +274,11 @@ public class AgentFilterCritreria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 59);
+                        myCalendar.set(Calendar.MINUTE, 59);
+                        myCalendar.set(Calendar.HOUR_OF_DAY, 23);
+                        endDateFilter = myCalendar.getTime();
                         updateLabelTo();
                     }
 
@@ -260,7 +306,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
             showAToast("No Record found");
             //TO-DO
         }else if(customers.size()==1){
-            showAToast("Customer found");
+            showAToast("Agent found");
             agentName.setText(customers.get(0).getAgentName());
             agentMail.setText(customers.get(0).getEmail());
             agentf = customers.get(0);

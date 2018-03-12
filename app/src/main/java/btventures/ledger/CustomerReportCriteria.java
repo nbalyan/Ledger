@@ -28,6 +28,8 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import btventures.ledger.json.ParseService;
@@ -58,6 +60,8 @@ public class CustomerReportCriteria extends AppCompatActivity {
     EditText fromdate;
     EditText todate;
     Calendar myCalendar;
+    private Date startDateFilter;
+    private Date endDateFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +195,34 @@ public class CustomerReportCriteria extends AppCompatActivity {
     }
 
     private void generateReport(){
+        HashMap<String,String> filters = new HashMap<>();
+        if(customerf !=null){
+            if(customerf.getName() != null){
+                filters.put("CustomerName", customerf.getName());
+            }
+            if(customerf.getAccount() != null){
+                filters.put("CustomerAccountNo",customerf.getAccount());
+            }
+            if(filters.size() !=0){
+                //ParseService serviceData = new ParseService(this);
+                //serviceData.loadTransactionDataWithFilter(filters);
+                /*Bundle b = new Bundle();
+                b.putString("Category","TransactionAgentWise");
+                MainFragment mainf = new MainFragment(filters,startDateFilter,endDateFilter);
+                mainf.setArguments(b);
+                getSupportFragmentManager().beginTransaction().add(R.id.activity_containerCustomer, mainf
+                        , MainFragment.class.getSimpleName()).commit();*/
+                Intent tableActivity = new Intent(this,TableActivity.class);
+                tableActivity.putExtra("FiltersMap",filters);
+                tableActivity.putExtra("startDate", startDateFilter.getTime());
+                tableActivity.putExtra("endDate",endDateFilter.getTime());
+                tableActivity.putExtra("Category","TransactionAgentWise");
+                startActivity(tableActivity);
+            }
+            else {
+                Toast.makeText(mContext, "Invalid Customer Data.", Toast.LENGTH_SHORT).show();
+            }
+        }
 
     }
 
@@ -228,6 +260,11 @@ public class CustomerReportCriteria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 0);
+                        myCalendar.set(Calendar.MINUTE, 0);
+                        myCalendar.set(Calendar.HOUR, 0);
+                        startDateFilter = myCalendar.getTime();
                         updateLabelFrom();
                     }
 
@@ -267,6 +304,11 @@ public class CustomerReportCriteria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 59);
+                        myCalendar.set(Calendar.MINUTE, 59);
+                        myCalendar.set(Calendar.HOUR_OF_DAY, 23);
+                        endDateFilter = myCalendar.getTime();
                         updateLabelTo();
                     }
 
