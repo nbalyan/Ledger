@@ -1,5 +1,7 @@
 package btventures.ledger;
 
+import java.util.Date;
+
 /**
  * Created by Anuj on 2/22/2018.
  */
@@ -11,6 +13,16 @@ public class Customer {
     private String Address;
     private String phone;
     private String cifno;
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    private Date createdAt;
 
     public String getAccountType() {
         return accountType;

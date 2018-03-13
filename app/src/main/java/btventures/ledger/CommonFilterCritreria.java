@@ -227,7 +227,7 @@ public class CommonFilterCritreria extends AppCompatActivity {
                         myCalendar.set(Calendar.YEAR, year);
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.MILLISECOND, 59);
                         myCalendar.set(Calendar.SECOND, 59);
                         myCalendar.set(Calendar.MINUTE, 59);
                         myCalendar.set(Calendar.HOUR_OF_DAY, 23);

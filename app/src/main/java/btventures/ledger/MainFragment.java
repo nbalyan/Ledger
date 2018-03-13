@@ -182,6 +182,30 @@ public class MainFragment extends Fragment {
         return list;
     }
 
+    private List<ColumnHeaderModel> createColumnHeaderModelListDayWiseAgent() {
+        List<ColumnHeaderModel> list = new ArrayList<>();
+
+        // Create Column Headers
+        list.add(new ColumnHeaderModel("Date"));
+        list.add(new ColumnHeaderModel("AmountCollected"));
+        list.add(new ColumnHeaderModel("AgentName"));
+        //list.add(new ColumnHeaderModel("ContactNo"));
+
+        return list;
+    }
+
+    private List<ColumnHeaderModel> createColumnHeaderModelListDayWiseCustomer() {
+        List<ColumnHeaderModel> list = new ArrayList<>();
+
+        // Create Column Headers
+        list.add(new ColumnHeaderModel("Date"));
+        list.add(new ColumnHeaderModel("AmountDeposited"));
+        list.add(new ColumnHeaderModel("CustomerName"));
+        list.add(new ColumnHeaderModel("AccountType"));
+
+        return list;
+    }
+
     private List<List<CellModel>> loadCellModelListUser(List<UserInfo> userInfoList) {
         List<List<CellModel>> lists = new ArrayList<>();
 

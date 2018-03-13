@@ -597,6 +597,7 @@ public class ParseService {
         cellModel.setAgentCode(object.getString("AgentCode"));
         cellModel.setAccountType(object.getString("AccountType"));
         cellModel.setCifno(object.getString("CIFNO"));
+        cellModel.setCreatedAt(new Date(object.getDate("createdAt").getTime()));
 
         return cellModel;
     }
