@@ -586,6 +586,11 @@ public class ParseService {
         newCustomer.setAddress(object.getString("Address"));
         newCustomer.setJointAccountName(object.getString("JointAccountHolder"));
         newCustomer.setObjectID(object.getString("objectId"));
+        if(object.getString("CreatedAt")!=null && object.getString("CreatedAt").intern()!="//".intern())
+            newCustomer.setOpeningDate(object.getString("CreatedAt"));
+        else
+            newCustomer.setOpeningDate("");
+
         return newCustomer;
     }
 
