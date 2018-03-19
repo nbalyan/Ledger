@@ -121,7 +121,7 @@ public class ParseService {
             }
         });
     }
-    
+
     public void loadTransactionDataWithFilter(HashMap<String,String> filters, Date startDate, Date endDate){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionData");
         query.setLimit(100);
@@ -135,7 +135,7 @@ public class ParseService {
 
         Log.d("BKNMainFragment","In Parse");
         for(String key: filters.keySet()){
-            query.whereContains(key,filters.get(key));
+            query.whereMatches(key,filters.get(key),"i");
             Log.d("DDDFilterAdded",key + " " + filters.get(key));
         }
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -152,11 +152,11 @@ public class ParseService {
                     }
 
                     Log.d("BKNMainFragment","Here");
-                   mainFragment.populatedTableViewTransaction(transactionList);
+                    mainFragment.populatedTableViewTransaction(transactionList);
                     mainFragment.hideProgressDialog();
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
-                        mainFragment.hideProgressDialog();
+                    mainFragment.hideProgressDialog();
                 }
             }
         });
@@ -182,7 +182,7 @@ public class ParseService {
         });
 
     }
-    
+
     public void failCallback(){
         if(transactionConfirmActivity != null){
             Toast.makeText(transactionConfirmActivity, "Transaction could not be saved", Toast.LENGTH_LONG).show();
@@ -198,7 +198,7 @@ public class ParseService {
 
         final ArrayList<AgentInfo> agentInfos = new ArrayList<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("AgentData");
-        query.whereContains("Name",name);
+        query.whereMatches("Name",name,"i");
         query.setLimit(50);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -230,7 +230,7 @@ public class ParseService {
 
         final ArrayList<AgentInfo> agentInfos = new ArrayList<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("AgentData");
-        query.whereContains("email",name);
+        query.whereMatches("email",name,"i");
         query.setLimit(50);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -262,7 +262,7 @@ public class ParseService {
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
-        query.whereContains("Name", Name);
+        query.whereMatches("Name", Name,"i");
         query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -316,12 +316,12 @@ public class ParseService {
     public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
-        query.whereContains("AccountNo", Account);
+        query.whereMatches("AccountNo", Account,"i");
         query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                Log.d("data returnnkb","nkb" + String.valueOf(objects.size()));
+//                Log.d("data returnnkb","nkb" + String.valueOf(objects.size()));
                 if(e==null) {
                     for (int i = 0; i < objects.size(); i++) {
                         Log.d("data returnnkb","nkb");
@@ -330,7 +330,7 @@ public class ParseService {
 
                     }
                     if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
-                    Log.d("hello", "hello");
+                        Log.d("hello", "hello");
                         modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
                     if(transactionEntry!= null){
                         ArrayList<Customer> list= new ArrayList<Customer>();
@@ -374,7 +374,7 @@ public class ParseService {
     public ArrayList<CustomerCompleteDetails> getDatabyMobile(String Mobile){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
-        query.whereContains("Mobile", Mobile);
+        query.whereMatches("Mobile", Mobile,"i");
         query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -425,7 +425,7 @@ public class ParseService {
     public ArrayList<CustomerCompleteDetails> getDatabyAddress(String Address){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
-        query.whereContains("Address", Address);
+        query.whereMatches("Address", Address,"i");
         query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -479,7 +479,7 @@ public class ParseService {
             data = getDatabyAccount(newData.getAccount().toString()).get(0);
         }
         if(data.getAccount()!=null)
-        Log.d("data",data.getAccount().toString());
+            Log.d("data",data.getAccount().toString());
         if(data.getAccount() != null) {
             newCustomer.put("Name", newData.getName());
             newCustomer.put("AccountNo", newData.getAccount());
@@ -561,7 +561,7 @@ public class ParseService {
     }
 
 
-    
+
     private CustomerCompleteDetails createCustomerInfoFromParseObject(ParseObject object){
         CustomerCompleteDetails newCustomer = new CustomerCompleteDetails();
         newCustomer.setAccount(object.getString("AccountNo"));
