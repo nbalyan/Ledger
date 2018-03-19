@@ -2,6 +2,8 @@ package btventures.ledger;
 
 import java.util.Date;
 
+import btventures.ledger.tableview.CustomerCompleteDetails;
+
 /**
  * Created by Anuj on 2/22/2018.
  */
@@ -13,6 +15,16 @@ public class Customer {
     private String Address;
     private String phone;
     private String cifno;
+
+    public CustomerCompleteDetails getCustomerCompleteDetails() {
+        return customerCompleteDetails;
+    }
+
+    public void setCustomerCompleteDetails(CustomerCompleteDetails customerCompleteDetails) {
+        this.customerCompleteDetails = customerCompleteDetails;
+    }
+
+    private CustomerCompleteDetails customerCompleteDetails;
 
     public Date getCreatedAt() {
         return createdAt;
@@ -73,6 +85,13 @@ public class Customer {
         this.account = account;
         Address = address;
         this.phone = phone;
+    }
+    public Customer(String name, String account, String address, String phone, CustomerCompleteDetails customerCompleteDetails) {
+        this.name = name;
+        this.account = account;
+        Address = address;
+        this.phone = phone;
+        this.customerCompleteDetails = customerCompleteDetails;
     }
 
     public void setName(String name) {

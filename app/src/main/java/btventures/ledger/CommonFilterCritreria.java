@@ -71,6 +71,8 @@ public class CommonFilterCritreria extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_common_report_criteria);
+        startDateFilter = new Date(-1);
+        endDateFilter = new Date(-1);
         mContext = this;
         fromdate = findViewById(R.id.input_from_date);
         todate = findViewById(R.id.input_to_date);
@@ -96,6 +98,9 @@ public class CommonFilterCritreria extends AppCompatActivity {
                     startActivity(intent1);*/
                     generateReport();
                     finish();
+                }else{
+
+                    Toast.makeText(mContext, "Please select date range to view the report.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -104,8 +109,12 @@ public class CommonFilterCritreria extends AppCompatActivity {
     }
 
     public boolean validate() {
-        boolean valid = true;
-        return valid;
+        if(startDateFilter == null || endDateFilter == null){
+            return false;
+        }else
+        {
+            return true;
+        }
     }
 
     private void generateReport(){

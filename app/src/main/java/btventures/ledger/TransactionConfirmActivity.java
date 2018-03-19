@@ -11,6 +11,9 @@ import android.widget.EditText;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import btventures.ledger.json.ParseService;
 
 /**
@@ -40,6 +43,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm);
+        String timeStamp = new SimpleDateFormat("yyMMddHHmmss").format(new Date());
+
         mContext = this;
         context = this;
         accountEdit = findViewById(R.id.input_account);
@@ -56,8 +61,9 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         nameEdit.setText(b.getString("name"));
         phoneEdit.setText(b.getString("phone"));
         addressEdit.setText(b.getString("address"));
-        recieptEdit.setText(b.getString("receipt"));
+        recieptEdit.setText(ParseUser.getCurrentUser().getString("AgentCode")+timeStamp);
         amountEdit.setText(b.getString("amount"));
+
         final String accountType = b.getString("CATEGORY");
         disableField(accountEdit);
         disableField(nameEdit);

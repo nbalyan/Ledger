@@ -129,10 +129,12 @@ public class ParseService {
         Log.d("startDate", String.valueOf(endDate.getTime()));
 //        mealPlan.whereGreaterThanOrEqualTo("createdAt", today);
 //        mealPlan.whereLessThan("createdAt", tomorrow);
-
-        query.whereGreaterThanOrEqualTo("createdAt", startDate);
-        query.whereLessThan("createdAt", endDate);
-
+        if(startDate.getTime() != -1) {
+            query.whereGreaterThanOrEqualTo("createdAt", startDate);
+        }
+        if(endDate.getTime() != -1) {
+            query.whereLessThan("createdAt", endDate);
+        }
         Log.d("BKNMainFragment","In Parse");
         for(String key: filters.keySet()){
             query.whereMatches(key,filters.get(key),"i");
@@ -313,7 +315,7 @@ public class ParseService {
         return customerCompleteDetailsList;
     }
 
-    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account){
+    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account, final boolean callback){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("AccountNo", Account,"i");
@@ -329,17 +331,22 @@ public class ParseService {
                         customerCompleteDetailsList.add(userInfo);
 
                     }
-                    if(modifyCustomer != null){modifyCustomer.handleResult(customerCompleteDetailsList);
-                        Log.d("hello", "hello");
-                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);}
+                    if(modifyCustomer != null) {
+                        if (callback){
+                            modifyCustomer.handleResult(customerCompleteDetailsList);
+                            modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
                     if(transactionEntry!= null){
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
                             list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
                         }
-                        transactionEntry.handleResult(list);
-                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        if(callback) {
+                            transactionEntry.handleResult(list);
+                            transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        }
                     }
 
                     if(customerReportCriteria!=null){
@@ -348,8 +355,10 @@ public class ParseService {
                         for(int j=0; j < list1.size(); j++){
                             list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
                         }
-                        customerReportCriteria.handleResult(list);
-                        customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+                        if(callback) {
+                            customerReportCriteria.handleResult(list);
+                            customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+                        }
 
                     }
                 }else{
@@ -369,6 +378,10 @@ public class ParseService {
 
         Log.d("data returnnkb",String.valueOf(customerCompleteDetailsList.size()));
         return customerCompleteDetailsList;
+    }
+
+    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account){
+        return getDatabyAccount(Account,true);
     }
 
     public ArrayList<CustomerCompleteDetails> getDatabyMobile(String Mobile){
@@ -475,8 +488,8 @@ public class ParseService {
         final ParseObject newCustomer = new ParseObject("CustomerData");
         CustomerCompleteDetails data = new CustomerCompleteDetails();
         Log.d("beforefetch",newData.getAccount());
-        if(getDatabyAccount(newData.getAccount().toString()).size() !=0) {
-            data = getDatabyAccount(newData.getAccount().toString()).get(0);
+        if(getDatabyAccount(newData.getAccount().toString(), false).size() !=0) {
+            data = getDatabyAccount(newData.getAccount().toString(), false).get(0);
         }
         if(data.getAccount()!=null)
             Log.d("data",data.getAccount().toString());
@@ -553,7 +566,7 @@ public class ParseService {
         modifyCustomer.finish();
     }
     public void accountupdateCallback(){
-        Toast.makeText(modifyCustomer, "New Customer Created", Toast.LENGTH_SHORT).show();
+        Toast.makeText(modifyCustomer, "Customer details updated", Toast.LENGTH_SHORT).show();
         Intent homeActivity = new Intent(modifyCustomer, HomeActivity.class);
         modifyCustomer.startActivity(homeActivity);
         modifyCustomer.finish();
@@ -583,7 +596,7 @@ public class ParseService {
         cellModel.setEmail(object.getString("email"));
         cellModel.setCode(object.getString("Code"));
         cellModel.setCode(object.getString("ContactNo"));
-
+        cellModel.setAgentCode(object.getString("AgentCode"));
         return cellModel;
     }
 
@@ -596,7 +609,7 @@ public class ParseService {
         cellModel.setAgentCode(object.getString("AgentCode"));
         cellModel.setAccountType(object.getString("AccountType"));
         cellModel.setCifno(object.getString("CIFNO"));
-        cellModel.setCreatedAt(new Date(object.getDate("createdAt").getTime()));
+        //cellModel.setCreatedAt(new Date((object.getDate("createdAt")).getTime()));
 
         return cellModel;
     }
@@ -606,7 +619,7 @@ public class ParseService {
         cellModel.setmAccountNo(object.getString("AccountNo"));
         cellModel.setName(object.getString("Name"));
         cellModel.setmAmount(String.valueOf(object.getString("Amount")));
-        cellModel.setmOpeningDate(object.getString("createdAt"));
+        cellModel.setmOpeningDate((object.getString("CreatedAt")));
         cellModel.setAddress(object.getString("Address"));
         cellModel.setMobile(object.getString("Mobile"));
         cellModel.setmAadharCardNo(object.getString("AadharNo"));

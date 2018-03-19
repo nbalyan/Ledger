@@ -72,6 +72,8 @@ public class AgentFilterCritreria extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_filter);
+        startDateFilter = new Date(-1);
+        endDateFilter = new Date(-1);
         mContext = this;
         fromdate = findViewById(R.id.input_from_date);
         todate = findViewById(R.id.input_to_date);
@@ -135,6 +137,9 @@ public class AgentFilterCritreria extends AppCompatActivity {
                     startActivity(intent1);*/
                     generateReport();
                     finish();
+                }else{
+
+                    Toast.makeText(mContext, "Please select agent to view the report.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -143,14 +148,18 @@ public class AgentFilterCritreria extends AppCompatActivity {
     }
 
     public boolean validate() {
-        boolean valid = true;
-        return valid;
+        if(agentf == null){
+            return false;
+        }else
+        {
+            return true;
+        }
     }
 
     private void generateReport(){
         HashMap<String,String> filters = new HashMap<>();
         if(agentf !=null){
-            if(agentf.getEmail() != null){
+            if(agentf.getAgentName() != null){
                 filters.put("AgentCode", agentf.getEmail());
             }
 //            if(agentf.getEmail() != null){
