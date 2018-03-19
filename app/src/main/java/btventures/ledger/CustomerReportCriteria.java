@@ -67,6 +67,8 @@ public class CustomerReportCriteria extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_report_criteria);
+        startDateFilter = new Date(-1);
+        endDateFilter = new Date(-1);
         mContext = this;
         accountButton = findViewById(R.id.search_account);
         nameButton = findViewById(R.id.search_name);
@@ -125,6 +127,8 @@ public class CustomerReportCriteria extends AppCompatActivity {
                     startActivity(intent1);*/
                     generateReport();
                     finish();
+                }else{
+                    Toast.makeText(mContext, "Please select customer to view the report.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -323,9 +327,9 @@ public class CustomerReportCriteria extends AppCompatActivity {
 
     }
 
-    public boolean validate() {
+    public boolean validate() {/*
         boolean valid = true;
-        /*String recieptNo = recieptEdit.getText().toString();
+        *//*String recieptNo = recieptEdit.getText().toString();
         String amount =amountEdit.getText().toString();
         if (recieptNo.isEmpty()) {
             recieptEdit.setError("Enter Valid Address");
@@ -338,9 +342,16 @@ public class CustomerReportCriteria extends AppCompatActivity {
             valid = false;
         } else {
             amountEdit.setError(null);
-        }*/
+        }*//*
 
-        return valid;
+        return valid;*/
+
+        if(customerf == null){
+            return false;
+        }else
+        {
+            return true;
+        }
     }
 
     public void showAToast (String message){

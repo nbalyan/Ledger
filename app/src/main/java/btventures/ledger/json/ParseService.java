@@ -129,10 +129,12 @@ public class ParseService {
         Log.d("startDate", String.valueOf(endDate.getTime()));
 //        mealPlan.whereGreaterThanOrEqualTo("createdAt", today);
 //        mealPlan.whereLessThan("createdAt", tomorrow);
-
-        query.whereGreaterThanOrEqualTo("createdAt", startDate);
-        query.whereLessThan("createdAt", endDate);
-
+        if(startDate.getTime() != -1) {
+            query.whereGreaterThanOrEqualTo("createdAt", startDate);
+        }
+        if(endDate.getTime() != -1) {
+            query.whereLessThan("createdAt", endDate);
+        }
         Log.d("BKNMainFragment","In Parse");
         for(String key: filters.keySet()){
             query.whereMatches(key,filters.get(key),"i");
@@ -597,7 +599,7 @@ public class ParseService {
         cellModel.setAgentCode(object.getString("AgentCode"));
         cellModel.setAccountType(object.getString("AccountType"));
         cellModel.setCifno(object.getString("CIFNO"));
-        cellModel.setCreatedAt(new Date(object.getDate("createdAt").getTime()));
+        //cellModel.setCreatedAt(new Date((object.getDate("createdAt")).getTime()));
 
         return cellModel;
     }
@@ -607,7 +609,7 @@ public class ParseService {
         cellModel.setmAccountNo(object.getString("AccountNo"));
         cellModel.setName(object.getString("Name"));
         cellModel.setmAmount(String.valueOf(object.getString("Amount")));
-        cellModel.setmOpeningDate(object.getString("createdAt"));
+        cellModel.setmOpeningDate((object.getString("CreatedAt")));
         cellModel.setAddress(object.getString("Address"));
         cellModel.setMobile(object.getString("Mobile"));
         cellModel.setmAadharCardNo(object.getString("AadharNo"));
