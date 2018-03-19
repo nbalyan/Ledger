@@ -16,6 +16,14 @@ public class AgentInfo {
 
     private String agentName;
 
+    public String getAgentCode() {
+        return agentCode;
+    }
+
+    public void setAgentCode(String agentCode) {
+        this.agentCode = agentCode;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -33,6 +41,8 @@ public class AgentInfo {
     public void setCode(String code) {
         this.code = code;
     }
+
+    private String agentCode;
 
     public String getPhone() {
         return phone;

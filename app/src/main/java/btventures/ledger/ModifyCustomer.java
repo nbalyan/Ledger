@@ -310,7 +310,7 @@ public class ModifyCustomer extends AppCompatActivity {
 
             ArrayList<CustomerCompleteDetails> list1 = customers;
             for(int j=0; j < list1.size(); j++) {
-                list.add(new Customer(list1.get(j).getName(), list1.get(j).getAccount(), list1.get(j).getAddress(), list1.get(j).getPhone()));
+                list.add(new Customer(list1.get(j).getName(), list1.get(j).getAccount(), list1.get(j).getAddress(), list1.get(j).getPhone(), list1.get(j)));
             }
             showPopup(list);
         }
@@ -360,6 +360,17 @@ public class ModifyCustomer extends AppCompatActivity {
                 nameEdit.setText(list.get(position).getName());
                 phoneEdit.setText(list.get(position).getPhone());
                 addressEdit.setText(list.get(position).getAddress());
+                dateEdit.setText(list.get(position).getCustomerCompleteDetails().getOpeningDate());
+                amountEdit.setText(list.get(position).getCustomerCompleteDetails().getAmount());
+
+//            codeEdit.setText(customers.get(0).getCode());
+                //         CIFedit.setText(customers.get(0).getCif());
+                aadharEdit.setText(list.get(position).getCustomerCompleteDetails().getAadhar());
+                PANEdit.setText(list.get(position).getCustomerCompleteDetails().getPan_no());
+                jointNameEdit.setText(list.get(position).getCustomerCompleteDetails().getJointAccountName());
+                //      jointCIFedit.setText(customers.get(0).getJointAccountCIF());
+                //     aadharJointEdit.setText(customers.get(0).getJointAccountAadharNo());
+                nominationEdit.setText(list.get(position).getCustomerCompleteDetails().getNomination());
                 pw.dismiss();
 
 

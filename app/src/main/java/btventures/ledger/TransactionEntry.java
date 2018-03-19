@@ -78,6 +78,7 @@ public class TransactionEntry extends AppCompatActivity {
             addressEdit.setText(b.getString("address"));
             recieptEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
+            customerf = new Customer(b.getString("name"), b.getString("account"), b.getString("address"), b.getString("phone"));
         }
 
 
@@ -182,12 +183,12 @@ public class TransactionEntry extends AppCompatActivity {
         boolean valid = true;
         String recieptNo = recieptEdit.getText().toString();
         String amount =amountEdit.getText().toString();
-        if (recieptNo.isEmpty()) {
-            recieptEdit.setError("Enter Valid Address");
-            valid = false;
-        } else {
-            recieptEdit.setError(null);
-        }
+//        if (recieptNo.isEmpty()) {
+//            recieptEdit.setError("Enter Valid Address");
+//            valid = false;
+//        } else {
+//            recieptEdit.setError(null);
+//        }
         if (amount.isEmpty() || ((Double)Double.parseDouble(amount)).compareTo(new Double(0))==0) {
             amountEdit.setError("Enter Valid Amount");
             valid = false;

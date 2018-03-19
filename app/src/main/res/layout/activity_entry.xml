@@ -158,7 +158,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
@@ -194,7 +195,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Amount"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
