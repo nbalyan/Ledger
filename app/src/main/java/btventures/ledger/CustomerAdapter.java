@@ -60,7 +60,7 @@ public class CustomerAdapter extends ArrayAdapter<Customer> {
 
         holder.account.setText(customers.get(position).getAccount());
         holder.name.setText(customers.get(position).getName());
-        holder.address.setText(customers.get(position).getAccount());
+        holder.address.setText(customers.get(position).getAddress());
         holder.phone.setText(customers.get(position).getPhone());
 
         /*String imgURL = getItem(position).get("URL");

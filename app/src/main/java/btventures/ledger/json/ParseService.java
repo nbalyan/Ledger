@@ -496,7 +496,6 @@ public class ParseService {
                 public void done(ParseException e) {
                     if(e==null){
                         accountsaveCallback();
-
                     }else{
                         failCallback();
                     }
