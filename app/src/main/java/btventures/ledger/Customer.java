@@ -15,6 +15,15 @@ public class Customer {
     private String Address;
     private String phone;
     private String cifno;
+    private String remarks;
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 
     public CustomerCompleteDetails getCustomerCompleteDetails() {
         return customerCompleteDetails;
