@@ -43,6 +43,7 @@ public class TransactionEntry extends AppCompatActivity {
     private EditText addressEdit;
     private EditText recieptEdit;
     private EditText amountEdit;
+    private EditText remarks;
     private Activity mContext;
     public ProgressBar progressBar;
     private Toast mToast;
@@ -67,6 +68,7 @@ public class TransactionEntry extends AppCompatActivity {
         recieptEdit = findViewById(R.id.input_reciept);
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
+        remarks = findViewById(R.id.input_remarks);
         Bundle b= getIntent().getExtras();
 
         actPerformed = b.getString("CATEGORY");
@@ -78,6 +80,7 @@ public class TransactionEntry extends AppCompatActivity {
             addressEdit.setText(b.getString("address"));
             recieptEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
+            remarks.setText(b.getString("remarks"));
             customerf = new Customer(b.getString("name"), b.getString("account"), b.getString("address"), b.getString("phone"));
         }
 
@@ -105,6 +108,7 @@ public class TransactionEntry extends AppCompatActivity {
                     extras.putString("phone",customerf.getPhone());
                     extras.putString("receipt",recieptEdit.getText().toString());
                     extras.putString("amount",amountEdit.getText().toString());
+                    extras.putString("remarks",remarks.getText().toString());
                     extras.putString("CATEGORY",actPerformed);
                     Intent intent1 = new Intent(mContext, TransactionConfirmActivity.class);
                     intent1.putExtras(extras);

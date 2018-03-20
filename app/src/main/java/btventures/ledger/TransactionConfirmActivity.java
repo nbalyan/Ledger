@@ -30,6 +30,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     private EditText addressEdit;
     private EditText recieptEdit;
     private EditText amountEdit;
+    private EditText remarksEdit;
     private AppCompatButton submitButton;
     private AppCompatButton editButton;
 
@@ -52,6 +53,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         addressEdit = findViewById(R.id.input_address);
         phoneEdit = findViewById(R.id.input_mobile);
         recieptEdit = findViewById(R.id.input_reciept);
+        remarksEdit = findViewById(R.id.input_remarks);
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
         editButton = findViewById(R.id.btn_edit);
@@ -61,6 +63,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         nameEdit.setText(b.getString("name"));
         phoneEdit.setText(b.getString("phone"));
         addressEdit.setText(b.getString("address"));
+        remarksEdit.setText(b.getString("remarks"));
         recieptEdit.setText(ParseUser.getCurrentUser().getString("AgentCode")+timeStamp);
         amountEdit.setText(b.getString("amount"));
 
@@ -71,6 +74,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         disableField(addressEdit);
         disableField(recieptEdit);
         disableField(amountEdit);
+        disableField(recieptEdit);
 
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -91,6 +95,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
                 newTransaction.setAccount(accountEdit.getText().toString());
                 newTransaction.setAccountType(accountType);
                 newTransaction.setCifno(recieptEdit.getText().toString());
+                newTransaction.setRemarks(remarksEdit.getText().toString());
                 newTransaction.setAgentCode(ParseUser.getCurrentUser().getUsername());
                 newTransaction.setmAmount(amountEdit.getText().toString());
                 newTransaction.setName(nameEdit.getText().toString());
