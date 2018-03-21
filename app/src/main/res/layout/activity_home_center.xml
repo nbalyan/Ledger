@@ -1,0 +1,39 @@
+<merge>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="btventures.ledger.HomeActivity">
+
+    <Button
+        android:id="@+id/RecDep"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:text="Recurring Deposit" />
+
+    <Button
+        android:id="@+id/FIXDep"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+
+        android:text="Savings Account" />
+
+    <Button
+        android:id="@+id/LICbutton"
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+
+        android:text="LIC" />
+
+    <Button
+        android:id="@+id/CustomerModify"
+
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:text="Add/Modify Customer" />
+
+</LinearLayout>
+</merge>
