@@ -50,7 +50,7 @@ public class ParseService {
     public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
     public ParseService(AgentFilterCritreria agentFilterCritreria){this.agentFilterCritreria = agentFilterCritreria;}
     public ParseService(CustomerReportCriteria customerReportCriteria){this.customerReportCriteria = customerReportCriteria;}
-    public ParseService(TransactionAfterConfirmActivity transactionAfterConfirmActivity){this.transactionAfterConfirmActivity = transactionAfterConfirmActivity;}
+    //public ParseService(TransactionAfterConfirmActivity transactionAfterConfirmActivity){this.transactionAfterConfirmActivity = transactionAfterConfirmActivity;}
 
     public ParseService(){};
 
@@ -587,8 +587,8 @@ public class ParseService {
 
     public void accountsaveCallback(){
         Toast.makeText(modifyCustomer, "New Customer Created", Toast.LENGTH_SHORT).show();
-        Intent homeActivity = new Intent(modifyCustomer, HomeActivity.class);
-        modifyCustomer.startActivity(homeActivity);
+        //Intent homeActivity = new Intent(modifyCustomer, HomeActivity.class);
+        //modifyCustomer.startActivity(homeActivity);
         modifyCustomer.finish();
     }
     public void accountupdateCallback(){

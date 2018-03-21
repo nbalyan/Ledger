@@ -7,47 +7,12 @@
 
     tools:context="btventures.ledger.HomeActivity">
 
-    <Button
-        android:id="@+id/RecDep"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_alignLeft="@+id/LICbutton"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="80dp"
-        android:layout_alignStart="@+id/LICbutton"
-        android:text="Recurring Deposit" />
-
-    <Button
-        android:id="@+id/FIXDep"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_alignLeft="@+id/LICbutton"
-        android:layout_alignStart="@+id/LICbutton"
-        android:layout_below="@+id/RecDep"
-        android:text="Savings Account" />
-
-    <Button
-        android:id="@+id/LICbutton"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_below="@+id/FIXDep"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="LIC" />
-
-    <Button
-        android:id="@+id/CustomerModify"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_below="@+id/LICbutton"
-        android:layout_centerHorizontal="true"
-        android:text="Add/Modify Customer" />
-
-    <!--<Button
-        android:id="@+id/button5"
-        android:layout_width="250dp"
-        android:layout_height="75dp"
-        android:layout_alignLeft="@+id/LICbutton"
-        android:layout_alignStart="@+id/LICbutton"
-        android:layout_below="@+id/LICbutton"
-        android:text="Deposits in post office for RD." />-->
+        >
+        <include layout="@layout/activity_home_center"/>
+    </RelativeLayout>
 </RelativeLayout>

@@ -26,11 +26,22 @@
         <activity android:name=".TableActivity"></activity>
         <activity android:name=".TransactionEntry"></activity>
         <activity android:name=".TransactionConfirmActivity"></activity>
+        <activity android:name=".TransactionAfterConfirmActivity"></activity>
         <activity android:name=".ModifyCustomer"></activity>
         <activity android:name=".AgentFilterCritreria"></activity>
         <activity android:name=".AdminHomeActivity"></activity>
         <activity android:name=".CustomerReportCriteria"></activity>
         <activity android:name=".CommonFilterCritreria"></activity>
+
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

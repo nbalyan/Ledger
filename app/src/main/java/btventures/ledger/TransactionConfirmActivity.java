@@ -106,4 +106,11 @@ public class TransactionConfirmActivity extends AppCompatActivity {
 
 
     }
+
+    public void handleCallBack() {
+        Intent transactionConfirmed = new Intent(this, TransactionAfterConfirmActivity.class);
+        transactionConfirmed.putExtras(getIntent().getExtras());
+        startActivity(transactionConfirmed);
+        finish();
+    }
 }
