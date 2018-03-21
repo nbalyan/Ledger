@@ -74,7 +74,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         disableField(addressEdit);
         disableField(recieptEdit);
         disableField(amountEdit);
-        disableField(recieptEdit);
+        disableField(remarksEdit);
 
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override

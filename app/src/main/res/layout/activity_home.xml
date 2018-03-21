@@ -24,7 +24,7 @@
         android:layout_alignLeft="@+id/LICbutton"
         android:layout_alignStart="@+id/LICbutton"
         android:layout_below="@+id/RecDep"
-        android:text="Fixed Deposit" />
+        android:text="Savings Account" />
 
     <Button
         android:id="@+id/LICbutton"

@@ -172,6 +172,7 @@ public class ParseService {
         newTransaction.put("CustomerAccountNo",data.getAccount());
         newTransaction.put("AccountType", data.getAccountType());
         newTransaction.put("CustomerName", data.getName());
+        newTransaction.put("Remarks",data.getRemarks());
         newTransaction.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
