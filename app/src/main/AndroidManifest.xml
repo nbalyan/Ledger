@@ -32,7 +32,6 @@
         <activity android:name=".AdminHomeActivity"></activity>
         <activity android:name=".CustomerReportCriteria"></activity>
         <activity android:name=".CommonFilterCritreria"></activity>
-
         <provider
             android:name=".GenericFileProvider"
             android:authorities="${applicationId}.my.package.name.provider"
