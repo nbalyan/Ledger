@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import btventures.ledger.AgentFilterCritreria;
 import btventures.ledger.Customer;
@@ -24,6 +27,7 @@ import btventures.ledger.CustomerReportCriteria;
 import btventures.ledger.HomeActivity;
 import btventures.ledger.MainFragment;
 import btventures.ledger.ModifyCustomer;
+import btventures.ledger.TransactionAfterConfirmActivity;
 import btventures.ledger.TransactionConfirmActivity;
 import btventures.ledger.TransactionEntry;
 import btventures.ledger.tableview.CustomerCompleteDetails;
@@ -39,12 +43,15 @@ public class ParseService {
     private TransactionConfirmActivity transactionConfirmActivity;
     private AgentFilterCritreria agentFilterCritreria;
     private CustomerReportCriteria customerReportCriteria;
+    private TransactionAfterConfirmActivity transactionAfterConfirmActivity;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
     public ParseService(ModifyCustomer modifyCustomer){this.modifyCustomer = modifyCustomer;};
     public ParseService(MainFragment mainFragment){this.mainFragment = mainFragment;}
     public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
     public ParseService(AgentFilterCritreria agentFilterCritreria){this.agentFilterCritreria = agentFilterCritreria;}
     public ParseService(CustomerReportCriteria customerReportCriteria){this.customerReportCriteria = customerReportCriteria;}
+    public ParseService(TransactionAfterConfirmActivity transactionAfterConfirmActivity){this.transactionAfterConfirmActivity = transactionAfterConfirmActivity;}
+
     public ParseService(){};
 
     public void loadCustomerData(){
@@ -195,6 +202,25 @@ public class ParseService {
         }else if(modifyCustomer != null){
             Toast.makeText(modifyCustomer, "Could not save/update the user. Please try again.", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public static void test(){
+        Map<String,String> params = new HashMap<>();
+        params.put("refer", "refer");
+        ParseCloud.callFunctionInBackground("testingCloud",params,new FunctionCallback<String>() {
+            public void done(String results, ParseException e) {
+                if (results != null) {
+                    //Toast.makeText(restaurantActivity, results, Toast.LENGTH_LONG).show();
+                    Log.d("testingCloud",results);
+                } else {
+                    Log.d("testingCloud","fail");
+                    //Toast.makeText(restaurantActivity, e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+                if(e!=null) e.printStackTrace();
+            }
+        });
+
+
     }
 
     public void getAgentDatabyName(String name){
@@ -554,10 +580,9 @@ public class ParseService {
     }
 
     public void transactionsaveCallback(){
-        Toast.makeText(transactionConfirmActivity, "Transaction Saved", Toast.LENGTH_SHORT).show();
-        Intent homeActivity = new Intent(transactionConfirmActivity, HomeActivity.class);
-        transactionConfirmActivity.startActivity(homeActivity);
-        transactionConfirmActivity.finish();
+        transactionConfirmActivity.handleCallBack();
+        //Toast.makeText(transactionConfirmActivity, "Transaction Saved", Toast.LENGTH_SHORT).show();
+
     }
 
     public void accountsaveCallback(){
