@@ -89,10 +89,18 @@
                 android:id="@+id/btn_submit"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="12dp"
                 android:layout_marginTop="24dp"
                 android:padding="24dp"
-                android:text="Show Report" />
+                android:text="Show Full Report" />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_generateCum"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
+                android:padding="24dp"
+                android:text="Show DayWise Report" />
         </LinearLayout>
     </ScrollView>
 

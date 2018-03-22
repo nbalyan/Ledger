@@ -55,6 +55,7 @@ public class CommonFilterCritreria extends AppCompatActivity {
     /*private ImageButton nameButton;
     private ImageButton mailButton;*/
     private AppCompatButton submitButton;
+    private AppCompatButton generateButton;
     public ProgressBar progressBar;
     private DatePickerDialog toDateDialog;
     private Date startDateFilter;
@@ -79,6 +80,7 @@ public class CommonFilterCritreria extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress);
         submitButton = findViewById(R.id.btn_submit);
+        generateButton = findViewById(R.id.btn_generateCum);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +99,30 @@ public class CommonFilterCritreria extends AppCompatActivity {
                     intent1.putExtras(extras);
                     startActivity(intent1);*/
                     generateReport();
+                    finish();
+                }else{
+
+                    Toast.makeText(mContext, "Please select date range to view the report.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        generateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ArrayList<Customer> customers = fetchListByAccount();
+                if(validate()){
+                    /*Bundle extras = new Bundle();
+                    extras.putString("account",customerf.getAccount());
+                    extras.putString("name",customerf.getName());
+                    extras.putString("address",customerf.getAddress());
+                    extras.putString("phone",customerf.getPhone());
+                    extras.putString("receipt",recieptEdit.getText().toString());
+                    extras.putString("amount",amountEdit.getText().toString());
+                    extras.putString("CATEGORY",actPerformed);
+                    Intent intent1 = new Intent(mContext, TransactionConfirmActivity.class);
+                    intent1.putExtras(extras);
+                    startActivity(intent1);*/
+                    generateCumulativeReport();
                     finish();
                 }else{
 
@@ -138,6 +164,39 @@ public class CommonFilterCritreria extends AppCompatActivity {
                 tableActivity.putExtra("endDate",endDateFilter.getTime());
                 tableActivity.putExtra("Category","TransactionAgentWise");
                 startActivity(tableActivity);
+
+    }
+
+    private void generateCumulativeReport(){
+        HashMap<String,String> filters = new HashMap<>();
+
+        if(startDateFilter.getTime() != -1){
+
+            filters.put("fromDate", startDateFilter.toString());
+        }
+        if(endDateFilter.getTime() != -1){
+
+            filters.put("toDate", endDateFilter.toString());
+        }
+//            if(agentf.getEmail() != null){
+//                filters.put("email",agentf.getEmail());
+//            }
+        //ParseService serviceData = new ParseService(this);
+        //serviceData.loadTransactionDataWithFilter(filters);
+                /*Bundle b = new Bundle();
+                b.putString("Category","TransactionAgentWise");
+                MainFragment mainf = new MainFragment(filters,startDateFilter,endDateFilter);
+                Log.d("BKNMainFragment","Created");
+                mainf.setArguments(b);
+                getSupportFragmentManager().beginTransaction().add(R.id.activity_containerCommon, mainf
+                        , MainFragment.class.getSimpleName()).commit();*/
+
+        Intent tableActivity = new Intent(this,TableActivity.class);
+        tableActivity.putExtra("FiltersMap",filters);
+        tableActivity.putExtra("startDate", startDateFilter.getTime());
+        tableActivity.putExtra("endDate",endDateFilter.getTime());
+        tableActivity.putExtra("Category","TransactionDayWise");
+        startActivity(tableActivity);
 
     }
 

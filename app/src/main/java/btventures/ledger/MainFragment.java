@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.evrencoskun.tableview.TableView;
 
 import btventures.ledger.json.AgentInfo;
+import btventures.ledger.json.DayWiseCollection;
 import btventures.ledger.json.ParseService;
 import btventures.ledger.json.UserInfo;
 import btventures.ledger.json.WebServiceHandler;
@@ -100,7 +101,11 @@ public class MainFragment extends Fragment {
         }else if(category.intern() == "TransactionAgentWise".intern()){
 
             Log.d("BKNMainFragment","Calling Parse");
-            parseService.loadTransactionDataWithFilter(filters,startDate,endDate);
+           parseService.loadTransactionDataWithFilter(filters,startDate,endDate);
+            //parseService.loadTransactionDataDayWise(filters);
+        }
+        else if (category.intern() == "TransactionDayWise".intern()){
+            parseService.loadTransactionDataDayWise(filters);
         }
        // mWebServiceHandler.loadUserInfoList();
 
@@ -131,6 +136,16 @@ public class MainFragment extends Fragment {
         // create Models
         mColumnHeaderList = createColumnHeaderModelListTransaction();
         mCellList = loadCellModelListTransaction(userInfoList);
+        mRowHeaderList = createRowHeaderList();
+
+        // Set all items to the TableView
+        mTableAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);
+    }
+
+    public void populatedTableViewTransactionDayWise(List<DayWiseCollection> userInfoList) {
+        // create Models
+        mColumnHeaderList = createColumnHeaderModelListDayWise();
+        mCellList = loadCellModelListTransactionDayWise(userInfoList);
         mRowHeaderList = createRowHeaderList();
 
         // Set all items to the TableView
@@ -189,6 +204,17 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("Date"));
         list.add(new ColumnHeaderModel("AmountCollected"));
         list.add(new ColumnHeaderModel("AgentName"));
+        //list.add(new ColumnHeaderModel("ContactNo"));
+
+        return list;
+    }
+
+    private List<ColumnHeaderModel> createColumnHeaderModelListDayWise() {
+        List<ColumnHeaderModel> list = new ArrayList<>();
+
+        // Create Column Headers
+        list.add(new ColumnHeaderModel("Date"));
+        list.add(new ColumnHeaderModel("AmountCollected"));
         //list.add(new ColumnHeaderModel("ContactNo"));
 
         return list;
@@ -288,6 +314,37 @@ public class MainFragment extends Fragment {
             list.add(new CellModel("4-" + i, userInfo.getAgentCode()));    //
             list.add(new CellModel("5-" + i, userInfo.getCifno())); //
             list.add(new CellModel("6-" + i, userInfo.getAccountType()));   //
+
+            // Add
+            lists.add(list);
+        }
+
+        return lists;
+    }
+
+    private List<List<CellModel>> loadCellModelListTransactionDayWise(List<DayWiseCollection> userInfoList) {
+        List<List<CellModel>> lists = new ArrayList<>();
+
+        // Creating cell model list from UserInfo list for Cell Items
+        // In this example, UserInfo list is populated from web service
+
+        for (int i = 0; i < userInfoList.size(); i++) {
+            DayWiseCollection userInfo = userInfoList.get(i);
+
+            List<CellModel> list = new ArrayList<>();
+
+            /*
+            *
+        list.add(new ColumnHeaderModel("CustomerAccountNo"));
+        list.add(new ColumnHeaderModel("CustomerName"));
+        list.add(new ColumnHeaderModel("Amount"));
+        list.add(new ColumnHeaderModel("AgentEmail"));
+        list.add(new ColumnHeaderModel("CIFNo"));
+        list.add(new ColumnHeaderModel("AccountType"));*/
+
+            // The order should be same with column header list;
+            list.add(new CellModel("1-" + i, userInfo.getDate()));       //
+            list.add(new CellModel("2-" + i, userInfo.getAmount()));     //
 
             // Add
             lists.add(list);

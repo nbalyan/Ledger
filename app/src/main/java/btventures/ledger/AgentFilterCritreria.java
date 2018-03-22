@@ -55,6 +55,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
     private ImageButton nameButton;
     private ImageButton mailButton;
     private AppCompatButton submitButton;
+    private AppCompatButton generateButton;
     public ProgressBar progressBar;
     private DatePickerDialog toDateDialog;
     private ScrollView scrollView;
@@ -83,6 +84,7 @@ public class AgentFilterCritreria extends AppCompatActivity {
         mailButton= findViewById(R.id.search_mail);
         progressBar = findViewById(R.id.progress);
         submitButton = findViewById(R.id.btn_submit);
+        generateButton = findViewById(R.id.btn_generateCum2);
         scrollView = findViewById(R.id.scrollView2);
         nameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +145,42 @@ public class AgentFilterCritreria extends AppCompatActivity {
                 }
             }
         });
+
+        generateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ArrayList<Customer> customers = fetchListByAccount();
+                if(agentf==null ){
+                    //showAToast("Please enter a valid customer account");
+                    agentName.setError("Enter a Valid Agent");
+                    return;
+                }else{
+                    agentName.setError(null);
+
+                }
+                if (agentf == null){
+
+                }
+                if(validate()){
+                    /*Bundle extras = new Bundle();
+                    extras.putString("account",customerf.getAccount());
+                    extras.putString("name",customerf.getName());
+                    extras.putString("address",customerf.getAddress());
+                    extras.putString("phone",customerf.getPhone());
+                    extras.putString("receipt",recieptEdit.getText().toString());
+                    extras.putString("amount",amountEdit.getText().toString());
+                    extras.putString("CATEGORY",actPerformed);
+                    Intent intent1 = new Intent(mContext, TransactionConfirmActivity.class);
+                    intent1.putExtras(extras);
+                    startActivity(intent1);*/
+                    generateCumulativeReport();
+                    finish();
+                }else{
+
+                    Toast.makeText(mContext, "Please select agent to view the report.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         initiliazeDate();
 
     }
@@ -156,11 +194,53 @@ public class AgentFilterCritreria extends AppCompatActivity {
         }
     }
 
+    private void generateCumulativeReport(){
+        HashMap<String,String> filters = new HashMap<>();
+        if(agentf !=null){
+            if(agentf.getAgentName() != null){
+                filters.put("agentEmail", agentf.getEmail());
+                //filters.put("agentEmail", agentf.getEmail());
+            }
+            if(startDateFilter.getTime() != -1){
+
+                filters.put("fromDate", startDateFilter.toString());
+            }
+            if(endDateFilter.getTime() != -1){
+
+                filters.put("toDate", endDateFilter.toString());
+            }
+//            if(agentf.getEmail() != null){
+//                filters.put("email",agentf.getEmail());
+//            }
+            if(filters.size() !=0){
+                //ParseService serviceData = new ParseService(this);
+                //serviceData.loadTransactionDataWithFilter(filters);
+                /*Bundle b = new Bundle();
+                b.putString("Category","TransactionAgentWise");
+                    MainFragment mainf = new MainFragment(filters,startDateFilter,endDateFilter);
+                    mainf.setArguments(b);
+                    getSupportFragmentManager().beginTransaction().add(R.id.activity_containerAgent, mainf
+                            , MainFragment.class.getSimpleName()).commit();*/
+
+                Intent tableActivity = new Intent(this,TableActivity.class);
+                tableActivity.putExtra("FiltersMap",filters);
+                tableActivity.putExtra("startDate", startDateFilter.getTime());
+                tableActivity.putExtra("endDate",endDateFilter.getTime());
+                tableActivity.putExtra("Category","TransactionDayWise");
+                startActivity(tableActivity);
+            }
+            else {
+                Toast.makeText(mContext, "Invalid Agent Data.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private void generateReport(){
         HashMap<String,String> filters = new HashMap<>();
         if(agentf !=null){
             if(agentf.getAgentName() != null){
                 filters.put("AgentCode", agentf.getEmail());
+                //filters.put("agentEmail", agentf.getEmail());
             }
 //            if(agentf.getEmail() != null){
 //                filters.put("email",agentf.getEmail());

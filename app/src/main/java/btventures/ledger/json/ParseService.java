@@ -15,9 +15,14 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -130,6 +135,47 @@ public class ParseService {
                 }
             }
         });
+    }
+
+    public void loadTransactionDataDayWise(HashMap<String,String> filters){
+        mainFragment.showProgressDialog();
+
+        ParseCloud.callFunctionInBackground("getTransactionData",filters,new FunctionCallback<String>() {
+            public void done(String objects, ParseException e) {
+                if(e==null){
+
+                   Log.d("jsonnkb",objects);
+                    try {
+                        JSONObject jObject = new JSONObject(objects);
+                        Iterator<?> keys = jObject.keys();
+                        ArrayList<DayWiseCollection> listDayWise = new ArrayList<>();
+
+                        while( keys.hasNext() ) {
+                            String key = (String)keys.next();
+                            DayWiseCollection current = new DayWiseCollection();
+                            current.setDate(key);
+                            current.setAmount(String.valueOf(jObject.getDouble(key)));
+                            listDayWise.add(current);
+                        }
+                        mainFragment.populatedTableViewTransactionDayWise(listDayWise);
+                        mainFragment.hideProgressDialog();
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+/*                    List<DayWiseCollection> transactionList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        DayWiseCollection userInfo = createTransactionInfoDayWiseFromParseObject(objects.get(i));
+                        transactionList.add(userInfo);
+                    }
+                    mainFragment.populatedTableViewTransactionDayWise(transactionList);
+                    mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                    mainFragment.hideProgressDialog();
+                }*/
+            }
+        }});
     }
 
     public void loadTransactionDataWithFilter(HashMap<String,String> filters, Date startDate, Date endDate){
@@ -659,6 +705,16 @@ public class ParseService {
         cellModel.setAgentCode(object.getString("AgentCode"));
         cellModel.setAccountType(object.getString("AccountType"));
         cellModel.setCifno(object.getString("CIFNO"));
+        //cellModel.setCreatedAt(new Date((object.getDate("createdAt")).getTime()));
+
+        return cellModel;
+    }
+
+    private DayWiseCollection createTransactionInfoDayWiseFromParseObject(JSONObject object){
+
+        DayWiseCollection cellModel = new DayWiseCollection();
+        //cellModel.setDate(object.get());
+        //cellModel.setAmount(object.getString("CustomerName"));
         //cellModel.setCreatedAt(new Date((object.getDate("createdAt")).getTime()));
 
         return cellModel;
