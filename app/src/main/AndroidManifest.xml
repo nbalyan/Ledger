@@ -3,6 +3,7 @@
     package="btventures.ledger">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".StartLedger"
@@ -32,6 +33,8 @@
         <activity android:name=".AdminHomeActivity"></activity>
         <activity android:name=".CustomerReportCriteria"></activity>
         <activity android:name=".CommonFilterCritreria"></activity>
+        <activity android:name=".SimpleScannerActivity"></activity>
+
         <provider
             android:name=".GenericFileProvider"
             android:authorities="${applicationId}.my.package.name.provider"

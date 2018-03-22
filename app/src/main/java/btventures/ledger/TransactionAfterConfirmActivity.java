@@ -3,12 +3,18 @@ package btventures.ledger;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.content.FileProvider;
+import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -121,6 +127,8 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
     }
 
 
+
+
     private void takeScreenshot() {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
@@ -138,7 +146,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
             v1.setVisibility(View.INVISIBLE);
 
 
-            File imageFile = new File(mPath);
+            /*File imageFile = new File(mPath);
 
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             int quality = 100;
@@ -146,10 +154,13 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
             outputStream.flush();
             outputStream.close();
 
-            openScreenshot(imageFile);
+            openScreenshot(imageFile);*/
+            doPhotoPrint(bitmap);
+
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM
             e.printStackTrace();
+
         }
     }
 
@@ -158,10 +169,23 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_VIEW);
         //Uri uri = Uri.fromFile(imageFile);
         Uri uri = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".my.package.name.provider", imageFile);
-
         intent.setDataAndType(uri, "image/*");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         startActivity(intent);
+    }
+
+    /*private void doPhotoPrint() {
+        PrintHelper photoPrinter = new PrintHelper(this);
+        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.droids);
+        photoPrinter.printBitmap("droids.jpg - test print", bitmap);
+    }*/
+
+    private void doPhotoPrint(Bitmap bitmap) {
+        PrintHelper photoPrinter = new PrintHelper(this);
+        photoPrinter.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+        photoPrinter.printBitmap("receipt", bitmap);
     }
 }

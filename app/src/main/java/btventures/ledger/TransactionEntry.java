@@ -10,6 +10,9 @@ import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -19,8 +22,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -230,6 +235,17 @@ public class TransactionEntry extends AppCompatActivity {
         customerfinal = customers;
 
     }
+    static int i;
+
+    public void addLayout(){
+        LinearLayout ll = (LinearLayout) findViewById(R.id.relatedChannels);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //layoutParams.setMargins(25, 20, 25, 10);
+        EditText view = new EditText(this);
+        view.setText(++i+" view");
+        ll.addView(view, layoutParams);
+    }
 
     private void setupPopUpLayoutManager(View layout){
         rv=(GridView) layout.findViewById(R.id.rv);
@@ -298,6 +314,7 @@ public class TransactionEntry extends AppCompatActivity {
                 phoneEdit.setText(list.get(position).getPhone());
                 addressEdit.setText(list.get(position).getAddress());
                 int j = 0;
+                addLayout();
                 while(customerfinal.size() !=1 && customerfinal.size()>0){
                     if(customerfinal.get(j).getAccount() ==  list.get(position).getAccount()){
                         customerf = customerfinal.get(j);
@@ -320,6 +337,30 @@ public class TransactionEntry extends AppCompatActivity {
                 finish();*/
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_entry,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if(item.getItemId() == R.id.scan){
+            //Log.i("Logging out",Integer.toString(item.getItemId()));
+            //ParseUser.logOut();
+            Bundle extras = new Bundle();
+            extras.putString("CATEGORY",actPerformed);
+            Intent intent = new Intent(getApplicationContext(), SimpleScannerActivity.class);
+            intent.putExtras(extras);
+            startActivity(intent);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

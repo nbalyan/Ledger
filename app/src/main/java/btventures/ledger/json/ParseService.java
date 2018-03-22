@@ -27,6 +27,7 @@ import btventures.ledger.CustomerReportCriteria;
 import btventures.ledger.HomeActivity;
 import btventures.ledger.MainFragment;
 import btventures.ledger.ModifyCustomer;
+import btventures.ledger.SimpleScannerActivity;
 import btventures.ledger.TransactionAfterConfirmActivity;
 import btventures.ledger.TransactionConfirmActivity;
 import btventures.ledger.TransactionEntry;
@@ -43,13 +44,15 @@ public class ParseService {
     private TransactionConfirmActivity transactionConfirmActivity;
     private AgentFilterCritreria agentFilterCritreria;
     private CustomerReportCriteria customerReportCriteria;
-    private TransactionAfterConfirmActivity transactionAfterConfirmActivity;
+    private SimpleScannerActivity simpleScannerActivity;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
     public ParseService(ModifyCustomer modifyCustomer){this.modifyCustomer = modifyCustomer;};
     public ParseService(MainFragment mainFragment){this.mainFragment = mainFragment;}
     public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
     public ParseService(AgentFilterCritreria agentFilterCritreria){this.agentFilterCritreria = agentFilterCritreria;}
     public ParseService(CustomerReportCriteria customerReportCriteria){this.customerReportCriteria = customerReportCriteria;}
+    public ParseService(SimpleScannerActivity simpleScannerActivity){this.simpleScannerActivity = simpleScannerActivity;}
+
     //public ParseService(TransactionAfterConfirmActivity transactionAfterConfirmActivity){this.transactionAfterConfirmActivity = transactionAfterConfirmActivity;}
 
     public ParseService(){};
@@ -292,7 +295,7 @@ public class ParseService {
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("Name", Name,"i");
-        query.setLimit(10);
+        //query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -346,7 +349,8 @@ public class ParseService {
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("AccountNo", Account,"i");
-        query.setLimit(10);
+        //query.setLimit(10);
+        //ParseQuery.or()
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -388,6 +392,18 @@ public class ParseService {
                         }
 
                     }
+                    if(simpleScannerActivity!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                        }
+                        if(callback) {
+                            simpleScannerActivity.handleParseResult(list);
+
+                        }
+
+                    }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
                     if(modifyCustomer!= null){
@@ -396,6 +412,9 @@ public class ParseService {
                     }
                     if(transactionEntry!=null){
                         transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if(simpleScannerActivity!=null){
                         Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -415,7 +434,7 @@ public class ParseService {
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("Mobile", Mobile,"i");
-        query.setLimit(10);
+        //query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -466,7 +485,7 @@ public class ParseService {
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("Address", Address,"i");
-        query.setLimit(10);
+        //query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
