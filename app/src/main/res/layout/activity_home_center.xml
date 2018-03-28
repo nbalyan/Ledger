@@ -35,5 +35,12 @@
         android:layout_height="75dp"
         android:text="Billing" />
 
+    <Button
+        android:id="@+id/ShowRecentTransactions"
+
+        android:layout_width="250dp"
+        android:layout_height="75dp"
+        android:text="Show Recent Transactions." />
+
 </LinearLayout>
 </merge>

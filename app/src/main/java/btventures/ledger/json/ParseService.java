@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import btventures.ledger.CustomerReportCriteria;
 import btventures.ledger.HomeActivity;
 import btventures.ledger.MainFragment;
 import btventures.ledger.ModifyCustomer;
+import btventures.ledger.RecentTransactions;
 import btventures.ledger.SimpleScannerActivity;
 import btventures.ledger.TransactionAfterConfirmActivity;
 import btventures.ledger.TransactionConfirmActivity;
@@ -50,6 +52,7 @@ public class ParseService {
     private AgentFilterCritreria agentFilterCritreria;
     private CustomerReportCriteria customerReportCriteria;
     private SimpleScannerActivity simpleScannerActivity;
+    private RecentTransactions recentTransactions;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
     public ParseService(ModifyCustomer modifyCustomer){this.modifyCustomer = modifyCustomer;};
     public ParseService(MainFragment mainFragment){this.mainFragment = mainFragment;}
@@ -61,6 +64,10 @@ public class ParseService {
     //public ParseService(TransactionAfterConfirmActivity transactionAfterConfirmActivity){this.transactionAfterConfirmActivity = transactionAfterConfirmActivity;}
 
     public ParseService(){};
+
+    public ParseService(RecentTransactions recentTransactions) {
+        this.recentTransactions = recentTransactions;
+    }
 
     public void loadCustomerData(){
         mainFragment.showProgressDialog();
@@ -181,6 +188,7 @@ public class ParseService {
     public void loadTransactionDataWithFilter(HashMap<String,String> filters, Date startDate, Date endDate){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionData");
         query.setLimit(100);
+        query.addDescendingOrder("createdAt");
         Log.d("startDate", String.valueOf(startDate.getTime()));
         Log.d("startDate", String.valueOf(endDate.getTime()));
 //        mealPlan.whereGreaterThanOrEqualTo("createdAt", today);
@@ -210,11 +218,18 @@ public class ParseService {
                     }
 
                     Log.d("BKNMainFragment","Here");
-                    mainFragment.populatedTableViewTransaction(transactionList);
-                    mainFragment.hideProgressDialog();
+                    if(mainFragment !=null) {
+                        mainFragment.populatedTableViewTransaction(transactionList);
+                        mainFragment.hideProgressDialog();
+                    }
+                    if(recentTransactions !=null){
+                        recentTransactions.makeListView(new ArrayList<>(transactionList));
+                    }
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
-                    mainFragment.hideProgressDialog();
+                    if(mainFragment !=null) {
+                        mainFragment.hideProgressDialog();
+                    }
                 }
             }
         });

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="btventures.ledger">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -16,24 +16,23 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            />
+        <activity android:name=".LoginActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".AdminActivity" />
-        <activity android:name=".TableActivity"></activity>
-        <activity android:name=".TransactionEntry"></activity>
-        <activity android:name=".TransactionConfirmActivity"></activity>
-        <activity android:name=".TransactionAfterConfirmActivity"></activity>
-        <activity android:name=".ModifyCustomer"></activity>
-        <activity android:name=".AgentFilterCritreria"></activity>
-        <activity android:name=".AdminHomeActivity"></activity>
-        <activity android:name=".CustomerReportCriteria"></activity>
-        <activity android:name=".CommonFilterCritreria"></activity>
-        <activity android:name=".SimpleScannerActivity"></activity>
+        <activity android:name=".TableActivity" />
+        <activity android:name=".TransactionEntry" />
+        <activity android:name=".TransactionConfirmActivity" />
+        <activity android:name=".TransactionAfterConfirmActivity" />
+        <activity android:name=".ModifyCustomer" />
+        <activity android:name=".AgentFilterCritreria" />
+        <activity android:name=".AdminHomeActivity" />
+        <activity android:name=".CustomerReportCriteria" />
+        <activity android:name=".CommonFilterCritreria" />
+        <activity android:name=".SimpleScannerActivity" />
 
         <provider
             android:name=".GenericFileProvider"
@@ -42,8 +41,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".RecentTransactions"></activity>
     </application>
 
 </manifest>

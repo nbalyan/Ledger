@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v4.print.PrintHelper;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,8 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
     private AppCompatButton printButton;
     private AppCompatButton smsButton;
     private AppCompatButton homeButton;
+    private LinearLayout linearLayout;
+    String calledFrom;
     private String actPerformed;
     private TextView textViewHeader;
 
@@ -81,6 +85,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         textView = findViewById(R.id.text_view);
         textViewHeader= findViewById(R.id.reciept_header);
 
+        linearLayout = findViewById(R.id.hidden_view);
 
         Bundle b= getIntent().getExtras();
         actPerformed = b.getString("CATEGORY");
@@ -102,6 +107,23 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         remarksEdit.setText(remarks);
         recieptEdit.setText(b.getString("receipt"));
         amountEdit.setText(b.getString("amount"));
+
+        calledFrom = b.getString("CalledFrom", "");
+
+        if(calledFrom.intern() == "recentTransactions".intern()){
+
+            textView.setText(new StringBuffer().append("Please select the option you want to perform on the selected transaction : ").append(b.getString("receipt")));
+        }
+        /*linearLayout.post(new Runnable() {
+            @Override
+            public void run() {
+
+                if(calledFrom.intern() == "recentTransactions".intern()){
+                    Toast.makeText(mContext, "trying to print", Toast.LENGTH_SHORT).show();
+                    takeScreenshot();
+                }
+            }
+        });*/
 
         final String accountType = b.getString("CATEGORY");
 
@@ -151,6 +173,16 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+    }
 
 
 

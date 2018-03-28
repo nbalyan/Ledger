@@ -19,6 +19,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button RecDepButton;
     private Button BillingButton;
     //private Button CustomerModify;
+    private Button showTransactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         RecDepButton = findViewById(R.id.RecDep);
         //CustomerModify = findViewById(R.id.CustomerModify);
         BillingButton = findViewById(R.id.billing);
+        //CustomerModify = findViewById(R.id.CustomerModify);
+        showTransactions = findViewById(R.id.ShowRecentTransactions);
 
         LICButton.setOnClickListener(this);
         FixDepButton.setOnClickListener(this);
         RecDepButton.setOnClickListener(this);
         BillingButton.setOnClickListener(this);
+        showTransactions.setOnClickListener(this);
 
     }
 
@@ -67,6 +71,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             extras.putString("CATEGORY", "REC");
         }else if(view.getId()==R.id.LICbutton){
             extras.putString("CATEGORY", "LIC");
+        }else if(view.getId()==R.id.ShowRecentTransactions){
+            extras.putString("CATEGORY", "RTR");
         }else if(view.getId()==R.id.billing){
             extras.putString("CATEGORY", "BILL");
         }else{
@@ -75,6 +81,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         if(extras.get("CATEGORY") == "ADDMODIFY"){
             Intent launchActivity = new Intent(getApplicationContext(), ModifyCustomer.class);
+            launchActivity.putExtras(extras);
+            startActivity(launchActivity);
+
+        }else if(extras.get("CATEGORY") == "RTR"){
+            Intent launchActivity = new Intent(getApplicationContext(), RecentTransactions.class);
             launchActivity.putExtras(extras);
             startActivity(launchActivity);
 
