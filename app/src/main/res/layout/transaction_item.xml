@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layoutMode="clipBounds"
+    android:padding="1dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:text="Receipt" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/textView5"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:text="Name" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:text="Amount" />
+
+    <TextView
+        android:id="@+id/accountItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView4"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:text="Account No" />
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:columnCount="2"
+
+        android:layout_below="@+id/accountItem"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:id="@+id/Print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="0.5"
+            android:text="Print" />
+
+        <Button
+            android:id="@+id/Delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="0.5"
+            android:text="Delete" />
+    </GridLayout>
+</RelativeLayout>

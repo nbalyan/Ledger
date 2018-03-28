@@ -415,7 +415,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 addressEdit.setText(list.get(position).getAddress());
                 customerf = new Customer(list.get(position).getName(),list.get(position).getAccount(),list.get(position).getAddress(),list.get(position).getPhone(),list.get(position).getCifno());
                 /*int j = 0;
-                addLayout();
+                //addLayout();
                 while(customerfinal.size() !=1 && customerfinal.size()>0){
                     if(customerfinal.get(j).getAccount() ==  list.get(position).getAccount()){
                         customerf = customerfinal.get(j);
