@@ -20,6 +20,15 @@ public class CustomerCompleteDetails {
     private String jointAccountAadharNo;
     private String jointAccountCIF;
     private String nomination;
+    private String accountType;
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
 
     public String getObjectID() {
         return objectID;

@@ -91,7 +91,7 @@ public class SimpleScannerActivity extends Activity implements ZXingScannerView.
         //ArrayList<Customer> list= new ArrayList<Customer>();
         //ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        newService.getDatabyAccount(account);
+        newService.getDatabyAccount(account,actPerformed);
        // Log.d("totalobj",String.valueOf(list1.size()));
         /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){

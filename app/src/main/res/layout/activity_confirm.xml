@@ -39,21 +39,43 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    >
 
-                    <EditText
-                        android:id="@+id/input_account"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Account Number"
-                        android:inputType="number" />
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
 
-                </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/input_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Account Number"
+                            android:inputType="number" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        >
+
+                        <EditText
+                            android:id="@+id/input_account_lic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Policy Number"
+                            android:inputType="number" />
+
+                    </android.support.design.widget.TextInputLayout>
+                </FrameLayout>
 
             </LinearLayout>
 

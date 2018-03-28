@@ -33,6 +33,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     private EditText remarksEdit;
     private AppCompatButton submitButton;
     private AppCompatButton editButton;
+    private String actPerformed;
+
 
     private void disableField(EditText editText){
         editText.setFocusable(false);
@@ -59,6 +61,14 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         editButton = findViewById(R.id.btn_edit);
 
         Bundle b= getIntent().getExtras();
+        actPerformed = b.getString("CATEGORY");
+        if(actPerformed.intern()=="LIC".intern()){
+            accountEdit.setVisibility(View.GONE);
+            accountEdit = findViewById(R.id.input_account_lic);
+        }else{
+            findViewById(R.id.input_account_lic).setVisibility(View.GONE);
+        }
+
         accountEdit.setText(b.getString("account"));
         nameEdit.setText(b.getString("name"));
         phoneEdit.setText(b.getString("phone"));
@@ -68,6 +78,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         amountEdit.setText(b.getString("amount"));
 
         final String accountType = b.getString("CATEGORY");
+
         disableField(accountEdit);
         disableField(nameEdit);
         disableField(phoneEdit);
@@ -106,6 +117,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void handleCallBack() {
         Intent transactionConfirmed = new Intent(this, TransactionAfterConfirmActivity.class);

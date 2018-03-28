@@ -103,6 +103,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/reciept_header"
                 android:text="@string/receipt_header" />
 
             <LinearLayout
@@ -111,23 +112,47 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
-                    style="@style/EditTextHint"
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    >
 
-                    <EditText
-                        android:id="@+id/input_account"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Account Number"
-                        android:inputType="number"
-                        android:textColor="@color/black" />
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        style="@style/EditTextHint">
 
-                </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/input_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Account Number"
+                            android:textColor="@color/black"
+                            android:inputType="number" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
+                        style="@style/EditTextHint"
+                        >
+
+                        <EditText
+                            android:id="@+id/input_account_lic"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Policy Number"
+                            android:textColor="@color/black"
+                            android:inputType="number" />
+
+                    </android.support.design.widget.TextInputLayout>
+                </FrameLayout>
 
             </LinearLayout>
 
@@ -153,7 +178,6 @@
                         android:layout_height="wrap_content"
                         android:hint="Name"
                         android:inputType="textPersonName"
-
                         android:textColor="@color/black" />
                 </android.support.design.widget.TextInputLayout>
 

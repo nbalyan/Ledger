@@ -148,14 +148,14 @@ public class ModifyCustomer extends AppCompatActivity {
 
         actPerformed = b.getString("CATEGORY");
 
-        if(b.getString("account")!=null) {
+        /*if(b.getString("account")!=null) {
             accountEdit.setText(b.getString("account"));
             nameEdit.setText(b.getString("name"));
             phoneEdit.setText(b.getString("phone"));
             addressEdit.setText(b.getString("address"));
             dateEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
-        }
+        }*/
 
 
        /* submitButton.setOnClickListener(new View.OnClickListener() {
@@ -336,6 +336,7 @@ public class ModifyCustomer extends AppCompatActivity {
         newData.setPan_no(PANEdit.getText().toString());
         newData.setJointAccountName(jointNameEdit.getText().toString());
         newData.setNomination(nominationEdit.getText().toString());
+        newData.setAccountType(actPerformed);
         ParseService newService = new ParseService(this);
         Log.d("herein click", newData.getAccount());
         newService.addCustomerData(newData);
@@ -388,25 +389,25 @@ public class ModifyCustomer extends AppCompatActivity {
     private ArrayList<CustomerCompleteDetails> fetchListByName(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list = newService.getDatabyName(nameEdit.getText().toString());
+        list = newService.getDatabyName(nameEdit.getText().toString(),actPerformed);
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByAccount(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list = newService.getDatabyAccount(accountEdit.getText().toString());
+        list = newService.getDatabyAccount(accountEdit.getText().toString(),actPerformed);
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByAddress(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list = newService.getDatabyAddress(addressEdit.getText().toString());
+        list = newService.getDatabyAddress(addressEdit.getText().toString(),actPerformed);
         return list;
     }
     private ArrayList<CustomerCompleteDetails> fetchListByPhone(){
         ArrayList<CustomerCompleteDetails> list= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list = newService.getDatabyMobile(phoneEdit.getText().toString());
+        list = newService.getDatabyMobile(phoneEdit.getText().toString(),actPerformed);
         return list;
     }
 

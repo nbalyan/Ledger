@@ -48,6 +48,8 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
     private AppCompatButton printButton;
     private AppCompatButton smsButton;
     private AppCompatButton homeButton;
+    private String actPerformed;
+    private TextView textViewHeader;
 
 
     private void disableField(EditText editText){
@@ -76,8 +78,18 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         smsButton = findViewById(R.id.btn_sms);
         homeButton = findViewById(R.id.btn_home);
         textView = findViewById(R.id.text_view);
+        textViewHeader= findViewById(R.id.reciept_header);
+
 
         Bundle b= getIntent().getExtras();
+        actPerformed = b.getString("CATEGORY");
+        if(actPerformed.intern()=="LIC".intern()){
+            accountEdit.setVisibility(View.GONE);
+            accountEdit = findViewById(R.id.input_account_lic);
+        }else{
+            findViewById(R.id.input_account_lic).setVisibility(View.GONE);
+        }
+
         textView.setText(new StringBuffer().append("Transaction has been saved successfully with reference no. ").append(recieptNo));
         accountEdit.setText(b.getString("account"));
         nameEdit.setText(b.getString("name"));
@@ -91,6 +103,17 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         amountEdit.setText(b.getString("amount"));
 
         final String accountType = b.getString("CATEGORY");
+
+
+        if(actPerformed.intern()=="BILL".intern()){
+            if(remarks.intern()=="GST".intern()){
+                textViewHeader.setText("SCA Business Solutions Private Limited");
+            }else{
+                textViewHeader.setText("Prashant Arya and Associates");
+            }
+
+        }
+
         disableField(accountEdit);
         disableField(nameEdit);
         disableField(phoneEdit);
@@ -122,6 +145,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
 
             }
         });
+        //modifyData();
 
 
     }

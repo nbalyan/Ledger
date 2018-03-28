@@ -336,11 +336,12 @@ public class ParseService {
         });
     }
 
-    public ArrayList<CustomerCompleteDetails> getDatabyName(String Name){
+    public ArrayList<CustomerCompleteDetails> getDatabyName(String Name,String accType){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
 
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("Name", Name,"i");
+        query.whereMatches("AccountType", accType,"i");
         //query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -391,10 +392,11 @@ public class ParseService {
         return customerCompleteDetailsList;
     }
 
-    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account, final boolean callback){
+    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account, String accType,final boolean callback){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("AccountNo", Account,"i");
+        query.whereMatches("AccountType", accType,"i");
         //query.setLimit(10);
         //ParseQuery.or()
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -472,8 +474,8 @@ public class ParseService {
         return customerCompleteDetailsList;
     }
 
-    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account){
-        return getDatabyAccount(Account,true);
+    public ArrayList<CustomerCompleteDetails> getDatabyAccount(String Account,String accType){
+        return getDatabyAccount(Account,accType,true);
     }
 
     public void getDataByCIF(String account){
@@ -533,10 +535,11 @@ public class ParseService {
         //return customerCompleteDetailsList;
     }
 
-    public ArrayList<CustomerCompleteDetails> getDatabyMobile(String Mobile){
+    public ArrayList<CustomerCompleteDetails> getDatabyMobile(String Mobile,String accType){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("Mobile", Mobile,"i");
+        query.whereMatches("AccountType", accType,"i");
         //query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -584,10 +587,11 @@ public class ParseService {
         return customerCompleteDetailsList;
     }
 
-    public ArrayList<CustomerCompleteDetails> getDatabyAddress(String Address){
+    public ArrayList<CustomerCompleteDetails> getDatabyAddress(String Address,String accType){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
         query.whereMatches("Address", Address,"i");
+        query.whereMatches("AccountType", accType,"i");
         //query.setLimit(10);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -636,9 +640,10 @@ public class ParseService {
     public void addCustomerData(final CustomerCompleteDetails newData){
         final ParseObject newCustomer = new ParseObject("CustomerData");
         CustomerCompleteDetails data = new CustomerCompleteDetails();
+        List<CustomerCompleteDetails> comData = getDatabyAccount(newData.getAccount().toString(), newData.getAccountType(),false);
         Log.d("beforefetch",newData.getAccount());
-        if(getDatabyAccount(newData.getAccount().toString(), false).size() !=0) {
-            data = getDatabyAccount(newData.getAccount().toString(), false).get(0);
+        if(comData.size() !=0) {
+            data = comData.get(0);
         }
         if(data.getAccount()!=null)
             Log.d("data",data.getAccount().toString());
@@ -652,6 +657,7 @@ public class ParseService {
             newCustomer.put("Amount", newData.getAmount());
             newCustomer.put("Address", newData.getAddress());
             newCustomer.put("JointAccountHolder", newData.getJointAccountName());
+            newCustomer.put("AccountType", newData.getAccountType());
             Log.d("about to save","there");
             newCustomer.saveInBackground(new SaveCallback() {
                 @Override
@@ -735,6 +741,7 @@ public class ParseService {
         newCustomer.setJointAccountName(object.getString("JointAccountHolder"));
         newCustomer.setObjectID(object.getString("objectId"));
         newCustomer.setCif(object.getString("CIF"));
+        newCustomer.setAccountType(object.getString("AccountType"));
         if(object.getString("CreatedAt")!=null && object.getString("CreatedAt").intern()!="//".intern())
             newCustomer.setOpeningDate(object.getString("CreatedAt"));
         else

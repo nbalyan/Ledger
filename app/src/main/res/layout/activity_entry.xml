@@ -39,21 +39,43 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <android.support.design.widget.TextInputLayout
+                <FrameLayout
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    >
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp">
+
+                        <EditText
+                            android:id="@+id/input_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Account Number"
+                            android:inputType="number" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="1">
+                    >
 
                     <EditText
-                        android:id="@+id/input_account"
+                        android:id="@+id/input_account_lic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Account Number"
+                        android:hint="Policy Number"
                         android:inputType="number" />
 
                 </android.support.design.widget.TextInputLayout>
+                </FrameLayout>
 
                 <ImageButton
                     android:id="@+id/search_account"
@@ -189,6 +211,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:id="@+id/others_view"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
@@ -205,6 +228,53 @@
                         android:hint="Remarks"
                         android:inputType="textPersonName" />
                 </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:id="@+id/bill_view"
+                android:layout_marginBottom="8dp"
+                >
+
+                <TextView
+                    android:id="@+id/textStat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Remarks"
+                    android:paddingLeft="4dp"
+                    android:textColor="@color/popup_menu_item_text_color"
+                    android:textSize="11sp"
+                    />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight=".28"
+                    android:paddingLeft="2dp"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/drop" />
+
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout

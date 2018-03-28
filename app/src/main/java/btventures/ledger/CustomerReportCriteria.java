@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -35,9 +37,44 @@ import java.util.Locale;
 import btventures.ledger.json.ParseService;
 import btventures.ledger.tableview.CustomerCompleteDetails;
 
-public class CustomerReportCriteria extends AppCompatActivity {
+public class CustomerReportCriteria extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private PopupWindow pw;
     private GridView rv;
+
+    private static final String[]paths = {"item 1", "item 2", "item 3"};
+
+    private void initializeDropDown(){
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_text,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+                // Whatever you want to happen when the first item gets selected
+                break;
+            case 1:
+                // Whatever you want to happen when the second item gets selected
+                break;
+            case 2:
+                // Whatever you want to happen when the thrid item gets selected
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
     private ImageButton accountButton;
     private ImageButton nameButton;
     private ImageButton addressButton;
@@ -194,6 +231,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
             }
         });
         initiliazeDate();
+        initializeDropDown();
 
         //showPopup();
     }
@@ -391,7 +429,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
         ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyName(nameEdit.getText().toString());
+        list1 = newService.getDatabyName(nameEdit.getText().toString(),actPerformed);
         if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
@@ -403,7 +441,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
         ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyAccount(accountEdit.getText().toString());
+        list1 = newService.getDatabyAccount(accountEdit.getText().toString(),actPerformed);
         Log.d("totalobj",String.valueOf(list1.size()));
         if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
@@ -415,7 +453,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
         ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyAddress(addressEdit.getText().toString());
+        list1 = newService.getDatabyAddress(addressEdit.getText().toString(),actPerformed);
         if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
@@ -426,7 +464,7 @@ public class CustomerReportCriteria extends AppCompatActivity {
         ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyMobile(phoneEdit.getText().toString());
+        list1 = newService.getDatabyMobile(phoneEdit.getText().toString(),actPerformed);
         if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));

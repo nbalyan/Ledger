@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -26,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +36,7 @@ import java.util.ArrayList;
 import btventures.ledger.json.ParseService;
 import btventures.ledger.tableview.CustomerCompleteDetails;
 
-public class TransactionEntry extends AppCompatActivity {
+public class TransactionEntry extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private PopupWindow pw;
     private GridView rv;
     private ImageButton accountButton;
@@ -81,6 +83,12 @@ public class TransactionEntry extends AppCompatActivity {
         Bundle b= getIntent().getExtras();
 
         actPerformed = b.getString("CATEGORY");
+        if(actPerformed.intern()=="LIC".intern()){
+            accountEdit.setVisibility(View.GONE);
+            accountEdit = findViewById(R.id.input_account_lic);
+        }else{
+            findViewById(R.id.input_account_lic).setVisibility(View.GONE);
+        }
 
         if(b.getString("account")!=null) {
             accountEdit.setText(b.getString("account"));
@@ -192,8 +200,49 @@ public class TransactionEntry extends AppCompatActivity {
 
             }
         });
-
+        modifyData();
         //showPopup();
+    }
+
+    private void modifyData(){
+
+        if(actPerformed.intern()=="BILL".intern()){
+            findViewById(R.id.others_view).setVisibility(View.GONE);
+            initializeDropDown();
+        }else{
+            findViewById(R.id.bill_view).setVisibility(View.GONE);
+        }
+
+    }
+
+    private void initializeDropDown(){
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_text,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    private static final String[]paths = {"GST", "Income Tax"};
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+                remarks.setText("GST");
+                break;
+            case 1:
+                remarks.setText("Income Tax");
+                break;
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public boolean validate() {
@@ -282,6 +331,7 @@ public class TransactionEntry extends AppCompatActivity {
             */
         }else
             showPopup(customers);
+        progressBar.setVisibility(View.GONE);
         //customerfinal = customers;
 
     }
@@ -305,7 +355,7 @@ public class TransactionEntry extends AppCompatActivity {
         /*ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        newService.getDatabyName(nameEdit.getText().toString());
+        newService.getDatabyName(nameEdit.getText().toString(),actPerformed);
         /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
@@ -317,7 +367,7 @@ public class TransactionEntry extends AppCompatActivity {
         /*ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        newService.getDatabyAccount(accountEdit.getText().toString());
+        newService.getDatabyAccount(accountEdit.getText().toString(),actPerformed);
         /*Log.d("totalobj",String.valueOf(list1.size()));
         if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
@@ -329,7 +379,7 @@ public class TransactionEntry extends AppCompatActivity {
         /*ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        newService.getDatabyAddress(addressEdit.getText().toString());
+        newService.getDatabyAddress(addressEdit.getText().toString(),actPerformed);
         /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
@@ -341,7 +391,7 @@ public class TransactionEntry extends AppCompatActivity {
         /*ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        newService.getDatabyMobile(phoneEdit.getText().toString());
+        newService.getDatabyMobile(phoneEdit.getText().toString(),actPerformed);
         /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
@@ -409,6 +459,14 @@ public class TransactionEntry extends AppCompatActivity {
             intent.putExtras(extras);
             startActivity(intent);
             finish();
+        }else{
+            Bundle extras = new Bundle();
+            extras.putString("CATEGORY",actPerformed);
+            Intent intent = new Intent(getApplicationContext(), ModifyCustomer.class);
+            intent.putExtras(extras);
+            startActivity(intent);
+            finish();
+
         }
         return super.onOptionsItemSelected(item);
     }

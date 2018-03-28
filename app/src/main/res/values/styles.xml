@@ -12,6 +12,13 @@
         <item name="android:itemTextAppearance">@style/itemTextStyle.AppTheme</item>
     </style>
 
+    <style name="spinnerItemStyle" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/white</item>
+
+
+
+    </style>
+
     <style name="EditTextHint" parent="TextAppearance.AppCompat">
         <item name="colorAccent">@color/black</item>
         <item name="android:textColorHint">@color/black</item>

@@ -3,4 +3,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/scan"  app:showAsAction="ifRoom" android:title="SCAN"/>
+    <item android:id="@+id/modifyCustomer"  app:showAsAction="never" android:title="Add/Modify Customer"/>
 </menu>
