@@ -225,6 +225,7 @@ public class AgentFilterCritreria extends AppCompatActivity implements AdapterVi
             }
         });
         initiliazeDate();
+        initializeDropDown();
 
     }
 
@@ -266,6 +267,7 @@ public class AgentFilterCritreria extends AppCompatActivity implements AdapterVi
                             , MainFragment.class.getSimpleName()).commit();*/
 
                 Intent tableActivity = new Intent(this,TableActivity.class);
+                filters.put("AccountType",actPerformed);
                 tableActivity.putExtra("FiltersMap",filters);
                 tableActivity.putExtra("startDate", startDateFilter.getTime());
                 tableActivity.putExtra("endDate",endDateFilter.getTime());
@@ -299,6 +301,7 @@ public class AgentFilterCritreria extends AppCompatActivity implements AdapterVi
                             , MainFragment.class.getSimpleName()).commit();*/
 
                 Intent tableActivity = new Intent(this,TableActivity.class);
+                filters.put("AccountType",actPerformed);
                 tableActivity.putExtra("FiltersMap",filters);
                 tableActivity.putExtra("startDate", startDateFilter.getTime());
                 tableActivity.putExtra("endDate",endDateFilter.getTime());

@@ -202,7 +202,7 @@ public class ParseService {
         Log.d("BKNMainFragment","In Parse");
         for(String key: filters.keySet()){
             query.whereMatches(key,filters.get(key),"i");
-            //Log.d("DDDFilterAdded",key + " " + filters.get(key));
+            Log.d("DDDFilterAdded",key + " " + filters.get(key));
         }
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
