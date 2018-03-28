@@ -92,9 +92,18 @@ public class Customer {
     public Customer(String name, String account, String address, String phone) {
         this.name = name;
         this.account = account;
-        Address = address;
+        this.Address = address;
         this.phone = phone;
     }
+
+    public Customer(String name, String account, String address, String phone,String cifno) {
+        this.name = name;
+        this.account = account;
+        this.Address = address;
+        this.phone = phone;
+        this.cifno = cifno;
+    }
+
     public Customer(String name, String account, String address, String phone, CustomerCompleteDetails customerCompleteDetails) {
         this.name = name;
         this.account = account;

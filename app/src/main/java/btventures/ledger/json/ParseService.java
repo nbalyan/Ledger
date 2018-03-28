@@ -359,16 +359,16 @@ public class ParseService {
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         transactionEntry.handleResult(list);
-                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        //transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                     if(customerReportCriteria!=null){
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         customerReportCriteria.handleResult(list);
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
@@ -418,11 +418,11 @@ public class ParseService {
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         if(callback) {
                             transactionEntry.handleResult(list);
-                            transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                            //transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
 
@@ -430,7 +430,7 @@ public class ParseService {
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         if(callback) {
                             customerReportCriteria.handleResult(list);
@@ -442,7 +442,7 @@ public class ParseService {
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         if(callback) {
                             simpleScannerActivity.handleParseResult(list);
@@ -476,6 +476,63 @@ public class ParseService {
         return getDatabyAccount(Account,true);
     }
 
+    public void getDataByCIF(String account){
+        getDatabyCIF(account);
+    }
+
+    public void getDatabyCIF(String cif){
+        final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
+        query.whereMatches("CIF", cif,"i");
+        //query.setLimit(10);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        CustomerCompleteDetails userInfo = createCustomerInfoFromParseObject(objects.get(i));
+                        customerCompleteDetailsList.add(userInfo);
+
+                    }
+                    if(modifyCustomer != null){
+                        modifyCustomer.handleResult(customerCompleteDetailsList);
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    if(transactionEntry!= null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        transactionEntry.handleAllAccountsResult(list);
+                        //transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    if(customerReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        customerReportCriteria.handleResult(list);
+                        customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                }else{
+                    Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
+                    if(modifyCustomer!= null){
+                        modifyCustomer.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(modifyCustomer, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if(transactionEntry!=null){
+                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        Toast.makeText(transactionEntry, "Error performing operation. Please try again. Issue: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        //return customerCompleteDetailsList;
+    }
+
     public ArrayList<CustomerCompleteDetails> getDatabyMobile(String Mobile){
         final ArrayList<CustomerCompleteDetails> customerCompleteDetailsList = new ArrayList<>();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("CustomerData");
@@ -496,16 +553,16 @@ public class ParseService {
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         transactionEntry.handleResult(list);
-                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        //transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                     if(customerReportCriteria!=null){
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         customerReportCriteria.handleResult(list);
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
@@ -546,16 +603,16 @@ public class ParseService {
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         transactionEntry.handleResult(list);
-                        transactionEntry.progressBar.setVisibility(View.INVISIBLE);
+                        //transactionEntry.progressBar.setVisibility(View.INVISIBLE);
                     }
                     if(customerReportCriteria!=null){
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
                         for(int j=0; j < list1.size(); j++){
-                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone()));
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
                         }
                         customerReportCriteria.handleResult(list);
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
@@ -677,6 +734,7 @@ public class ParseService {
         newCustomer.setAddress(object.getString("Address"));
         newCustomer.setJointAccountName(object.getString("JointAccountHolder"));
         newCustomer.setObjectID(object.getString("objectId"));
+        newCustomer.setCif(object.getString("CIF"));
         if(object.getString("CreatedAt")!=null && object.getString("CreatedAt").intern()!="//".intern())
             newCustomer.setOpeningDate(object.getString("CreatedAt"));
         else

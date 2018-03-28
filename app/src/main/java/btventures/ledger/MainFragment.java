@@ -1,12 +1,18 @@
 package btventures.ledger;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import btventures.ledger.utils.ExcelGenUtil;
+import jxl.write.Number;
+
 
 import com.evrencoskun.tableview.TableView;
 
@@ -20,11 +26,20 @@ import btventures.ledger.tableview.MyTableViewListener;
 import btventures.ledger.tableview.model.CellModel;
 import btventures.ledger.tableview.model.ColumnHeaderModel;
 import btventures.ledger.tableview.model.RowHeaderModel;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class MainFragment extends Fragment {
 
@@ -40,6 +55,7 @@ public class MainFragment extends Fragment {
 
     // For TableView
     private List<List<CellModel>> mCellList;
+    private List<Label> labels = new ArrayList<Label>();
     private List<ColumnHeaderModel> mColumnHeaderList;
     private List<RowHeaderModel> mRowHeaderList;
     private String category;
@@ -53,11 +69,18 @@ public class MainFragment extends Fragment {
         this.filters = filters;
         this.startDate = startDate;
         this.endDate = endDate;
-        Log.d("BKNMainFragment","initialized");
+        Log.d("BKNM ainFragment","initialized");
     }*/
+
 
     public MainFragment(){
 
+
+    }
+
+    public void writeExcel(){
+        ExcelGenUtil egu = new ExcelGenUtil();
+        egu.writeExcel(this.getContext(),labels);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,10 +122,8 @@ public class MainFragment extends Fragment {
         }else if (category.intern() == "Transaction".intern()){
             parseService.loadTransactionData();
         }else if(category.intern() == "TransactionAgentWise".intern()){
-
             Log.d("BKNMainFragment","Calling Parse");
-           parseService.loadTransactionDataWithFilter(filters,startDate,endDate);
-            //parseService.loadTransactionDataDayWise(filters);
+            parseService.loadTransactionDataWithFilter(filters,startDate,endDate);
         }
         else if (category.intern() == "TransactionDayWise".intern()){
             parseService.loadTransactionDataDayWise(filters);
@@ -167,6 +188,16 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("JointAccountHolder"));
         list.add(new ColumnHeaderModel("PanNo"));
 
+        labels.add(new Label(0, 0, "Name"));
+        labels.add(new Label(1, 0, "AccountNo"));
+        labels.add(new Label(2, 0, "Mobile"));
+        labels.add(new Label(3, 0, "Amount"));
+        labels.add(new Label(4, 0, "AadharNo"));
+        labels.add(new Label(5, 0, "Address"));
+        labels.add(new Label(6, 0, "JointAccountHolder"));
+        labels.add(new Label(7, 0, "PanNo"));
+
+
         return list;
     }
 
@@ -179,6 +210,11 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("Email"));
         list.add(new ColumnHeaderModel("Code"));
         list.add(new ColumnHeaderModel("ContactNo"));
+
+        labels.add(new Label(0, 0,"Name"));
+        labels.add(new Label(1, 0,"Email"));
+        labels.add(new Label(2, 0,"Code"));
+        labels.add(new Label(3, 0,"ContactNo"));
 
         return list;
     }
@@ -194,6 +230,13 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("CIFNo"));
         list.add(new ColumnHeaderModel("AccountType"));
 
+        labels.add(new Label(0, 0, "CustomerAccountNo"));
+        labels.add(new Label(1, 0,"CustomerName"));
+        labels.add(new Label(2, 0,"Amount"));
+        labels.add(new Label(3, 0,"AgentEmail"));
+        labels.add(new Label(4, 0,"CIFNo"));
+        labels.add(new Label(5, 0,"AccountType"));
+
         return list;
     }
 
@@ -206,6 +249,10 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("AgentName"));
         //list.add(new ColumnHeaderModel("ContactNo"));
 
+        labels.add(new Label(0, 0,"Date"));
+        labels.add(new Label(1, 0,"AmountCollected"));
+        labels.add(new Label(2, 0,"AgentName"));
+
         return list;
     }
 
@@ -216,6 +263,9 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("Date"));
         list.add(new ColumnHeaderModel("AmountCollected"));
         //list.add(new ColumnHeaderModel("ContactNo"));
+
+        labels.add(new Label(0, 0,"Date"));
+        labels.add(new Label(1, 0,"AmountCollected"));
 
         return list;
     }
@@ -228,6 +278,11 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("AmountDeposited"));
         list.add(new ColumnHeaderModel("CustomerName"));
         list.add(new ColumnHeaderModel("AccountType"));
+
+        labels.add(new Label(0, 0,"Date"));
+        labels.add(new Label(1, 0,"AmountDeposited"));
+        labels.add(new Label(2, 0,"CustomerName"));
+        labels.add(new Label(3, 0,"AccountType"));
 
         return list;
     }
@@ -255,6 +310,14 @@ public class MainFragment extends Fragment {
             list.add(new CellModel("7-" + i, userInfo.getmJointAccountHolder()));      //
             list.add(new CellModel("8-" + i, userInfo.getmPanNo()));      //
 
+            labels.add(new Label(0,i+1, userInfo.getName()));       //
+            labels.add(new Label(1,i+1, userInfo.getmAccountNo()));     //
+            labels.add(new Label(2,i+1, userInfo.getMobile())); //
+            labels.add(new Label(3,i+1, userInfo.getmAmount()));    //
+            labels.add(new Label(4,i+1, userInfo.getmAadharCardNo())); //
+            labels.add(new Label(5,i+1, userInfo.getAddress()));   //
+            labels.add(new Label(6,i+1, userInfo.getmJointAccountHolder()));      //
+            labels.add(new Label(7,i+1, userInfo.getmPanNo()));      //
             // Add
             lists.add(list);
         }
@@ -279,6 +342,11 @@ public class MainFragment extends Fragment {
             list.add(new CellModel("2-" + i, userInfo.getEmail()));     //
             list.add(new CellModel("3-" + i, userInfo.getCode())); //
             list.add(new CellModel("4-" + i, userInfo.getPhone()));    //
+
+            labels.add(new Label(0,i+1, userInfo.getAgentName()));       //
+            labels.add(new Label(1,i+1, userInfo.getEmail()));     //
+            labels.add(new Label(2,i+1, userInfo.getCode())); //
+            labels.add(new Label(3,i+1, userInfo.getPhone()));    //
 
             // Add
             lists.add(list);
@@ -315,6 +383,12 @@ public class MainFragment extends Fragment {
             list.add(new CellModel("5-" + i, userInfo.getCifno())); //
             list.add(new CellModel("6-" + i, userInfo.getAccountType()));   //
 
+            labels.add(new Label(0,i+1, userInfo.getAccount()));       //
+            labels.add(new Label(1,i+1, userInfo.getName()));     //
+            labels.add(new Label(2,i+1, userInfo.getmAmount())); //
+            labels.add(new Label(3,i+1, userInfo.getAgentCode()));    //
+            labels.add(new Label(4,i+1, userInfo.getCifno())); //
+            labels.add(new Label(5,i+1, userInfo.getAccountType()));   //
             // Add
             lists.add(list);
         }
@@ -345,6 +419,9 @@ public class MainFragment extends Fragment {
             // The order should be same with column header list;
             list.add(new CellModel("1-" + i, userInfo.getDate()));       //
             list.add(new CellModel("2-" + i, userInfo.getAmount()));     //
+
+            labels.add(new Label(0,i+1, userInfo.getDate()));       //
+            labels.add(new Label(1,i+1, userInfo.getAmount()));
 
             // Add
             lists.add(list);

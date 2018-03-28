@@ -36,6 +36,7 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.savvi.datepicker:rangepicker:1.2.0'
     compile 'me.dm7.barcodescanner:zxing:1.9.8'
+    compile group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
 
 
 }

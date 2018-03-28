@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -53,7 +54,10 @@ public class TransactionEntry extends AppCompatActivity {
     public ProgressBar progressBar;
     private Toast mToast;
     private String actPerformed;
-    ArrayList<Customer> customerfinal;
+    private ArrayList<String> allAccounts;
+    private ArrayList<String> allAccountsCheckList;
+    //private String cifNo;
+    //ArrayList<Customer> customerfinal;
     Customer customerf;
 
     @Override
@@ -86,7 +90,8 @@ public class TransactionEntry extends AppCompatActivity {
             recieptEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
             remarks.setText(b.getString("remarks"));
-            customerf = new Customer(b.getString("name"), b.getString("account"), b.getString("address"), b.getString("phone"));
+            //cifNo = b.getString("cif");
+            customerf = new Customer(b.getString("name"), b.getString("account"), b.getString("address"), b.getString("phone"),b.getString("cif"));
         }
 
 
@@ -107,10 +112,13 @@ public class TransactionEntry extends AppCompatActivity {
                 }
                 if(validate()){
                     Bundle extras = new Bundle();
+                    extras.putStringArrayList("all_accounts",allAccounts);
+                    extras.putStringArrayList("all_accounts_check_list",allAccountsCheckList);
                     extras.putString("account",customerf.getAccount());
                     extras.putString("name",customerf.getName());
                     extras.putString("address",customerf.getAddress());
                     extras.putString("phone",customerf.getPhone());
+                    extras.putString("cif",customerf.getCifno());
                     extras.putString("receipt",recieptEdit.getText().toString());
                     extras.putString("amount",amountEdit.getText().toString());
                     extras.putString("remarks",remarks.getText().toString());
@@ -133,7 +141,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByAccount();
+                fetchListByAccount();
                 //handleResult(customers);
                 //progressBar.setVisibility(View.GONE);
 
@@ -148,7 +156,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByName();
+                fetchListByName();
                 //handleResult(customers);
                 //progressBar.setVisibility(View.GONE);
 
@@ -163,7 +171,7 @@ public class TransactionEntry extends AppCompatActivity {
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByAddress();
+                fetchListByAddress();
                 //handleResult(customers);
                 //progressBar.setVisibility(View.GONE);
 
@@ -174,11 +182,11 @@ public class TransactionEntry extends AppCompatActivity {
             public void onClick(View view) {
                 hideSoftKeyboard(mContext);
                 if(phoneEdit.getText().length()<3){
-                    showAToast("Please enter atleast 3 charchaters");
+                    showAToast("Please enter atleast 3 characters");
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-                ArrayList<Customer> customers = fetchListByPhone();
+                fetchListByPhone();
                 //handleResult(customers);
                 //progressBar.setVisibility(View.GONE);
 
@@ -216,6 +224,48 @@ public class TransactionEntry extends AppCompatActivity {
         mToast.show();
     }
 
+    //public void call
+    static int i;
+
+    public void addLayout(){
+        LinearLayout ll = (LinearLayout) findViewById(R.id.relatedChannels);
+        ll.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //layoutParams.setMargins(25, 20, 25, 10);
+        EditText view = new EditText(this);
+        view.setText(++i+" view");
+        ll.addView(view, layoutParams);
+    }
+
+    private void createDynamicLayout(LinearLayout ll){
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        for(int i=0;i<allAccounts.size();i++){
+            CheckBox checkBox = new CheckBox(this);
+            checkBox.setText(allAccounts.get(i));
+            //checkBox.setChecked();
+            ll.addView(checkBox, layoutParams);
+        }
+
+    }
+
+    private void setAdditionalAccounts(ArrayList<Customer> customers){
+        for(int i=0;i<customers.size();i++){
+            allAccounts.add(customers.get(i).getAccount());
+            if(i==0){
+
+            }
+        }
+
+    }
+
+    public void handleAllAccountsResult(ArrayList<Customer> customers){
+        LinearLayout ll = (LinearLayout) findViewById(R.id.relatedChannels);
+        clearLayout(ll);
+        if(customers!=null && customers.size()>0){
+            //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+    }
+
     public void handleResult(ArrayList<Customer> customers){
         if(customers == null || customers.size()==0){
             showAToast("No Record found");
@@ -232,19 +282,13 @@ public class TransactionEntry extends AppCompatActivity {
             */
         }else
             showPopup(customers);
-        customerfinal = customers;
+        //customerfinal = customers;
 
     }
-    static int i;
 
-    public void addLayout(){
-        LinearLayout ll = (LinearLayout) findViewById(R.id.relatedChannels);
-        ll.setOrientation(LinearLayout.VERTICAL);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //layoutParams.setMargins(25, 20, 25, 10);
-        EditText view = new EditText(this);
-        view.setText(++i+" view");
-        ll.addView(view, layoutParams);
+    private void clearLayout(LinearLayout l1){
+        if(l1.getChildCount()>1)
+            l1.removeAllViews();
     }
 
     private void setupPopUpLayoutManager(View layout){
@@ -252,51 +296,57 @@ public class TransactionEntry extends AppCompatActivity {
         rv.setNumColumns(1);
     }
 
-    private ArrayList<Customer> fetchListByName(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+    private void fetchAccountsByCIF(String cif){
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyName(nameEdit.getText().toString());
-        if(list1.size() !=0){
+        newService.getDataByCIF(cif);
+    }
+
+    private void fetchListByName(){
+        /*ArrayList<Customer> list= new ArrayList<Customer>();
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
+        ParseService newService = new ParseService(this);
+        newService.getDatabyName(nameEdit.getText().toString());
+        /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
             }
         }
-        return list;
+        return list;*/
     }
-    private ArrayList<Customer> fetchListByAccount(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+    private void fetchListByAccount(){
+        /*ArrayList<Customer> list= new ArrayList<Customer>();
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyAccount(accountEdit.getText().toString());
-        Log.d("totalobj",String.valueOf(list1.size()));
+        newService.getDatabyAccount(accountEdit.getText().toString());
+        /*Log.d("totalobj",String.valueOf(list1.size()));
         if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
             }
-        }return list;
+        }return list;*/
     }
-    private ArrayList<Customer> fetchListByAddress(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+    private void fetchListByAddress(){
+        /*ArrayList<Customer> list= new ArrayList<Customer>();
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyAddress(addressEdit.getText().toString());
-        if(list1.size() !=0){
+        newService.getDatabyAddress(addressEdit.getText().toString());
+        /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
             }
-        }return list;
+        }return list;*/
+
     }
-    private ArrayList<Customer> fetchListByPhone(){
-        ArrayList<Customer> list= new ArrayList<Customer>();
-        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();
+    private void fetchListByPhone(){
+        /*ArrayList<Customer> list= new ArrayList<Customer>();
+        ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
         ParseService newService = new ParseService(this);
-        list1 = newService.getDatabyMobile(phoneEdit.getText().toString());
-        if(list1.size() !=0){
+        newService.getDatabyMobile(phoneEdit.getText().toString());
+        /*if(list1.size() !=0){
             for(int i=0; i < list1.size(); i++){
                 list.add(new Customer(list1.get(i).getName(),list1.get(i).getAccount(),list1.get(i).getAddress(),list1.get(i).getPhone()));
             }
-        }return list;
+        }return list;*/
     }
 
     private void initializeAdapter(Context mContext,ArrayList<Customer> customers){
@@ -313,7 +363,8 @@ public class TransactionEntry extends AppCompatActivity {
                 nameEdit.setText(list.get(position).getName());
                 phoneEdit.setText(list.get(position).getPhone());
                 addressEdit.setText(list.get(position).getAddress());
-                int j = 0;
+                customerf = new Customer(list.get(position).getName(),list.get(position).getAccount(),list.get(position).getAddress(),list.get(position).getPhone(),list.get(position).getCifno());
+                /*int j = 0;
                 addLayout();
                 while(customerfinal.size() !=1 && customerfinal.size()>0){
                     if(customerfinal.get(j).getAccount() ==  list.get(position).getAccount()){
@@ -321,7 +372,7 @@ public class TransactionEntry extends AppCompatActivity {
                         break;
                     }
                     j++;
-                }
+                }*/
                 pw.dismiss();
 
 
@@ -341,7 +392,6 @@ public class TransactionEntry extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_entry,menu);
         return super.onCreateOptionsMenu(menu);
