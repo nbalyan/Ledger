@@ -17,6 +17,7 @@ public class Customer {
     private String cifno;
     private String remarks;
 
+
     public String getRemarks() {
         return remarks;
     }

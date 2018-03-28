@@ -111,6 +111,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
                 newTransaction.setAgentCode(ParseUser.getCurrentUser().getUsername());
                 newTransaction.setmAmount(amountEdit.getText().toString());
                 newTransaction.setName(nameEdit.getText().toString());
+
                 service.saveTransaction(newTransaction);
                 //TODO
             }

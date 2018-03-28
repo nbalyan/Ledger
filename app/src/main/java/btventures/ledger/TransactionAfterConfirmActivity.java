@@ -58,6 +58,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         editText.setClickable(false);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -194,7 +194,7 @@ public class ParseService {
         Log.d("BKNMainFragment","In Parse");
         for(String key: filters.keySet()){
             query.whereMatches(key,filters.get(key),"i");
-            Log.d("DDDFilterAdded",key + " " + filters.get(key));
+            //Log.d("DDDFilterAdded",key + " " + filters.get(key));
         }
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -641,12 +641,13 @@ public class ParseService {
         final ParseObject newCustomer = new ParseObject("CustomerData");
         CustomerCompleteDetails data = new CustomerCompleteDetails();
         List<CustomerCompleteDetails> comData = getDatabyAccount(newData.getAccount().toString(), newData.getAccountType(),false);
-        Log.d("beforefetch",newData.getAccount());
+        //Log.d("beforefetch",newData.getAccount());
         if(comData.size() !=0) {
             data = comData.get(0);
         }
         if(data.getAccount()!=null)
             Log.d("data",data.getAccount().toString());
+
         if(data.getAccount() != null) {
             newCustomer.put("Name", newData.getName());
             newCustomer.put("AccountNo", newData.getAccount());

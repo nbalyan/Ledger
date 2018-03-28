@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -40,7 +42,7 @@ import btventures.ledger.tableview.CustomerCompleteDetails;
  * Created by HP on 11-03-2018.
  */
 
-public class AgentFilterCritreria extends AppCompatActivity {
+public class AgentFilterCritreria extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Activity mContext;
     EditText fromdate;
@@ -63,10 +65,51 @@ public class AgentFilterCritreria extends AppCompatActivity {
     AgentInfo agentf;
     private Date startDateFilter;
     private Date endDateFilter;
+    private String actPerformed;
 
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager)activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    private static final String[]paths = {"Recurring Deposit", "Savings", "LIC", "Billing"};
+
+    private void initializeDropDown(){
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_text,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+                actPerformed="REC";
+                //clearLayout();
+                break;
+            case 1:
+                actPerformed="FIX";
+                //clearLayout();
+                break;
+            case 2:
+                actPerformed="LIC";
+                //clearLayout();
+                break;
+            case 3:
+                actPerformed="BILL";
+                //clearLayout();
+                break;
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     @Override

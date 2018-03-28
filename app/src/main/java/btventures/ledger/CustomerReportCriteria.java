@@ -41,40 +41,6 @@ public class CustomerReportCriteria extends AppCompatActivity implements Adapter
     private PopupWindow pw;
     private GridView rv;
 
-    private static final String[]paths = {"item 1", "item 2", "item 3"};
-
-    private void initializeDropDown(){
-        Spinner spinner = (Spinner)findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.spinner_text,paths);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        switch (i) {
-            case 0:
-                // Whatever you want to happen when the first item gets selected
-                break;
-            case 1:
-                // Whatever you want to happen when the second item gets selected
-                break;
-            case 2:
-                // Whatever you want to happen when the thrid item gets selected
-                break;
-
-        }
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
-
     private ImageButton accountButton;
     private ImageButton nameButton;
     private ImageButton addressButton;
@@ -99,6 +65,49 @@ public class CustomerReportCriteria extends AppCompatActivity implements Adapter
     Calendar myCalendar;
     private Date startDateFilter;
     private Date endDateFilter;
+    //private String actPerformed;
+
+    private static final String[]paths = {"Recurring Deposit", "Savings", "LIC", "Billing"};
+
+    private void initializeDropDown(){
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.spinner_text,paths);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+                actPerformed="REC";
+                //clearLayout();
+                break;
+            case 1:
+                actPerformed="FIX";
+                //clearLayout();
+                break;
+            case 2:
+                actPerformed="LIC";
+                //clearLayout();
+                break;
+            case 3:
+                actPerformed="BILL";
+                //clearLayout();
+                break;
+        }
+
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -254,6 +263,7 @@ public class CustomerReportCriteria extends AppCompatActivity implements Adapter
                 mainf.setArguments(b);
                 getSupportFragmentManager().beginTransaction().add(R.id.activity_containerCustomer, mainf
                         , MainFragment.class.getSimpleName()).commit();*/
+                filters.put("AccountType",actPerformed);
                 Intent tableActivity = new Intent(this,TableActivity.class);
                 tableActivity.putExtra("FiltersMap",filters);
                 tableActivity.putExtra("startDate", startDateFilter.getTime());
