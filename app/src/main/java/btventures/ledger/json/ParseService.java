@@ -250,10 +250,10 @@ public class ParseService {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                accountupdateCallback();
+//                                accountupdateCallback();
 
                             } else {
-                                failCallback();
+//                                failCallback();
                             }
                         }
                     });
