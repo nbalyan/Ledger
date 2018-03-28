@@ -34,7 +34,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     private AppCompatButton submitButton;
     private AppCompatButton editButton;
     private String actPerformed;
-
+    private String reciept;
 
     private void disableField(EditText editText){
         editText.setFocusable(false);
@@ -74,7 +74,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         phoneEdit.setText(b.getString("phone"));
         addressEdit.setText(b.getString("address"));
         remarksEdit.setText(b.getString("remarks"));
-        recieptEdit.setText(ParseUser.getCurrentUser().getString("AgentCode")+timeStamp);
+        reciept = ParseUser.getCurrentUser().getString("AgentCode")+timeStamp;
+        recieptEdit.setText(reciept);
         amountEdit.setText(b.getString("amount"));
 
         final String accountType = b.getString("CATEGORY");
@@ -122,6 +123,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
 
     public void handleCallBack() {
         Intent transactionConfirmed = new Intent(this, TransactionAfterConfirmActivity.class);
+        Bundle bundle = getIntent().getExtras();
+        bundle.putString("receipt",reciept);
         transactionConfirmed.putExtras(getIntent().getExtras());
         startActivity(transactionConfirmed);
         finish();

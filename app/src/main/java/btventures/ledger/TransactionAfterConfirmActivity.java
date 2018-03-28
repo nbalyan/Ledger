@@ -63,7 +63,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_confirm);
         String timeStamp = new SimpleDateFormat("yyMMddHHmmss").format(new Date());
-        String recieptNo = ParseUser.getCurrentUser().getString("AgentCode")+timeStamp;
+        //String recieptNo = ParseUser.getCurrentUser().getString("AgentCode")+timeStamp;
 
         mContext = this;
         context = this;
@@ -90,7 +90,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
             findViewById(R.id.input_account_lic).setVisibility(View.GONE);
         }
 
-        textView.setText(new StringBuffer().append("Transaction has been saved successfully with reference no. ").append(recieptNo));
+        textView.setText(new StringBuffer().append("Transaction has been saved successfully with reference no. ").append(b.getString("receipt")));
         accountEdit.setText(b.getString("account"));
         nameEdit.setText(b.getString("name"));
         phoneEdit.setText(b.getString("phone"));
@@ -99,7 +99,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         if(remarks==null || remarks.trim().intern()=="".intern())
             remarks="-";
         remarksEdit.setText(remarks);
-        recieptEdit.setText(recieptNo);
+        recieptEdit.setText(b.getString("receipt"));
         amountEdit.setText(b.getString("amount"));
 
         final String accountType = b.getString("CATEGORY");
