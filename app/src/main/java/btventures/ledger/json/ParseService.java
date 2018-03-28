@@ -235,6 +235,34 @@ public class ParseService {
         });
     }
 
+    public void updateTransaction(String receiptNo){
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TransactionData");
+        //final ParseObject abc = new ParseObject("TransactionData");
+        query.whereEqualTo("CIFNO", receiptNo);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if(object == null){
+                    //object = abc;
+                }else {
+                    object.put("Status", "Pending");
+                    object.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                accountupdateCallback();
+
+                            } else {
+                                failCallback();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+
     public void saveTransaction(Customer data){
         ParseObject newTransaction = new ParseObject("TransactionData");
         newTransaction.put("CIFNO", data.getCifno().toString());

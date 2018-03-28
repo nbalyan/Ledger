@@ -118,6 +118,8 @@ class TransactionAdapter extends ArrayAdapter<Customer>{
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "chal gya delete", Toast.LENGTH_SHORT).show();
+                ParseService updateTransactionService = new ParseService();
+                updateTransactionService.updateTransaction(customerf.getCifno());
 
             }
         });
