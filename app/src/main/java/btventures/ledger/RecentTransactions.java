@@ -14,7 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseUser;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,11 +25,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import btventures.ledger.json.ParseService;
+import jxl.biff.formula.ParseContext;
 
 public class RecentTransactions extends AppCompatActivity {
     private ListView recentTransactions;
     private HashMap<String,String> filters;
-    ArrayList<Customer> transactionList = new ArrayList<>();
+    public ArrayList<Customer> transactionList = new ArrayList<>();
+    public String viewType = "";
 
 
     @Override
@@ -35,11 +40,28 @@ public class RecentTransactions extends AppCompatActivity {
         setContentView(R.layout.activity_recent_transactions);
         recentTransactions = findViewById(R.id.recentTransactions);
         //transactionList.add(new Customer("Ner","2134123","sadas","123123"));
-        recentTransactions.setAdapter(new TransactionAdapter(this,R.layout.transaction_item,transactionList));
+        //recentTransactions.setAdapter(new TransactionAdapter(this,R.layout.transaction_item,transactionList));
         filters = new HashMap<>();
-        filters.put("AgentCode", ParseUser.getCurrentUser().getUsername().toString());
         ParseService getDataService = new ParseService(this);
-        getDataService.loadTransactionDataWithFilter(filters,new Date(-1), new Date(-1));
+
+        if(ParseUser.getCurrentUser().getInt("role") == 1) {
+            filters.put("AgentCode", ParseUser.getCurrentUser().getUsername().toString());
+            //filters.put("Status", JSONObject.NULL.toString());
+            getDataService.loadTransactionDataWithFilter(filters, new Date(-1), new Date(-1), 1);
+        }else{
+            //filters.put("Status", "pending");
+            Bundle b = getIntent().getExtras();
+            if(b !=null) {
+                viewType = getIntent().getExtras().getString("viewType", "");
+            }
+            if(viewType.intern() == "".intern()) {
+                getDataService.loadTransactionDataWithFilter(filters, new Date(-1), new Date(-1), 0);
+            }
+            if(viewType.intern() == "DelTrans".intern()){
+                getDataService.loadTransactionDataWithFilter(filters, new Date(-1), new Date(-1), 2);
+
+            }
+        }
     }
 
     public void makeListView(ArrayList<Customer> list){
@@ -51,7 +73,7 @@ public class RecentTransactions extends AppCompatActivity {
         recentTransactions.deferNotifyDataSetChanged();*/
         this.transactionList = list;
         recentTransactions.setAdapter(new TransactionAdapter(this,R.layout.transaction_item,transactionList));
-        recentTransactions.deferNotifyDataSetChanged();
+        //recentTransactions.deferNotifyDataSetChanged();
         //recentTransactions.deferNotifyDataSetChanged();
     }
 
@@ -77,7 +99,7 @@ class TransactionAdapter extends ArrayAdapter<Customer>{
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
 
         View vi = view;
         if (vi == null)
@@ -114,15 +136,49 @@ class TransactionAdapter extends ArrayAdapter<Customer>{
                 startActivity(intent1);
             }
         });
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "chal gya delete", Toast.LENGTH_SHORT).show();
-                ParseService updateTransactionService = new ParseService();
-                updateTransactionService.updateTransaction(customerf.getCifno());
+        if(ParseUser.getCurrentUser().getInt("role") == 1) {
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Toast.makeText(context, "Transaction sent for approval.", Toast.LENGTH_SHORT).show();
+                    ParseService updateTransactionService = new ParseService(RecentTransactions.this);
+                    updateTransactionService.updateTransaction(customerf.getCifno(), "pending");
+                    transactionList.remove(i);
+                    notifyDataSetChanged();
 
+                }
+            });
+        }else{
+            if(viewType.intern() == "".intern()) {
+                delete.setText("Approve");
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Toast.makeText(context, "Transaction deleted.", Toast.LENGTH_SHORT).show();
+                        ParseService updateTransactionService = new ParseService(RecentTransactions.this);
+                        updateTransactionService.updateTransaction(customerf.getCifno(), "deleted");
+                        transactionList.remove(i);
+                        notifyDataSetChanged();
+
+                    }
+                });
+            }else if(viewType.intern() == "DelTrans".intern()){
+
+                delete.setText("Cancel Delete");
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Toast.makeText(context, "Transaction deleted.", Toast.LENGTH_SHORT).show();
+                        ParseService updateTransactionService = new ParseService(RecentTransactions.this);
+                        updateTransactionService.updateTransaction(customerf.getCifno(), "active");
+                        transactionList.remove(i);
+                        notifyDataSetChanged();
+
+                    }
+                });
             }
-        });
+
+        }
         return vi;
     }
 }

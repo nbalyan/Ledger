@@ -8,37 +8,47 @@
     android:orientation="vertical"
     tools:context="btventures.ledger.HomeActivity">
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/RecDep"
         android:layout_width="250dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textColor="@color/black"
         android:layout_height="75dp"
         android:text="Recurring Deposit" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/FIXDep"
         android:layout_width="250dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textColor="@color/black"
         android:layout_height="75dp"
 
         android:text="Savings Account" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/LICbutton"
         android:layout_width="250dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textColor="@color/black"
         android:layout_height="75dp"
 
         android:text="LIC" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/billing"
 
         android:layout_width="250dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textColor="@color/black"
         android:layout_height="75dp"
         android:text="Billing" />
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
         android:id="@+id/ShowRecentTransactions"
 
         android:layout_width="250dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textColor="@color/black"
         android:layout_height="75dp"
         android:text="Show Recent Transactions." />
 

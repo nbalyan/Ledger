@@ -3,6 +3,7 @@ package btventures.ledger;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,12 +15,12 @@ import com.parse.ParseUser;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button LICButton;
-    private Button FixDepButton;
-    private Button RecDepButton;
-    private Button BillingButton;
+    private AppCompatButton LICButton;
+    private AppCompatButton FixDepButton;
+    private AppCompatButton RecDepButton;
+    private AppCompatButton BillingButton;
     //private Button CustomerModify;
-    private Button showTransactions;
+    private AppCompatButton showTransactions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

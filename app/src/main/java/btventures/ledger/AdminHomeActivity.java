@@ -23,7 +23,7 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menulogout,menu);
+        menuInflater.inflate(R.menu.approvedel,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -36,6 +36,15 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
+        }
+        if(item.getItemId() == R.id.approvedel){
+            Intent launchrecentTransactionsdeletion = new Intent(getApplicationContext(), RecentTransactions.class);
+            startActivity(launchrecentTransactionsdeletion);
+        }
+        if(item.getItemId() == R.id.deltrans){
+            Intent launchrecentTransactionsdeletion = new Intent(getApplicationContext(), RecentTransactions.class);
+            launchrecentTransactionsdeletion.putExtra("viewType","DelTrans");
+            startActivity(launchrecentTransactionsdeletion);
         }
         return super.onOptionsItemSelected(item);
     }

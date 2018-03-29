@@ -105,6 +105,15 @@ public class Customer {
         this.cifno = cifno;
     }
 
+    public Customer(String name, String account, String address, String phone,String cifno, String amount) {
+        this.name = name;
+        this.account = account;
+        this.Address = address;
+        this.phone = phone;
+        this.mAmount = amount;
+        this.cifno = cifno;
+    }
+
     public Customer(String name, String account, String address, String phone, CustomerCompleteDetails customerCompleteDetails) {
         this.name = name;
         this.account = account;
