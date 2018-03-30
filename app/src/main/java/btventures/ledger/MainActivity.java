@@ -22,7 +22,23 @@ public class MainActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA},
+                                2);
+                    }
+
+
                 } else {
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                1);
+                    }
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -33,9 +49,37 @@ public class MainActivity extends AppCompatActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(ParseUser.getCurrentUser() != null){ //Uncomment
+            /*Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(homeActivity);
+            finish();*/
+                        int role = ParseUser.getCurrentUser().getInt("role");// 0 for admin, 1 for agent
+                        if(role == 0){
+                            Intent adminActivity = new Intent(getApplicationContext(), AdminHomeActivity.class);
+                            startActivity(adminActivity);
+                        }
+                        else if(role == 1){
+                            Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(homeActivity);
+                        }
+                        finish();
 
+
+                    }else{
+                        Intent intent = new Intent(this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
 
                 } else {
+
+                    if (ContextCompat.checkSelfPermission(this,
+                            Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{Manifest.permission.CAMERA},
+                                2);
+                    }
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -58,18 +102,20 @@ public class MainActivity extends AppCompatActivity {
                     1);
         }
 
+
         if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA)
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
-                    2);
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
         }
 
+
         if(ParseUser.getCurrentUser() != null){ //Uncomment
-            /*Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
-            startActivity(homeActivity);
-            finish();*/
+            //Intent homeActivity = new Intent(getApplicationContext(), HomeActivity.class);
+            //startActivity(homeActivity);
+            //finish();
             int role = ParseUser.getCurrentUser().getInt("role");// 0 for admin, 1 for agent
             if(role == 0){
                 Intent adminActivity = new Intent(getApplicationContext(), AdminHomeActivity.class);
