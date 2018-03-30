@@ -44,7 +44,7 @@ public class TransactionAdditionalData {
                 data = "Pending";
             }
             transactionAdditionalData.put(iter.toString(),data);
-            Log.d("Pending",iter.toString());
+            Log.d("Pending",data);
             iter.next();
         }
 

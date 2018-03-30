@@ -199,9 +199,11 @@ public class MainFragment extends Fragment {
             HashMap<String,String> data = userInfo.getTransactionAdditionalData();
 
             List<CellModel> list = new ArrayList<>();
-
+            int j = 1;
             for(String keys: data.keySet()){
-                list.add(new CellModel(String.valueOf(i)+"-"+i,data.get(keys)));
+                list.add(new CellModel(String.valueOf(j)+"-"+i,data.get(keys)));
+                Log.d("Pendingkey1",keys);
+                j++;
             }
 
             /*// The order should be same with column header list;
@@ -229,6 +231,7 @@ public class MainFragment extends Fragment {
         List<ColumnHeaderModel> list = new ArrayList<>();
         for(String s: keys){
             list.add(new ColumnHeaderModel(s));
+            Log.d("PendingKeys", s);
 
         }
         return list;
