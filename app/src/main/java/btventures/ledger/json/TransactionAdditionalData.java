@@ -42,7 +42,7 @@ public class TransactionAdditionalData {
                     data = columnData;
                 }
             }else{
-                data = "Pending";
+                data = "Due";
             }
             transactionAdditionalData.put(iter,data);
             Log.d("Pending",iter + data);
