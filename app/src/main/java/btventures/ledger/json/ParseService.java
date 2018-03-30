@@ -914,6 +914,10 @@ public class ParseService {
             Log.d("data",data.getAccount().toString());
 
         if(data.getAccount() != null) {
+            ParseObject cutomerAdditinalData = new ParseObject("TransactionAdditionalData");
+            cutomerAdditinalData.put("AccountNo",newData.getAccount());
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+            cutomerAdditinalData.put(formatter.format(new Date()),"D");
             newCustomer.put("Name", newData.getName());
             newCustomer.put("AccountNo", newData.getAccount());
             newCustomer.put("Mobile", newData.getPhone());
@@ -925,6 +929,8 @@ public class ParseService {
             newCustomer.put("JointAccountHolder", newData.getJointAccountName());
             newCustomer.put("AccountType", newData.getAccountType());
             Log.d("about to save","there");
+            if(newData.getAccountType().intern()=="REC".intern())
+                cutomerAdditinalData.saveInBackground();
             newCustomer.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -947,7 +953,13 @@ public class ParseService {
                 public void done(ParseObject object, ParseException e) {
                     if(object == null){
                         object = abc;
+                        ParseObject cutomerAdditinalData = new ParseObject("TransactionAdditionalData");
+                        cutomerAdditinalData.put("AccountNo",newData.getAccount());
+                        SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+                        cutomerAdditinalData.put(formatter.format(new Date()),"D");
+                        cutomerAdditinalData.saveInBackground();
                     }
+
                     object.put("Name", newData.getName());
                     object.put("AccountNo", newData.getAccount());
                     object.put("Mobile", newData.getPhone());
@@ -957,6 +969,7 @@ public class ParseService {
                     object.put("Amount", newData.getAmount());
                     object.put("Address", newData.getAddress());
                     object.put("JointAccountHolder", newData.getJointAccountName());
+                    object.put("AccountType", newData.getAccountType());
                     object.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {

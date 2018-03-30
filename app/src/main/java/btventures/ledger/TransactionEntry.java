@@ -130,12 +130,13 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 if(validate()){
                     Bundle extras = new Bundle();
                     //extras.putStringArrayList("all_accounts",allAccounts);
-                    try {
-                        CompleteTransactionInfo();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+
                     if(actPerformed.intern()=="REC".intern()) {
+                        try {
+                            CompleteTransactionInfo();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         extras.putStringArrayList("list_Dates", listStringDates);
                         extras.putStringArrayList("list_amounts", listAmount);
                         extras.putString("pending", duePayString);
@@ -501,7 +502,8 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
             phoneEdit.setText(customers.get(0).getPhone());
             addressEdit.setText(customers.get(0).getAddress());
             amountEdit.setText(customers.get(0).getmAmount());
-            monthlyAmount = Integer.parseInt(customers.get(0).getmAmount());
+            if(customers.get(0).getmAmount()!=null && customers.get(0).getmAmount().trim().intern()!="".intern())
+                monthlyAmount = Integer.parseInt(customers.get(0).getmAmount());
             customerf = customers.get(0);
             fetchPendingPayments(customers.get(0).getAccount());
             /*addressEdit.setFreezesText(true);
@@ -607,7 +609,8 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 phoneEdit.setText(list.get(position).getPhone());
                 addressEdit.setText(list.get(position).getAddress());
                 amountEdit.setText(list.get(position).getmAmount());
-                monthlyAmount = Integer.parseInt(list.get(position).getmAmount());
+                if(list.get(position).getmAmount()!=null && list.get(position).getmAmount().trim().intern()!="".intern())
+                    monthlyAmount = Integer.parseInt(list.get(position).getmAmount());
                 customerf = new Customer(list.get(position).getName(),list.get(position).getAccount(),list.get(position).getAddress(),list.get(position).getPhone(),list.get(position).getCifno());
                 progressBar.setVisibility(View.VISIBLE);
                 fetchPendingPayments(list.get(position).getAccount());

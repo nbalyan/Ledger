@@ -145,12 +145,14 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
 
         if(actPerformed.intern()=="BILL".intern()){
             if(remarks.intern()=="GST".intern()){
-                textViewHeader.setText("SCA Business Solutions Private Limited");
+                textViewHeader.setText("SCA Business Solutions Private Limited\n43 Ward No.11\nJhajjar");
             }else{
-                textViewHeader.setText("Prashant Arya and Associates");
+                textViewHeader.setText("Prashant Arya and Associates\nShop No. 109\nOpposite Post Office, Near Khadi Ashram\nJhajjar");
             }
 
-        }
+        }else
+            textViewHeader.setText("Arya Investment Centre\nShop No. 108\nOpposite Post Office, Near Khadi Ashram\nJhajjar");
+
 
         disableField(accountEdit);
         disableField(nameEdit);
