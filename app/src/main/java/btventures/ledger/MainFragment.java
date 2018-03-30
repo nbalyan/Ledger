@@ -63,6 +63,7 @@ public class MainFragment extends Fragment {
     private List<RowHeaderModel> mRowHeaderList;
     private String category;
     private HashMap<String,String> filters;
+    private ArrayList<String> datesList;
     private Date startDate;
     private Date endDate;
 
@@ -91,6 +92,7 @@ public class MainFragment extends Fragment {
         Bundle b = getArguments();
         category = b.getString("Category");
         filters = (HashMap<String,String>)b.getSerializable("FiltersMap");
+        datesList = (ArrayList<String>)b.getSerializable("Dates");
         startDate = new Date();
         startDate.setTime(b.getLong("startDate",-1));
         endDate = new Date();
@@ -130,7 +132,7 @@ public class MainFragment extends Fragment {
         }else if (category.intern() == "TransactionDayWise".intern()){
             parseService.loadTransactionDataDayWise(filters);
         }else if (category.intern() == "pending_report".intern()){
-            parseService.loadTransactionAdditionalData();
+            parseService.loadTransactionAdditionalData(filters,datesList);
         }
        // mWebServiceHandler.loadUserInfoList();pending_report
 
@@ -201,7 +203,8 @@ public class MainFragment extends Fragment {
             HashMap<String,String> data = userInfo.getTransactionAdditionalData();
 
             List<CellModel> list = new ArrayList<>();
-            int j = 1;
+            list.add(new CellModel("1-"+i,data.get("AccountNo")));
+            int j = 2;
             for(String keys: this.finalkeys){
                 list.add(new CellModel(String.valueOf(j)+"-"+i,data.get(keys)));
                 Log.d("Pendingkey1",keys);
@@ -232,6 +235,7 @@ public class MainFragment extends Fragment {
 
     private List<ColumnHeaderModel> createColumnHeaderModelListPendingWise(ArrayList<String> keys) {
         List<ColumnHeaderModel> list = new ArrayList<>();
+        list.add(new ColumnHeaderModel("AccountNo"));
         for(String s: keys){
             list.add(new ColumnHeaderModel(s));
             Log.d("PendingKeys", s);

@@ -25,12 +25,14 @@ public class TransactionAdditionalData {
 
     HashMap<String,String> transactionAdditionalData = new HashMap<>();
 
-    public TransactionAdditionalData(ParseObject objects){
-        ArrayList<String> keysArray = new ArrayList<>(objects.keySet());
+    public TransactionAdditionalData(ParseObject objects, ArrayList<String> keysArray){
+       // ArrayList<String> keysArray = new ArrayList<>(objects.keySet());
+        transactionAdditionalData.put("AccountNo",objects.get("AccountNo").toString());
         for(String iter: keysArray) {
             String data = "Due";
             String columnData;
-            if(objects.get(iter) != null){
+            //if(objects.get(iter) != null)
+            if(objects.containsKey(iter)){
                 columnData = objects.get(iter).toString();
                 if(columnData.intern() == "C".intern()){
                     data = "Paid";

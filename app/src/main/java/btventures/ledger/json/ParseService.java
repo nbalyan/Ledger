@@ -252,8 +252,13 @@ public class ParseService {
         });
     }
 
-    public void loadTransactionAdditionalData(){
+    public void loadTransactionAdditionalData(HashMap<String,String> filters, final ArrayList<String> keySet){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionAdditionalData");
+
+        for(String key: filters.keySet()){
+            query.whereMatches(key,filters.get(key),"i");
+            Log.d("DDDFilterAdded",key + " " + filters.get(key));
+        }
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -263,12 +268,12 @@ public class ParseService {
                     Log.d("score", "Retrieved " + objects.size() + " scores");
                     for (int i = 0; i < objects.size(); i++){
 //                        Log.d("PendingNkb",objects.get(0).getJSONObject("results").toString());
-                        transactionList.add(new TransactionAdditionalData(objects.get(i)));
+                        transactionList.add(new TransactionAdditionalData(objects.get(i),keySet));
                     }
-                    ArrayList<String> keySet = new ArrayList<>();
+                    /*ArrayList<String> keySet = new ArrayList<>();
                     if(objects.size()!=0){
                         keySet = new ArrayList<>(objects.get(0).keySet());
-                    }
+                    }*/
                     mainFragment.populatedTableViewPending(transactionList,keySet);
                     mainFragment.hideProgressDialog();
                 } else {
