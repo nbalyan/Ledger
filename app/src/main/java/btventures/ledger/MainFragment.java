@@ -209,9 +209,11 @@ public class MainFragment extends Fragment {
                 list.add(new CellModel(String.valueOf(j)+"-"+i,data.get(keys)));
                 Log.d("Pendingkey1",keys);
 
-                lists.add(list);
                 j++;
             }
+            lists.add(list);
+
+
 
             /*// The order should be same with column header list;
             list.add(new CellModel("1-" + i, userInfo.getAccount()));       //

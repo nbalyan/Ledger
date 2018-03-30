@@ -254,7 +254,7 @@ public class ParseService {
 
     public void loadTransactionAdditionalData(HashMap<String,String> filters, final ArrayList<String> keySet){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionAdditionalData");
-
+        query.setLimit(5000);
         for(String key: filters.keySet()){
             query.whereMatches(key,filters.get(key),"i");
             Log.d("DDDFilterAdded",key + " " + filters.get(key));
