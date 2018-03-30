@@ -404,6 +404,8 @@ public class ParseService {
         newTransaction.put("AccountType", data.getAccountType());
         newTransaction.put("CustomerName", data.getName());
         newTransaction.put("Remarks",data.getRemarks());
+        newTransaction.put("Address",data.getAddress());
+        newTransaction.put("Mobile",data.getPhone());
         newTransaction.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -1098,6 +1100,8 @@ public class ParseService {
         Customer cellModel = new Customer();
         cellModel.setAccount(object.getString("CustomerAccountNo"));
         cellModel.setName(object.getString("CustomerName"));
+        cellModel.setAddress(object.getString("Address"));
+        cellModel.setPhone(object.getString("Mobile"));
         cellModel.setmAmount(object.getString("Amount"));
         cellModel.setAgentCode(object.getString("AgentCode"));
         cellModel.setAccountType(object.getString("AccountType"));
