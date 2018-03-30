@@ -251,14 +251,14 @@ public class PendingReportCriteria extends AppCompatActivity implements AdapterV
     private void generateReport(){
         HashMap<String,String> filters = new HashMap<>();
         if(customerf !=null || true){
-            if(customerf!=null && customerf.getName() != null){
+            /*if(customerf!=null && customerf.getName() != null){
                 filters.put("CustomerName", customerf.getName());
-            }
+            }*/
             if(customerf!=null && customerf.getAccount() != null){
-                filters.put("CustomerAccountNo",customerf.getAccount());
+                filters.put("AccountNo",customerf.getAccount());
             }
-            filters.put("AccountType",actPerformed);
-            if(filters.size() !=0){
+            //filters.put("AccountType",actPerformed);
+            if(true){
                 //ParseService serviceData = new ParseService(this);
                 //serviceData.loadTransactionDataWithFilter(filters);
                 /*Bundle b = new Bundle();
@@ -267,7 +267,7 @@ public class PendingReportCriteria extends AppCompatActivity implements AdapterV
                 mainf.setArguments(b);
                 getSupportFragmentManager().beginTransaction().add(R.id.activity_containerCustomer, mainf
                         , MainFragment.class.getSimpleName()).commit();*/
-                filters.put("AccountType",actPerformed);
+               // filters.put("AccountType",actPerformed);
                 Intent tableActivity = new Intent(this,TableActivity.class);
                 tableActivity.putExtra("FiltersMap",filters);
                 try {
