@@ -31,7 +31,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 import btventures.ledger.json.ParseService;
 import btventures.ledger.tableview.CustomerCompleteDetails;
@@ -58,6 +63,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
     private String actPerformed;
     private ArrayList<String> allAccounts;
     private ArrayList<String> allAccountsCheckList;
+    private int monthlyAmount;
     //private String cifNo;
     //ArrayList<Customer> customerfinal;
     Customer customerf;
@@ -97,6 +103,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
             addressEdit.setText(b.getString("address"));
             recieptEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
+            monthlyAmount = Integer.parseInt(b.getString("amount"));
             remarks.setText(b.getString("remarks"));
             //cifNo = b.getString("cif");
             customerf = new Customer(b.getString("name"), b.getString("account"), b.getString("address"), b.getString("phone"),b.getString("cif"));
@@ -120,10 +127,18 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 }
                 if(validate()){
                     Bundle extras = new Bundle();
-                    extras.putStringArrayList("all_accounts",allAccounts);
-                    extras.putStringArrayList("all_accounts_check_list",allAccountsCheckList);
+                    //extras.putStringArrayList("all_accounts",allAccounts);
+                    try {
+                        CompleteTransactionInfo();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    extras.putStringArrayList("list_Dates",listStringDates);
+                    extras.putStringArrayList("list_amounts",listAmount);
+                    //extras.putStringArrayList("all_accounts_check_list",allAccountsCheckList);
                     extras.putString("account",customerf.getAccount());
                     extras.putString("name",customerf.getName());
+                    extras.putString("dueDateString",duePayString);
                     extras.putString("address",customerf.getAddress());
                     extras.putString("phone",customerf.getPhone());
                     extras.putString("cif",customerf.getCifno());
@@ -131,6 +146,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                     extras.putString("amount",amountEdit.getText().toString());
                     extras.putString("remarks",remarks.getText().toString());
                     extras.putString("CATEGORY",actPerformed);
+
                     Intent intent1 = new Intent(mContext, TransactionConfirmActivity.class);
                     intent1.putExtras(extras);
                     startActivity(intent1);
@@ -202,6 +218,144 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         });
         modifyData();
         //showPopup();
+    }
+
+    private Date getDateAtIndex(int i){
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+        if(listDates.size()<=i){
+            try {
+                Date date = formatter.parse(formatter.format(listDates.get(listDates.size()-1)));
+                Log.d("checking addition", String.valueOf(date));
+                date.setMonth(date.getMonth()+1);
+                Log.d("checking addition", String.valueOf(date));
+                listDates.add(date);
+                listAmount.add("D");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return listDates.get(listDates.size()-1);
+        }
+        return listDates.get(i);
+
+    }
+
+    private String getMonthAtIndex(int i){
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+        if(listDates.size()<=i){
+            try {
+                //listDates.add(formatter.parse(formatter.format(listDates.get(listDates.size()-1))));
+                Date date = formatter.parse(formatter.format(listDates.get(listDates.size()-1)));
+                Log.d("checking addition", String.valueOf(date));
+                date.setMonth(date.getMonth()+1);
+                Log.d("checking addition", String.valueOf(date));
+                listDates.add(date);
+                listAmount.add("D");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return formatter.format(listDates.get(listDates.size()-1));
+        }
+        return formatter.format(listDates.get(i));
+
+    }
+
+    private ArrayList<String> listAmount;
+    private ArrayList<String> listStringDates;
+    String duePayString;
+    private void CompleteTransactionInfo() throws ParseException {
+        int inputAmount = Integer.parseInt(String.valueOf(amountEdit.getText()));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+        Date currentdate=null;
+
+        currentdate = formatter.parse(formatter.format(new Date()));
+
+        String currentMonth = DateToString(currentdate,"MMMyy");
+        //String input= null;
+        listAmount = new ArrayList<String>();
+        for(Date date:listDates){
+            listAmount.add(mapDates.get(DateToString(date,"MMMyy")));
+        }
+        String monthtoAdd = null;
+
+        int index=0;
+        while(inputAmount>0){
+                if(mapDates.get(currentMonth)!=null && mapDates.get(currentMonth).intern()!="C".intern()){
+                    //mapDates.put(currentMonth,input);
+                    Log.d("ankur","here");
+                    monthtoAdd = currentMonth;
+                }else {
+                    Log.d("ankur","here1"+mapDates.get(currentMonth));
+                    //Log.d("ankur","here1"+getDateAtIndex(index));
+                    Log.d("ankur","here1"+getMonthAtIndex(index));
+                    if (getMonthAtIndex(index).equals(currentMonth) && mapDates.get(currentMonth).intern() == "C".intern()) {
+                        monthtoAdd=getMonthAtIndex(index+1);
+                        index++;
+                    } else {
+                        monthtoAdd=getMonthAtIndex(index);
+                    }
+                    index++;
+                }
+                String value = mapDates.get(monthtoAdd);
+            //Log.d("dates", String.valueOf(inputAmount));
+               // Log.d("date", String.valueOf(monthlyAmount));
+            //Log.d("date", monthtoAdd);
+                value = value==null?"D":value;
+                String valueSub = value.substring(0,1);
+                String toPut = null;
+                if(valueSub.intern()=="P".intern()){
+                    int amount = Integer.parseInt(value.substring(2));
+                    if(monthlyAmount-amount>inputAmount){
+                        int amountToPut=inputAmount+amount;
+                        toPut="P:"+(amountToPut);
+                        inputAmount=0;
+                    }else{
+                        toPut="C";
+                        inputAmount=inputAmount-(monthlyAmount-amount);
+
+                    }
+                }else{
+                    if(monthlyAmount>inputAmount){
+                        toPut="P:"+(inputAmount);
+                        inputAmount=0;
+                    }else{
+                        toPut="C";
+                        inputAmount=inputAmount-monthlyAmount;
+                    }
+
+                }
+                mapDates.put(monthtoAdd,toPut);
+                listStringDates = new ArrayList<String>();
+                for(Date date:listDates){
+                    listStringDates.add(DateToString(date,"MMMyy"));
+                }
+                listAmount.remove(listStringDates.indexOf(monthtoAdd));
+                listAmount.add(listStringDates.indexOf(monthtoAdd),toPut);
+
+        }
+        StringBuffer stringBuffer= new StringBuffer();
+        boolean addRequired = true;
+        for(int i=0;i<listAmount.size();i++){
+            String amount=listAmount.get(i);
+            String amountSub = amount.substring(0,1);
+            if(amount.intern()=="D".intern()){
+                stringBuffer.append(listStringDates.get(i));
+            }
+            if(amountSub.intern()=="D".intern()||amountSub.intern()=="P".intern())
+                addRequired = false;
+        }
+        if(addRequired){
+            Date addDate = formatter.parse(formatter.format(listDates.get(listDates.size()-1)));
+            addDate.setMonth(addDate.getMonth()+1);
+            listAmount.add("D");
+            listStringDates.add(formatter.format(addDate));
+
+        }
+        duePayString=stringBuffer.toString();
+        Log.d("datess", String.valueOf(listAmount));
+        Log.d("datesstring", String.valueOf(listStringDates));
+
+        //if inputAmount
     }
 
     private void modifyData(){
@@ -325,8 +479,10 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
             nameEdit.setText(customers.get(0).getName());
             phoneEdit.setText(customers.get(0).getPhone());
             addressEdit.setText(customers.get(0).getAddress());
-            amountEdit.setText(String.valueOf(customers.get(0).getmAmount()));
+            amountEdit.setText(customers.get(0).getmAmount());
+            monthlyAmount = Integer.parseInt(customers.get(0).getmAmount());
             customerf = customers.get(0);
+            fetchPendingPayments();
             /*addressEdit.setFreezesText(true);
             addressEdit.setFocusable(false);
             */
@@ -364,6 +520,12 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         }
         return list;*/
     }
+
+    private void fetchPendingPayments(){
+        ParseService newService = new ParseService(this);
+        newService.getPendingPayments(accountEdit.getText().toString());
+    }
+
     private void fetchListByAccount(){
         /*ArrayList<Customer> list= new ArrayList<Customer>();
         ArrayList<CustomerCompleteDetails> list1= new ArrayList<CustomerCompleteDetails>();*/
@@ -415,7 +577,9 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 phoneEdit.setText(list.get(position).getPhone());
                 addressEdit.setText(list.get(position).getAddress());
                 amountEdit.setText(list.get(position).getmAmount());
+                monthlyAmount = Integer.parseInt(list.get(position).getmAmount());
                 customerf = new Customer(list.get(position).getName(),list.get(position).getAccount(),list.get(position).getAddress(),list.get(position).getPhone(),list.get(position).getCifno());
+                fetchPendingPayments();
                 /*int j = 0;
                 //addLayout();
                 while(customerfinal.size() !=1 && customerfinal.size()>0){
@@ -440,6 +604,43 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 finish();*/
             }
         });
+    }
+
+    private String DateToString(Date date,String format){
+        Format formatter = new SimpleDateFormat(format);
+        return formatter.format(date);
+    }
+
+    private String StringToDate(String date,String format){
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        return formatter.format(date);
+    }
+
+    ArrayList<Date> listDates;
+    HashMap<String,String> mapDates;
+
+    public void handlePendingPaymentsResults(HashMap map){
+        listDates = (ArrayList<Date>) map.get("list");
+        mapDates = (HashMap<String, String>) map.get("data");
+        boolean tobeAppended;
+        Date currentDate = new Date();
+        int currentYear = Integer.parseInt(DateToString(currentDate,"yyyy"));
+        //String currentMonth = DateToString(new Date());
+        StringBuffer newBuffer = new StringBuffer();
+        newBuffer.append("Payment pending for ");
+        for(Date date:listDates){
+                if(currentDate.after(date)){
+                    tobeAppended= true;
+                    if(currentYear<Integer.parseInt(DateToString(date,"yyyy")))
+                        newBuffer.append(DateToString(date,"MMM yy")).append(", ");
+                    else
+                        newBuffer.append(DateToString(date,"MMM")).append(", ");
+
+                }
+        }
+        //if(tobeAppended)
+
+
     }
 
     @Override

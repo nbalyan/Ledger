@@ -113,6 +113,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
                 newTransaction.setName(nameEdit.getText().toString());
 
                 service.saveTransaction(newTransaction);
+                service.saveTransactionAdditionalInfo(getIntent().getExtras().getStringArrayList("list_Dates"),getIntent().getExtras().getStringArrayList("list_amounts"),accountEdit.getText().toString());
                 //TODO
             }
         });
@@ -126,7 +127,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         Intent transactionConfirmed = new Intent(this, TransactionAfterConfirmActivity.class);
         Bundle bundle = getIntent().getExtras();
         bundle.putString("receipt",reciept);
-        transactionConfirmed.putExtras(getIntent().getExtras());
+        transactionConfirmed.putExtras(bundle);
         startActivity(transactionConfirmed);
         finish();
     }

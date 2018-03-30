@@ -21,8 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.PrivateKey;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -353,6 +355,42 @@ public class ParseService {
 
     }
 
+    public void saveTransactionAdditionalInfo(final ArrayList<String> listDates, final ArrayList listAmounts, final String account){
+        //ParseObject newTransaction = new ParseObject("TransactionData");
+        Log.d("niggaupdate","there");
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TransactionAdditionalData");
+        final ParseObject abc = new ParseObject("TransactionAdditionalData");
+        query.whereEqualTo("AccountNo", account);
+        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if(object == null){
+                    object = abc;
+                }
+                object.put("AccountNo", account);
+                for(int i=0;i<listDates.size();i++){
+                    /*String amount=listAmount.get(i);
+                    if(amount=="D"){
+                        stringBuffer.append(listStringDates.get(i));
+                    }*/
+                    object.put(listDates.get(i), listAmounts.get(i));
+                }
+                object.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e==null){
+                            //accountupdateCallback();
+
+                        }else{
+                            //failCallback();
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
     public void saveTransaction(Customer data){
         ParseObject newTransaction = new ParseObject("TransactionData");
         newTransaction.put("CIFNO", data.getCifno().toString());
@@ -611,6 +649,31 @@ public class ParseService {
         return getDatabyAccount(Account,accType,true);
     }
 
+    public void getPendingPayments(String Account){
+        //return getPendingPayments(Account,true);
+        getPendingPayments(Account,true);
+    }
+
+    private void getPendingPayments(String account, final boolean b) {
+        //iteratePendingObject();
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TransactionAdditionalData");
+        query.whereMatches("AccountNo", account,"i");
+        //query.whereDoesNotMatchKeyInQuery("AccountNo", account,"i");
+        //query.setLimit(10);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                    HashMap map=iteratePendingObject(objects.get(0));
+                    if(b)
+                        transactionEntry.handlePendingPaymentsResults(map);
+                }
+
+            }
+
+        });
+    }
+
     public void getDataByCIF(String account){
         getDatabyCIF(account);
     }
@@ -860,9 +923,84 @@ public class ParseService {
         modifyCustomer.finish();
     }
 
+    private HashMap iteratePendingObject(ParseObject object){
+        HashMap returnMap = null;
+        HashMap<String,String> pendingMap = new HashMap<String,String>();
+        ArrayList<Date> pendingDatesList = new ArrayList<Date>();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+        Date date=null;
+        try {
+            Set<String> keySet = object.keySet();
+            String[] parseKeys = keySet.toArray(new String[keySet.size()]);
+            for (String key : parseKeys) {
+                try {
+
+                    String value = (String) object.get(key);
+                    Log.d("Handled 1", key+" "+value);
+                    value=value==null||value.trim().intern()=="".intern()?"D":value;
+                    if(value.intern()!="C".intern()) {
+                        date = formatter.parse(key);
+                        pendingMap.put(key, (String) object.get(key));
+                        pendingDatesList.add(date);
+                    }
+                    Log.d("Handled", String.valueOf(pendingDatesList));
+                }catch(Exception e){
+                    Log.d("Handled","handled");
+                }
+                //String parseValue = (String) object.get(key);
+                //do whatever you want
+            }
+            //if(pendingDatesList.size()>0) {
+            if(pendingDatesList.size()>0) {
+                Date currentdate = formatter.parse(formatter.format(new Date()));
+                Collections.sort(pendingDatesList);
+                //if(pendingMap.get(formatter.format(currentdate))!=null){
+                    Date lastPaymentDate = formatter.parse(formatter.format(pendingDatesList.get(pendingDatesList.size()-1)));
+                    if(lastPaymentDate.before(currentdate)){
+                        Log.d("TestLogs","lastPaymentDate"+lastPaymentDate);
+                        while(!lastPaymentDate.equals(currentdate) ){
+                            lastPaymentDate.setMonth(lastPaymentDate.getMonth()+1);
+                            Log.d("TestLogs","lastPaymentDate11"+formatter.parse(formatter.format(lastPaymentDate)));
+                            String dbValue = (String)object.get(formatter.format(lastPaymentDate));
+                            //if(dbValue!=null)
+                            if( !"C".equals(dbValue)) {
+                                pendingDatesList.add(formatter.parse(formatter.format(lastPaymentDate)));
+                                if(dbValue!=null && dbValue.trim().intern()!="".intern())
+                                    pendingMap.put(formatter.format(lastPaymentDate), dbValue);
+                                else
+                                    pendingMap.put(formatter.format(lastPaymentDate), "D");
+                            }
+                        }
+                        if(!pendingMap.containsKey(formatter.format(lastPaymentDate))){
+                            lastPaymentDate.setMonth(lastPaymentDate.getMonth()+1);
+                            pendingDatesList.add(formatter.parse(formatter.format(lastPaymentDate)));
+                            pendingMap.put(formatter.format(lastPaymentDate), "D");
+                        }
+                        //if()
+
+                    }
+                //}
+            }else{
+                Date currentdate = formatter.parse(formatter.format(new Date()));
+                pendingDatesList.add(currentdate);
+                pendingMap.put(formatter.format(currentdate), "D");
+            }
+
+            returnMap = new HashMap();
+            Log.d("fatt", String.valueOf(pendingDatesList));
+            returnMap.put("list",pendingDatesList);
+            returnMap.put("data",pendingMap);
+
+            //Collections.sort(dates, Collections.reverseOrder());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
 
 
     private CustomerCompleteDetails createCustomerInfoFromParseObject(ParseObject object){
+        //object.
         CustomerCompleteDetails newCustomer = new CustomerCompleteDetails();
         newCustomer.setAccount(object.getString("AccountNo"));
         newCustomer.setName(object.getString("Name"));
