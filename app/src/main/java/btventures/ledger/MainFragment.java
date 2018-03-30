@@ -204,10 +204,13 @@ public class MainFragment extends Fragment {
 
             List<CellModel> list = new ArrayList<>();
             list.add(new CellModel("1-"+i,data.get("AccountNo")));
+            labels.add(new Label(0,i+1,data.get("AccountNo") ));
             int j = 2;
             for(String keys: this.finalkeys){
                 list.add(new CellModel(String.valueOf(j)+"-"+i,data.get(keys)));
                 Log.d("Pendingkey1",keys);
+
+                labels.add(new Label(j-1,i+1,data.get(keys)));
 
                 j++;
             }
@@ -238,9 +241,13 @@ public class MainFragment extends Fragment {
     private List<ColumnHeaderModel> createColumnHeaderModelListPendingWise(ArrayList<String> keys) {
         List<ColumnHeaderModel> list = new ArrayList<>();
         list.add(new ColumnHeaderModel("AccountNo"));
+        int j = 1;
+        labels.add(new Label(0,0,"AccountNo"));
         for(String s: keys){
             list.add(new ColumnHeaderModel(s));
+            labels.add(new Label(j,0,s));
             Log.d("PendingKeys", s);
+            j++;
 
         }
         return list;
