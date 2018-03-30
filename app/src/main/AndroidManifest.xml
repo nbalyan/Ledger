@@ -33,6 +33,7 @@
         <activity android:name=".CustomerReportCriteria" />
         <activity android:name=".CommonFilterCritreria" />
         <activity android:name=".SimpleScannerActivity" />
+        <activity android:name=".PendingReportCriteria" />
 
         <provider
             android:name=".GenericFileProvider"

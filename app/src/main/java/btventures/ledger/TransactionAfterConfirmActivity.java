@@ -56,6 +56,8 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
     String calledFrom;
     private String actPerformed;
     private TextView textViewHeader;
+    private String duePayString;
+
 
 
     private void disableField(EditText editText){
@@ -109,6 +111,17 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         remarksEdit.setText(remarks);
         recieptEdit.setText(b.getString("receipt"));
         amountEdit.setText(b.getString("amount"));
+        duePayString = b.getString("pending");
+
+
+
+
+
+        TextView textView1 = findViewById(R.id.add_text);
+        if(duePayString!=null && duePayString.trim().intern()!="".intern()) {
+            textView1.setText(duePayString);
+            Log.d("duePayString",duePayString);
+        }
 
         calledFrom = b.getString("CalledFrom", "");
 

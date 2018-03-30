@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -35,6 +36,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     private AppCompatButton editButton;
     private String actPerformed;
     private String reciept;
+    private String duePayString;
 
     private void disableField(EditText editText){
         editText.setFocusable(false);
@@ -77,8 +79,13 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         reciept = ParseUser.getCurrentUser().getString("AgentCode")+timeStamp;
         recieptEdit.setText(reciept);
         amountEdit.setText(b.getString("amount"));
+        duePayString = b.getString("pending");
 
         final String accountType = b.getString("CATEGORY");
+
+        TextView textView = findViewById(R.id.add_text);
+        if(duePayString!=null && duePayString.intern()!="".intern())
+            textView.setText(duePayString);
 
         disableField(accountEdit);
         disableField(nameEdit);
@@ -113,7 +120,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
                 newTransaction.setName(nameEdit.getText().toString());
 
                 service.saveTransaction(newTransaction);
-                service.saveTransactionAdditionalInfo(getIntent().getExtras().getStringArrayList("list_Dates"),getIntent().getExtras().getStringArrayList("list_amounts"),accountEdit.getText().toString());
+                if(getIntent().getExtras().getStringArrayList("list_Dates")!=null)
+                    service.saveTransactionAdditionalInfo(getIntent().getExtras().getStringArrayList("list_Dates"),getIntent().getExtras().getStringArrayList("list_amounts"),accountEdit.getText().toString());
                 //TODO
             }
         });

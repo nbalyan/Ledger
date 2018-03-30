@@ -38,6 +38,7 @@ import btventures.ledger.CustomerReportCriteria;
 import btventures.ledger.HomeActivity;
 import btventures.ledger.MainFragment;
 import btventures.ledger.ModifyCustomer;
+import btventures.ledger.PendingReportCriteria;
 import btventures.ledger.RecentTransactions;
 import btventures.ledger.SimpleScannerActivity;
 import btventures.ledger.TransactionAfterConfirmActivity;
@@ -56,6 +57,7 @@ public class ParseService {
     private TransactionConfirmActivity transactionConfirmActivity;
     private AgentFilterCritreria agentFilterCritreria;
     private CustomerReportCriteria customerReportCriteria;
+    private PendingReportCriteria pendingReportCriteria;
     private SimpleScannerActivity simpleScannerActivity;
     private RecentTransactions recentTransactions;
     public ParseService(TransactionEntry transactionEntry){this.transactionEntry = transactionEntry;};
@@ -64,6 +66,7 @@ public class ParseService {
     public ParseService(TransactionConfirmActivity transactionConfirmActivity){this.transactionConfirmActivity = transactionConfirmActivity;}
     public ParseService(AgentFilterCritreria agentFilterCritreria){this.agentFilterCritreria = agentFilterCritreria;}
     public ParseService(CustomerReportCriteria customerReportCriteria){this.customerReportCriteria = customerReportCriteria;}
+    public ParseService(PendingReportCriteria pendingReportCriteria){this.pendingReportCriteria = pendingReportCriteria;}
     public ParseService(SimpleScannerActivity simpleScannerActivity){this.simpleScannerActivity = simpleScannerActivity;}
 
     //public ParseService(TransactionAfterConfirmActivity transactionAfterConfirmActivity){this.transactionAfterConfirmActivity = transactionAfterConfirmActivity;}
@@ -547,6 +550,16 @@ public class ParseService {
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
 
                     }
+                    if(pendingReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        pendingReportCriteria.handleResult(list);
+                        pendingReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
                     if(modifyCustomer!= null){
@@ -612,6 +625,18 @@ public class ParseService {
                         }
 
                     }
+                    if(pendingReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        if(callback) {
+                            pendingReportCriteria.handleResult(list);
+                            pendingReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                    }
                     if(simpleScannerActivity!=null){
                         ArrayList<Customer> list= new ArrayList<Customer>();
                         ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
@@ -667,7 +692,11 @@ public class ParseService {
                 if(e==null){
                     HashMap map=iteratePendingObject(objects.get(0));
                     if(b)
-                        transactionEntry.handlePendingPaymentsResults(map);
+                        try {
+                            transactionEntry.handlePendingPaymentsResults(map);
+                        } catch (java.text.ParseException e1) {
+                            e1.printStackTrace();
+                        }
                 }
 
             }
@@ -714,6 +743,16 @@ public class ParseService {
                         }
                         customerReportCriteria.handleResult(list);
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                    if(pendingReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        pendingReportCriteria.handleResult(list);
+                        pendingReportCriteria.progressBar.setVisibility(View.INVISIBLE);
 
                     }
                 }else{
@@ -768,6 +807,16 @@ public class ParseService {
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
 
                     }
+                    if(pendingReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        pendingReportCriteria.handleResult(list);
+                        pendingReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
                 }else{
                     Log.d("error", "Retrieved " + e.getMessage().toString() + " scores");
                     if(modifyCustomer!= null){
@@ -817,6 +866,16 @@ public class ParseService {
                         }
                         customerReportCriteria.handleResult(list);
                         customerReportCriteria.progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                    if(pendingReportCriteria!=null){
+                        ArrayList<Customer> list= new ArrayList<Customer>();
+                        ArrayList<CustomerCompleteDetails> list1 = customerCompleteDetailsList;
+                        for(int j=0; j < list1.size(); j++){
+                            list.add(new Customer(list1.get(j).getName(),list1.get(j).getAccount(),list1.get(j).getAddress(),list1.get(j).getPhone(),list1.get(j).getCif()));
+                        }
+                        pendingReportCriteria.handleResult(list);
+                        pendingReportCriteria.progressBar.setVisibility(View.INVISIBLE);
 
                     }
                 }else{

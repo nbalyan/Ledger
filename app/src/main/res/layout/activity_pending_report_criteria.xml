@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransactionConfirmActivity">
+    tools:context=".PendingReportCriteria">
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -37,46 +37,78 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                >
+
+                <TextView
+                    android:id="@+id/textStat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Transaction Type"
+                    android:paddingLeft="4dp"
+                    android:textColor="@color/popup_menu_item_text_color"
+                    android:textSize="11sp"
+                    />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight=".28"
+                    android:paddingLeft="2dp"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:gravity="center"
+                        android:spinnerMode="dropdown" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:src="@drawable/drop" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <FrameLayout
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    >
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <EditText
+                        android:id="@+id/input_account"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp">
+                        android:hint="Account Number"
+                        android:inputType="number" />
 
-                        <EditText
-                            android:id="@+id/input_account"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Account Number"
-                            android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
 
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginTop="8dp"
-                        >
-
-                        <EditText
-                            android:id="@+id/input_account_lic"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Policy Number"
-                            android:inputType="number" />
-
-                    </android.support.design.widget.TextInputLayout>
-                </FrameLayout>
-
+                <ImageButton
+                    android:id="@+id/search_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Search"
+                    android:src="@android:drawable/ic_menu_search" />
             </LinearLayout>
 
             <!-- Name Label -->
@@ -102,7 +134,12 @@
                         android:inputType="textPersonName" />
                 </android.support.design.widget.TextInputLayout>
 
-
+                <ImageButton
+                    android:id="@+id/search_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Search"
+                    android:src="@android:drawable/ic_menu_search" />
             </LinearLayout>
 
             <!-- Address Label -->
@@ -127,7 +164,12 @@
                         android:inputType="textMultiLine" />
                 </android.support.design.widget.TextInputLayout>
 
-
+                <ImageButton
+                    android:id="@+id/search_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Search"
+                    android:src="@android:drawable/ic_menu_search" />
             </LinearLayout>
 
             <!-- mobile number -->
@@ -152,7 +194,12 @@
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 
-
+                <ImageButton
+                    android:id="@+id/search_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Search"
+                    android:src="@android:drawable/ic_menu_search" />
             </LinearLayout>
 
             <LinearLayout
@@ -169,11 +216,14 @@
                     android:layout_weight="1">
 
                     <EditText
-                        android:id="@+id/input_remarks"
+                        android:id="@+id/input_from_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Remarks"
-                        android:inputType="textPersonName" />
+                        android:focusable="false"
+                        android:hint="From Date"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:inputType="date" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
@@ -191,85 +241,32 @@
                     android:layout_weight="1">
 
                     <EditText
-                        android:id="@+id/input_amount"
+                        android:id="@+id/input_to_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Amount"
-                        android:inputType="number" />
+                        android:hint="To Date"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:inputType="date" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- Signup Button -->
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_submit"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/input_reciept"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Reciept No."
-                        android:inputType="textPersonName" />
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:id="@+id/add_view"
-                android:layout_marginBottom="8dp"
-                >
-
-                <TextView
-                    android:id="@+id/add_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_edit"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="fill_vertical"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginTop="24dp"
-                    android:padding="15dp"
-                    android:text="Edit Transaction" />
-
-                <!-- Signup Button -->
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/btn_submit"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="fill_vertical"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginTop="24dp"
-                    android:padding="15dp"
-                    android:text="Confirm Transaction" />
-            </LinearLayout>
-
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
+                android:padding="24dp"
+                android:text="Show Report" />
         </LinearLayout>
     </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/activity_containerCustomer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </android.support.constraint.ConstraintLayout>

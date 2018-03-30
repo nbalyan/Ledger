@@ -103,10 +103,12 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
             addressEdit.setText(b.getString("address"));
             recieptEdit.setText(b.getString("receipt"));
             amountEdit.setText(b.getString("amount"));
-            monthlyAmount = Integer.parseInt(b.getString("amount"));
+            monthlyAmount = Integer.parseInt(b.getString("Mamount"));
             remarks.setText(b.getString("remarks"));
             //cifNo = b.getString("cif");
             customerf = new Customer(b.getString("name"), b.getString("account"), b.getString("address"), b.getString("phone"),b.getString("cif"));
+            fetchPendingPayments(b.getString("account"));
+            progressBar.setVisibility(View.VISIBLE);
         }
 
 
@@ -133,8 +135,11 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    extras.putStringArrayList("list_Dates",listStringDates);
-                    extras.putStringArrayList("list_amounts",listAmount);
+                    if(actPerformed.intern()=="REC".intern()) {
+                        extras.putStringArrayList("list_Dates", listStringDates);
+                        extras.putStringArrayList("list_amounts", listAmount);
+                        extras.putString("pending", duePayString);
+                    }
                     //extras.putStringArrayList("all_accounts_check_list",allAccountsCheckList);
                     extras.putString("account",customerf.getAccount());
                     extras.putString("name",customerf.getName());
@@ -142,6 +147,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                     extras.putString("address",customerf.getAddress());
                     extras.putString("phone",customerf.getPhone());
                     extras.putString("cif",customerf.getCifno());
+                    extras.putString("Mamount", String.valueOf(monthlyAmount));
                     extras.putString("receipt",recieptEdit.getText().toString());
                     extras.putString("amount",amountEdit.getText().toString());
                     extras.putString("remarks",remarks.getText().toString());
@@ -271,18 +277,18 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         currentdate = formatter.parse(formatter.format(new Date()));
 
         String currentMonth = DateToString(currentdate,"MMMyy");
-        //String input= null;
+
         listAmount = new ArrayList<String>();
         for(Date date:listDates){
-            listAmount.add(mapDates.get(DateToString(date,"MMMyy")));
+            String value=mapDates.get(DateToString(date,"MMMyy"));
+            value = value==null||value.trim().intern()=="".intern()?"D":value;
+            listAmount.add(value);
         }
         String monthtoAdd = null;
 
         int index=0;
         while(inputAmount>0){
                 if(mapDates.get(currentMonth)!=null && mapDates.get(currentMonth).intern()!="C".intern()){
-                    //mapDates.put(currentMonth,input);
-                    Log.d("ankur","here");
                     monthtoAdd = currentMonth;
                 }else {
                     Log.d("ankur","here1"+mapDates.get(currentMonth));
@@ -297,10 +303,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                     index++;
                 }
                 String value = mapDates.get(monthtoAdd);
-            //Log.d("dates", String.valueOf(inputAmount));
-               // Log.d("date", String.valueOf(monthlyAmount));
-            //Log.d("date", monthtoAdd);
-                value = value==null?"D":value;
+                value = value==null||value.trim().intern()=="".intern()?"D":value;
                 String valueSub = value.substring(0,1);
                 String toPut = null;
                 if(valueSub.intern()=="P".intern()){
@@ -351,7 +354,24 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
             listStringDates.add(formatter.format(addDate));
 
         }
-        duePayString=stringBuffer.toString();
+        StringBuffer newBuffer = new StringBuffer();
+        newBuffer.append("Payment pending for ");
+        //Date currentDate  = formatter.parse(formatter.format(new Date()));;
+        int currentYear = Integer.parseInt(DateToString(currentdate,"yyyy"));
+        boolean tobeAppended = false;
+        //for(Date date:listDates){
+        for(int i=0;i<listDates.size();i++){
+            Date date = listDates.get(i);
+            if(currentdate.after(date) && listAmount.get(i).intern()!="C".intern()){
+                tobeAppended= true;
+                if(currentYear<Integer.parseInt(DateToString(date,"yyyy")))
+                    newBuffer.append(DateToString(date,"MMM yy")).append(", ");
+                else
+                    newBuffer.append(DateToString(date,"MMM")).append(", ");
+
+            }
+        }
+        duePayString=tobeAppended?newBuffer.substring(0,newBuffer.length()-2).toString():"";
         Log.d("datess", String.valueOf(listAmount));
         Log.d("datesstring", String.valueOf(listStringDates));
 
@@ -472,6 +492,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
     public void handleResult(ArrayList<Customer> customers){
         if(customers == null || customers.size()==0){
             showAToast("No Record found");
+            progressBar.setVisibility(View.GONE);
             //TO-DO
         }else if(customers.size()==1){
             showAToast("Customer found");
@@ -482,13 +503,15 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
             amountEdit.setText(customers.get(0).getmAmount());
             monthlyAmount = Integer.parseInt(customers.get(0).getmAmount());
             customerf = customers.get(0);
-            fetchPendingPayments();
+            fetchPendingPayments(customers.get(0).getAccount());
             /*addressEdit.setFreezesText(true);
             addressEdit.setFocusable(false);
             */
-        }else
+        }else {
             showPopup(customers);
-        progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }
+
         //customerfinal = customers;
 
     }
@@ -521,7 +544,14 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         return list;*/
     }
 
-    private void fetchPendingPayments(){
+    private void fetchPendingPayments(String account){
+        if(actPerformed.intern()!="REC".intern()){
+            progressBar.setVisibility(View.GONE);
+            return;
+
+        }
+        if(account==null)
+            account= accountEdit.getText().toString();
         ParseService newService = new ParseService(this);
         newService.getPendingPayments(accountEdit.getText().toString());
     }
@@ -579,7 +609,9 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                 amountEdit.setText(list.get(position).getmAmount());
                 monthlyAmount = Integer.parseInt(list.get(position).getmAmount());
                 customerf = new Customer(list.get(position).getName(),list.get(position).getAccount(),list.get(position).getAddress(),list.get(position).getPhone(),list.get(position).getCifno());
-                fetchPendingPayments();
+                progressBar.setVisibility(View.VISIBLE);
+                fetchPendingPayments(list.get(position).getAccount());
+
                 /*int j = 0;
                 //addLayout();
                 while(customerfinal.size() !=1 && customerfinal.size()>0){
@@ -619,11 +651,14 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
     ArrayList<Date> listDates;
     HashMap<String,String> mapDates;
 
-    public void handlePendingPaymentsResults(HashMap map){
+    public void handlePendingPaymentsResults(HashMap map) throws ParseException {
         listDates = (ArrayList<Date>) map.get("list");
         mapDates = (HashMap<String, String>) map.get("data");
+        Log.d("ankur1", String.valueOf(listDates));
+        Log.d("ankur1", String.valueOf(mapDates));
         boolean tobeAppended;
-        Date currentDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+        Date currentDate  = formatter.parse(formatter.format(new Date()));;
         int currentYear = Integer.parseInt(DateToString(currentDate,"yyyy"));
         //String currentMonth = DateToString(new Date());
         StringBuffer newBuffer = new StringBuffer();
@@ -638,9 +673,11 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
 
                 }
         }
+        duePayString = newBuffer.substring(0,newBuffer.length()-2).toString();
         //if(tobeAppended)
-
-
+        TextView textView = findViewById(R.id.add_text);
+        textView.setText(duePayString);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
