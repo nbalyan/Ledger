@@ -49,6 +49,7 @@ public class MainFragment extends Fragment {
 
     private TableView mTableView;
     private MyTableAdapter mTableAdapter;
+    private ArrayList<String> finalkeys;
 
     private ProgressDialog mProgressDialog;
     //private WebServiceHandler mWebServiceHandler;
@@ -177,6 +178,7 @@ public class MainFragment extends Fragment {
     }
 
     public void populatedTableViewPending(List<TransactionAdditionalData> userInfoList, ArrayList<String> keys){
+        finalkeys = keys;
         mColumnHeaderList = createColumnHeaderModelListPendingWise(keys);
         mCellList = loadCellModelListTransactionPendingWise(userInfoList);
         mRowHeaderList = createRowHeaderList();
@@ -200,9 +202,11 @@ public class MainFragment extends Fragment {
 
             List<CellModel> list = new ArrayList<>();
             int j = 1;
-            for(String keys: data.keySet()){
+            for(String keys: this.finalkeys){
                 list.add(new CellModel(String.valueOf(j)+"-"+i,data.get(keys)));
                 Log.d("Pendingkey1",keys);
+
+                lists.add(list);
                 j++;
             }
 
@@ -221,7 +225,6 @@ public class MainFragment extends Fragment {
             labels.add(new Label(4,i+1, userInfo.getCifno())); //
             labels.add(new Label(5,i+1, userInfo.getAccountType()));   //*/
             // Add
-            lists.add(list);
         }
 
         return lists;
