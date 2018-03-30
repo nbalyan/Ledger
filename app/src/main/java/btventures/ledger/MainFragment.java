@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import btventures.ledger.json.TransactionAdditionalData;
 import btventures.ledger.utils.ExcelGenUtil;
 import jxl.write.Number;
 
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
@@ -124,11 +126,12 @@ public class MainFragment extends Fragment {
         }else if(category.intern() == "TransactionAgentWise".intern()){
             Log.d("BKNMainFragment","Calling Parse");
             parseService.loadTransactionDataWithFilter(filters,startDate,endDate);
-        }
-        else if (category.intern() == "TransactionDayWise".intern()){
+        }else if (category.intern() == "TransactionDayWise".intern()){
             parseService.loadTransactionDataDayWise(filters);
+        }else if (category.intern() == "pending_report".intern()){
+            parseService.loadTransactionAdditionalData();
         }
-       // mWebServiceHandler.loadUserInfoList();
+       // mWebServiceHandler.loadUserInfoList();pending_report
 
         return view;
     }
@@ -173,6 +176,63 @@ public class MainFragment extends Fragment {
         mTableAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);
     }
 
+    public void populatedTableViewPending(List<TransactionAdditionalData> userInfoList, ArrayList<String> keys){
+        mColumnHeaderList = createColumnHeaderModelListPendingWise(keys);
+        mCellList = loadCellModelListTransactionPendingWise(userInfoList);
+        mRowHeaderList = createRowHeaderList();
+
+        // Set all items to the TableView
+        mTableAdapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList);
+
+
+    }
+
+    private List<List<CellModel>> loadCellModelListTransactionPendingWise(List<TransactionAdditionalData> userInfoList) {
+
+        List<List<CellModel>> lists = new ArrayList<>();
+
+        // Creating cell model list from UserInfo list for Cell Items
+        // In this example, UserInfo list is populated from web service
+
+        for (int i = 0; i < userInfoList.size(); i++) {
+            TransactionAdditionalData userInfo = userInfoList.get(i);
+            HashMap<String,String> data = userInfo.getTransactionAdditionalData();
+
+            List<CellModel> list = new ArrayList<>();
+
+            for(String keys: data.keySet()){
+                list.add(new CellModel(String.valueOf(i)+"-"+i,data.get(keys)));
+            }
+
+            /*// The order should be same with column header list;
+            list.add(new CellModel("1-" + i, userInfo.getAccount()));       //
+            list.add(new CellModel("2-" + i, userInfo.getName()));     //
+            list.add(new CellModel("3-" + i, userInfo.getmAmount())); //
+            list.add(new CellModel("4-" + i, userInfo.getAgentCode()));    //
+            list.add(new CellModel("5-" + i, userInfo.getCifno())); //
+            list.add(new CellModel("6-" + i, userInfo.getAccountType()));   //
+
+            labels.add(new Label(0,i+1, userInfo.getAccount()));       //
+            labels.add(new Label(1,i+1, userInfo.getName()));     //
+            labels.add(new Label(2,i+1, userInfo.getmAmount())); //
+            labels.add(new Label(3,i+1, userInfo.getAgentCode()));    //
+            labels.add(new Label(4,i+1, userInfo.getCifno())); //
+            labels.add(new Label(5,i+1, userInfo.getAccountType()));   //*/
+            // Add
+            lists.add(list);
+        }
+
+        return lists;
+    }
+
+    private List<ColumnHeaderModel> createColumnHeaderModelListPendingWise(ArrayList<String> keys) {
+        List<ColumnHeaderModel> list = new ArrayList<>();
+        for(String s: keys){
+            list.add(new ColumnHeaderModel(s));
+
+        }
+        return list;
+    }
 
 
     private List<ColumnHeaderModel> createColumnHeaderModelListUser() {

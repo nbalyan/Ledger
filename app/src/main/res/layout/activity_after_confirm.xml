@@ -90,12 +90,14 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/hidden_view"
             android:visibility="invisible">
         <LinearLayout
-            android:id="@+id/hidden_view"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
+            android:id="@+id/hidden_view1"
             android:orientation="vertical"
             android:padding="20dp"
             >

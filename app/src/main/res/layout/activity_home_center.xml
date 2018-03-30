@@ -11,16 +11,12 @@
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/RecDep"
         android:layout_width="250dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textColor="@color/black"
         android:layout_height="75dp"
         android:text="Recurring Deposit" />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/FIXDep"
         android:layout_width="250dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textColor="@color/black"
         android:layout_height="75dp"
 
         android:text="Savings Account" />
@@ -28,8 +24,6 @@
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/LICbutton"
         android:layout_width="250dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textColor="@color/black"
         android:layout_height="75dp"
 
         android:text="LIC" />
@@ -38,8 +32,6 @@
         android:id="@+id/billing"
 
         android:layout_width="250dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textColor="@color/black"
         android:layout_height="75dp"
         android:text="Billing" />
 
@@ -47,10 +39,8 @@
         android:id="@+id/ShowRecentTransactions"
 
         android:layout_width="250dp"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:textColor="@color/black"
         android:layout_height="75dp"
-        android:text="Show Recent Transactions." />
+        android:text="Show Recent Transactions" />
 
 </LinearLayout>
 </merge>

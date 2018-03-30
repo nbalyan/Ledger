@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +52,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
     private AppCompatButton printButton;
     private AppCompatButton smsButton;
     private AppCompatButton homeButton;
-    private LinearLayout linearLayout;
+    private ScrollView linearLayout;
     String calledFrom;
     private String actPerformed;
     private TextView textViewHeader;
@@ -184,6 +186,17 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    public static Bitmap loadBitmapFromView(View v)
+    {
+
+
+        Bitmap b = Bitmap.createBitmap(v.getWidth(), v.findViewById(R.id.hidden_view1).getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas c = new Canvas(b);
+        v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
+        v.draw(c);
+        return b;
+    }
 
 
     private void takeScreenshot() {
@@ -198,7 +211,8 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
             View v1 = findViewById(R.id.hidden_view);
             v1.setVisibility(View.VISIBLE);
             v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            //Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+            Bitmap bitmap =loadBitmapFromView(v1);
             v1.setDrawingCacheEnabled(false);
             v1.setVisibility(View.INVISIBLE);
 
@@ -213,6 +227,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
 
             openScreenshot(imageFile);*/
             doPhotoPrint(bitmap);
+
 
         } catch (Throwable e) {
             // Several error may come out with file handling or DOM

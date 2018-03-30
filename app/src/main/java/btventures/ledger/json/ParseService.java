@@ -1,6 +1,7 @@
 package btventures.ledger.json;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -21,11 +22,13 @@ import org.json.JSONObject;
 
 import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import btventures.ledger.AgentFilterCritreria;
 import btventures.ledger.Customer;
@@ -242,6 +245,33 @@ public class ParseService {
                 }
             }
         });
+    }
+
+    public void loadTransactionAdditionalData(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionAdditionalData");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                if(e==null){
+                    List<TransactionAdditionalData> transactionList = new ArrayList<>();
+                    Log.d("score", "Retrieved " + objects.size() + " scores");
+                    for (int i = 0; i < objects.size(); i++){
+                        transactionList.add(new TransactionAdditionalData(objects.get(i)));
+                    }
+                    ArrayList<String> keySet = new ArrayList<>();
+                    if(objects.size()!=0){
+                        keySet = new ArrayList<>(objects.get(0).keySet());
+                    }
+                    mainFragment.populatedTableViewPending(transactionList,keySet);
+                    mainFragment.hideProgressDialog();
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                    mainFragment.hideProgressDialog();
+                }
+            }
+        });
+
     }
 
     public void loadTransactionDataWithFilter(HashMap<String,String> filters, Date startDate, Date endDate){

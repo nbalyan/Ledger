@@ -85,7 +85,7 @@ public class AdminHomeActivity extends AppCompatActivity implements View.OnClick
             startActivity(launchActivity);
         }else{
             extras.putString("Category","pending_report");
-            Intent launchActivity = new Intent(getApplicationContext(), CommonFilterCritreria.class);
+            Intent launchActivity = new Intent(getApplicationContext(), TableActivity.class);
             launchActivity.putExtras(extras);
             startActivity(launchActivity);
         }
