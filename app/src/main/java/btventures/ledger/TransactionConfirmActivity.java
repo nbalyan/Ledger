@@ -113,6 +113,8 @@ public class TransactionConfirmActivity extends AppCompatActivity {
                 Customer newTransaction = new Customer();
                 newTransaction.setAccount(accountEdit.getText().toString());
                 newTransaction.setAccountType(accountType);
+                newTransaction.setAddress(addressEdit.getText().toString());
+                newTransaction.setPhone(phoneEdit.getText().toString());
                 newTransaction.setCifno(recieptEdit.getText().toString());
                 newTransaction.setRemarks(remarksEdit.getText().toString());
                 newTransaction.setAgentCode(ParseUser.getCurrentUser().getUsername());
