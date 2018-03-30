@@ -656,7 +656,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         mapDates = (HashMap<String, String>) map.get("data");
         Log.d("ankur1", String.valueOf(listDates));
         Log.d("ankur1", String.valueOf(mapDates));
-        boolean tobeAppended;
+        boolean tobeAppended=false;
         SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
         Date currentDate  = formatter.parse(formatter.format(new Date()));;
         int currentYear = Integer.parseInt(DateToString(currentDate,"yyyy"));
@@ -673,7 +673,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
 
                 }
         }
-        duePayString = newBuffer.substring(0,newBuffer.length()-2).toString();
+        duePayString = tobeAppended?newBuffer.substring(0,newBuffer.length()-2).toString():"";
         //if(tobeAppended)
         TextView textView = findViewById(R.id.add_text);
         textView.setText(duePayString);

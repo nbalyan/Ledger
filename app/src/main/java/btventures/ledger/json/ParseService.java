@@ -376,6 +376,8 @@ public class ParseService {
                 if(object == null){
                     object = abc;
                 }
+                Log.d("parseObject", String.valueOf(object));
+                Log.d("parseObject", String.valueOf(listDates));
                 object.put("AccountNo", account);
                 for(int i=0;i<listDates.size();i++){
                     /*String amount=listAmount.get(i);
