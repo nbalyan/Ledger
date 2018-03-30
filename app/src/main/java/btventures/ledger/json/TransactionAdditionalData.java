@@ -26,26 +26,24 @@ public class TransactionAdditionalData {
     HashMap<String,String> transactionAdditionalData = new HashMap<>();
 
     public TransactionAdditionalData(ParseObject objects){
-        Set<String> keysArray = objects.keySet();
-        Iterator iter = keysArray.iterator();
-        while (iter.hasNext()) {
+        ArrayList<String> keysArray = new ArrayList<>(objects.keySet());
+        for(String iter: keysArray) {
             String data = "Due";
             String columnData;
-            if(objects.get(iter.toString()) != null){
-                columnData = objects.get(iter.toString()).toString();
-                if(columnData == "C"){
+            if(objects.get(iter) != null){
+                columnData = objects.get(iter).toString();
+                if(columnData.intern() == "C".intern()){
                     data = "Paid";
-                }else if(columnData == "D"){
+                }else if(columnData.intern() == "D".intern()){
                     data = "Due";
                 }else{
-                    data = "Partial";
+                    data = columnData;
                 }
             }else{
                 data = "Pending";
             }
-            transactionAdditionalData.put(iter.toString(),data);
-            Log.d("Pending",data);
-            iter.next();
+            transactionAdditionalData.put(iter,data);
+            Log.d("Pending",iter + data);
         }
 
     }

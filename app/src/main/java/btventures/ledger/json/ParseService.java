@@ -259,6 +259,7 @@ public class ParseService {
                     List<TransactionAdditionalData> transactionList = new ArrayList<>();
                     Log.d("score", "Retrieved " + objects.size() + " scores");
                     for (int i = 0; i < objects.size(); i++){
+//                        Log.d("PendingNkb",objects.get(0).getJSONObject("results").toString());
                         transactionList.add(new TransactionAdditionalData(objects.get(i)));
                     }
                     ArrayList<String> keySet = new ArrayList<>();
