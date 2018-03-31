@@ -37,6 +37,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     private String actPerformed;
     private String reciept;
     private String duePayString;
+    private String lastPayString;
 
     private void disableField(EditText editText){
         editText.setFocusable(false);
@@ -80,12 +81,18 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         recieptEdit.setText(reciept);
         amountEdit.setText(b.getString("amount"));
         duePayString = b.getString("pending");
+        lastPayString = b.getString("last_pay");
 
         final String accountType = b.getString("CATEGORY");
 
         TextView textView = findViewById(R.id.add_text);
         if(duePayString!=null && duePayString.intern()!="".intern())
             textView.setText(duePayString);
+
+        if(lastPayString!=null && lastPayString.intern()!="".intern()){
+            textView = findViewById(R.id.add_text1);
+            textView.setText(lastPayString);
+        }
 
         disableField(accountEdit);
         disableField(nameEdit);

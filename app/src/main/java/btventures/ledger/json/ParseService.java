@@ -413,6 +413,7 @@ public class ParseService {
         newTransaction.put("Remarks",data.getRemarks());
         newTransaction.put("Address",data.getAddress());
         newTransaction.put("Mobile",data.getPhone());
+        newTransaction.put("CreateDate",new Date());
         newTransaction.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -689,6 +690,38 @@ public class ParseService {
         getPendingPayments(Account,true);
     }
 
+    public void getLastTransaction(String account, String accountType) {
+        //iteratePendingObject();
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TransactionData");
+        query.whereMatches("CustomerAccountNo", account,"i");
+        query.whereMatches("AccountType", accountType,"i");
+        query.orderByDescending("CreateDate");
+        query.setLimit(1);
+        final HashMap map = new HashMap();
+        //query.whereDoesNotMatchKeyInQuery("AccountNo", account,"i");
+        //query.setLimit(10);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e==null){
+                        try {
+                            if(objects!=null && objects.size()==1) {
+                                map.put("CreateDate",objects.get(0).getDate("CreateDate"));
+                                map.put("Amount",objects.get(0).getString("Amount"));
+                            }
+                            Log.d("hererere", String.valueOf(map));
+                            //transactionEntry.handlePendingPaymentsResults(map);
+                            transactionEntry.handlePendingPaymentsResults(map);
+                        } catch (java.text.ParseException e1) {
+                            e1.printStackTrace();
+                        }
+                }
+
+            }
+
+        });
+    }
+
     private void getPendingPayments(String account, final boolean b) {
         //iteratePendingObject();
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TransactionAdditionalData");
@@ -702,7 +735,8 @@ public class ParseService {
                     HashMap map=iteratePendingObject(objects.get(0));
                     if(b)
                         try {
-                            transactionEntry.handlePendingPaymentsResults(map);
+                            //transactionEntry.handlePendingPaymentsResults(map);
+                            transactionEntry.handlePendingResultsModified(map);
                         } catch (java.text.ParseException e1) {
                             e1.printStackTrace();
                         }

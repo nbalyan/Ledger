@@ -140,6 +140,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                         extras.putStringArrayList("list_Dates", listStringDates);
                         extras.putStringArrayList("list_amounts", listAmount);
                         extras.putString("pending", duePayString);
+                        extras.putString("last_pay", lastPayString);
                     }
                     //extras.putStringArrayList("all_accounts_check_list",allAccountsCheckList);
                     extras.putString("account",customerf.getAccount());
@@ -269,6 +270,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
     private ArrayList<String> listAmount;
     private ArrayList<String> listStringDates;
     String duePayString;
+    String lastPayString;
     private void CompleteTransactionInfo() throws ParseException {
         int inputAmount = Integer.parseInt(String.valueOf(amountEdit.getText()));
 
@@ -554,6 +556,7 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         }
         if(account==null)
             account= accountEdit.getText().toString();
+        this.account=account;
         ParseService newService = new ParseService(this);
         newService.getPendingPayments(accountEdit.getText().toString());
     }
@@ -653,12 +656,37 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
 
     ArrayList<Date> listDates;
     HashMap<String,String> mapDates;
+    HashMap map;
+    String account;
 
-    public void handlePendingPaymentsResults(HashMap map) throws ParseException {
+    public void handlePendingResultsModified(HashMap map) throws ParseException {
+        this.map = map;
+        ParseService newService = new ParseService(this);
+        newService.getLastTransaction(account,actPerformed);
+    }
+
+    public void handlePendingPaymentsResults(HashMap returnMap) throws ParseException {
+        if(returnMap.containsKey("Amount")){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy");
+            //cutomerAdditinalData.put(formatter.format(new Date()),"D");
+            try {
+                lastPayString = "Last payment was made on " + formatter.format(returnMap.get("CreateDate"));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        if(lastPayString!=null && lastPayString.intern()!="".intern()){
+            TextView textView = findViewById(R.id.add_text1);
+            textView.setText(lastPayString);
+        }
+        handlePendingPaymentsResults();
+    }
+
+    public void handlePendingPaymentsResults() throws ParseException {
         listDates = (ArrayList<Date>) map.get("list");
         mapDates = (HashMap<String, String>) map.get("data");
-        Log.d("ankur1", String.valueOf(listDates));
-        Log.d("ankur1", String.valueOf(mapDates));
+        //Log.d("ankur1", String.valueOf(listDates));
+        //Log.d("ankur1", String.valueOf(mapDates));
         boolean tobeAppended=false;
         SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
         Date currentDate  = formatter.parse(formatter.format(new Date()));;

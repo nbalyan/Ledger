@@ -57,6 +57,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
     private String actPerformed;
     private TextView textViewHeader;
     private String duePayString;
+    private String lastPayString;
 
 
 
@@ -112,6 +113,7 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         recieptEdit.setText(b.getString("receipt"));
         amountEdit.setText(b.getString("amount"));
         duePayString = b.getString("pending");
+        lastPayString= b.getString("last_pay");
 
 
 
@@ -121,6 +123,11 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
         if(duePayString!=null && duePayString.trim().intern()!="".intern()) {
             textView1.setText(duePayString);
             Log.d("duePayString",duePayString);
+        }
+
+        if(lastPayString!=null && lastPayString.intern()!="".intern()){
+            textView1 = findViewById(R.id.add_text1);
+            textView1.setText(lastPayString);
         }
 
         calledFrom = b.getString("CalledFrom", "");
