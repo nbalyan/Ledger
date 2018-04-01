@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -26,8 +27,13 @@ import android.widget.Toast;
 
 import com.parse.ParseUser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -187,14 +193,87 @@ public class TransactionAfterConfirmActivity extends AppCompatActivity {
 
         smsButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(view.getContext(), "SMS sent", Toast.LENGTH_LONG).show();
+            public void onClick(View view) {/*
+                        try {
+                            // Construct data
+                            String apiKey = "apikey=" + URLEncoder.encode("oTjNx5xJhGQ-bCq31vCK36pT3XtWOBnoLXYUdwnPxN");
+                            String message = "&message=" + "Your payment of Rs " + amountEdit.getText().toString() + " has been received. Reference number is " + recieptEdit.getText();
+                            //String sender = "&sender=" + "ARYAIC";
+                            String numbers = "&numbers=" + "91"+ phoneEdit.getText();
+
+                            Log.d("Sendingsms","sending");
+
+                            // Send data
+                            HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
+                            String data = apiKey + numbers + message;// + sender;
+                            conn.setDoOutput(true);
+                            conn.setRequestMethod("POST");
+                            conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
+                            conn.getOutputStream().write(data.getBytes("UTF-8"));
+                            final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                            final StringBuffer stringBuffer = new StringBuffer();
+                            String line;
+                            while ((line = rd.readLine()) != null) {
+                                stringBuffer.append(line);
+                            }
+                            rd.close();
+
+
+                            Toast.makeText(view.getContext(), "SMS sent", Toast.LENGTH_LONG).show();
+
+                            //return stringBuffer.toString();
+                        } catch (Exception e) {
+                            //System.out.println("Error SMS "+e);
+                            Log.d("fatgyi",e.toString());
+
+                            Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //return "Error "+e;
+                        }*/
+                new SendSms().execute();
+
+                //Toast.makeText(view.getContext(), "SMS sent", Toast.LENGTH_LONG).show();
 
             }
         });
         //modifyData();
 
 
+    }
+
+    class SendSms extends AsyncTask<Void, Void, Void> {
+
+        private Exception exception;
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                // Construct data
+                String apiKey = "apikey=" + URLEncoder.encode("oTjNx5xJhGQ-bCq31vCK36pT3XtWOBnoLXYUdwnPxN");
+                String message = "&message=" + "Your payment of Rs " + amountEdit.getText().toString() + " has been received by ARYAIC. Reference number is " + recieptEdit.getText();
+                //String sender = "&sender=" + "ARYAIC";
+                String numbers = "&numbers=" + "91"+ phoneEdit.getText();
+
+                Log.d("Sendingsms","sending");
+
+                // Send data
+                HttpURLConnection conn = (HttpURLConnection) new URL("https://api.textlocal.in/send/?").openConnection();
+                String data = apiKey + numbers + message;// + sender;
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
+                conn.getOutputStream().write(data.getBytes("UTF-8"));
+                final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                final StringBuffer stringBuffer = new StringBuffer();
+                String line;
+                while ((line = rd.readLine()) != null) {
+                    stringBuffer.append(line);
+                }
+                rd.close();
+                return null;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
     }
 
     @Override

@@ -262,7 +262,7 @@ public class ModifyCustomer extends AppCompatActivity {
         String phone = phoneEdit.getText().toString();
         String amount =amountEdit.getText().toString();
         if (name.isEmpty()) {
-            nameEdit.setError("Enter Valid Receipt No.");
+            nameEdit.setError("Enter Valid Name");
             valid = false;
         } else {
             nameEdit.setError(null);
@@ -324,22 +324,23 @@ public class ModifyCustomer extends AppCompatActivity {
         jointCIFedit = findViewById(R.id.input_secondaryCIF);
         nominationEdit = findViewById(R.id.input_nomination);
         * */
-
-        CustomerCompleteDetails newData = new CustomerCompleteDetails();
-        newData.setAccount(accountEdit.getText().toString());
-        newData.setName(nameEdit.getText().toString());
-        newData.setPhone(phoneEdit.getText().toString());
-        newData.setOpeningDate(dateEdit.getText().toString());
-        newData.setAddress(addressEdit.getText().toString());
-        newData.setAmount(amountEdit.getText().toString());
-        newData.setAadhar(aadharEdit.getText().toString());
-        newData.setPan_no(PANEdit.getText().toString());
-        newData.setJointAccountName(jointNameEdit.getText().toString());
-        newData.setNomination(nominationEdit.getText().toString());
-        newData.setAccountType(actPerformed);
-        ParseService newService = new ParseService(this);
-        Log.d("herein click", newData.getAccount());
-        newService.addCustomerData(newData);
+        if(validate()) {
+            CustomerCompleteDetails newData = new CustomerCompleteDetails();
+            newData.setAccount(accountEdit.getText().toString());
+            newData.setName(nameEdit.getText().toString());
+            newData.setPhone(phoneEdit.getText().toString());
+            newData.setOpeningDate(dateEdit.getText().toString());
+            newData.setAddress(addressEdit.getText().toString());
+            newData.setAmount(amountEdit.getText().toString());
+            newData.setAadhar(aadharEdit.getText().toString());
+            newData.setPan_no(PANEdit.getText().toString());
+            newData.setJointAccountName(jointNameEdit.getText().toString());
+            newData.setNomination(nominationEdit.getText().toString());
+            newData.setAccountType(actPerformed);
+            ParseService newService = new ParseService(this);
+            Log.d("herein click", newData.getAccount());
+            newService.addCustomerData(newData);
+        }
 
 
 
