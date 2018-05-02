@@ -211,6 +211,7 @@ public class ParseService {
         Log.d("startDate", String.valueOf(endDate.getTime()));
 //        mealPlan.whereGreaterThanOrEqualTo("createdAt", today);
 //        mealPlan.whereLessThan("createdAt", tomorrow);
+
         if(startDate.getTime() != -1) {
             query.whereGreaterThanOrEqualTo("createdAt", startDate);
         }
@@ -289,17 +290,17 @@ public class ParseService {
     public void loadTransactionDataWithFilter(HashMap<String,String> filters, Date startDate, Date endDate){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("TransactionData");
         query.setLimit(100);
-        query.addDescendingOrder("createdAt");
+        query.addDescendingOrder("CreateDate");
         query.whereNotEqualTo("Status", "deleted");
         Log.d("startDate", String.valueOf(startDate.getTime()));
         Log.d("startDate", String.valueOf(endDate.getTime()));
 //        mealPlan.whereGreaterThanOrEqualTo("createdAt", today);
 //        mealPlan.whereLessThan("createdAt", tomorrow);
         if(startDate.getTime() != -1) {
-            query.whereGreaterThanOrEqualTo("createdAt", startDate);
+            query.whereGreaterThanOrEqualTo("CreateDate", startDate);
         }
         if(endDate.getTime() != -1) {
-            query.whereLessThan("createdAt", endDate);
+            query.whereLessThan("CreateDate", endDate);
         }
         Log.d("BKNMainFragment","In Parse");
         for(String key: filters.keySet()){
@@ -1189,6 +1190,8 @@ public class ParseService {
         cellModel.setmAmount(object.getString("Amount"));
         cellModel.setAgentCode(object.getString("AgentCode"));
         cellModel.setAccountType(object.getString("AccountType"));
+        Log.d("ankur test", String.valueOf(object.getDate("CreateDate")));
+        cellModel.setDate(DateToString(object.getDate("CreateDate"),null));
         cellModel.setCifno(object.getString("CIFNO"));
         //cellModel.setCreatedAt(new Date((object.getDate("createdAt")).getTime()));
 

@@ -302,12 +302,15 @@ public class MainFragment extends Fragment {
         List<ColumnHeaderModel> list = new ArrayList<>();
 
         // Create Column Headers
+        list.add(new ColumnHeaderModel("Date"));
         list.add(new ColumnHeaderModel("CustomerAccountNo"));
         list.add(new ColumnHeaderModel("CustomerName"));
         list.add(new ColumnHeaderModel("Amount"));
         list.add(new ColumnHeaderModel("AgentEmail"));
         list.add(new ColumnHeaderModel("CIFNo"));
         list.add(new ColumnHeaderModel("AccountType"));
+
+        labels.add(new Label(0, 0, "Date"));
 
         labels.add(new Label(0, 0, "CustomerAccountNo"));
         labels.add(new Label(1, 0,"CustomerName"));
@@ -455,13 +458,15 @@ public class MainFragment extends Fragment {
         list.add(new ColumnHeaderModel("AccountType"));*/
 
             // The order should be same with column header list;
-            list.add(new CellModel("1-" + i, userInfo.getAccount()));       //
-            list.add(new CellModel("2-" + i, userInfo.getName()));     //
-            list.add(new CellModel("3-" + i, userInfo.getmAmount())); //
-            list.add(new CellModel("4-" + i, userInfo.getAgentCode()));    //
-            list.add(new CellModel("5-" + i, userInfo.getCifno())); //
-            list.add(new CellModel("6-" + i, userInfo.getAccountType()));   //
+            list.add(new CellModel("1-" + i, userInfo.getDate()));       //
+            list.add(new CellModel("2-" + i, userInfo.getAccount()));       //
+            list.add(new CellModel("3-" + i, userInfo.getName()));     //
+            list.add(new CellModel("4-" + i, userInfo.getmAmount())); //
+            list.add(new CellModel("5-" + i, userInfo.getAgentCode()));    //
+            list.add(new CellModel("6-" + i, userInfo.getCifno())); //
+            list.add(new CellModel("7-" + i, userInfo.getAccountType()));   //
 
+            labels.add(new Label(0,i+1, userInfo.getDate()));       //
             labels.add(new Label(0,i+1, userInfo.getAccount()));       //
             labels.add(new Label(1,i+1, userInfo.getName()));     //
             labels.add(new Label(2,i+1, userInfo.getmAmount())); //
