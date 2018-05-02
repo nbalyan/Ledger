@@ -1,6 +1,7 @@
 package btventures.ledger;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -35,8 +37,10 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import btventures.ledger.json.ParseService;
 import btventures.ledger.tableview.CustomerCompleteDetails;
@@ -67,6 +71,67 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
     //private String cifNo;
     //ArrayList<Customer> customerfinal;
     Customer customerf;
+    private EditText dateEdit;
+    Calendar myCalendar;
+
+
+    private void initiliazeDate(){
+        myCalendar = Calendar.getInstance();
+        dateEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                hideSoftKeyboard(mContext);
+                DatePickerDialog mDatePickerDialog = new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        myCalendar.set(Calendar.MILLISECOND, 0);
+                        myCalendar.set(Calendar.SECOND, 0);
+                        myCalendar.set(Calendar.MINUTE, 0);
+                        myCalendar.set(Calendar.HOUR, 0);
+                        updateLabelFrom();
+                    }
+
+                }, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                //if(new Date().getTime()!=0)
+                mDatePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+                mDatePickerDialog.show();
+
+                /*new DatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        updateLabelFrom();
+                    }
+
+                }, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();*/
+            }
+        });
+
+
+    }
+
+    private void updateLabelFrom() {
+        String myFormat = "dd/MM/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        dateEdit.setText(sdf.format(myCalendar.getTime()));
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +145,14 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         accountEdit = findViewById(R.id.input_account);
         nameEdit = findViewById(R.id.input_name);
         addressEdit = findViewById(R.id.input_address);
+        dateEdit = findViewById(R.id.input_date);
         phoneEdit = findViewById(R.id.input_mobile);
         progressBar = findViewById(R.id.progress);
         recieptEdit = findViewById(R.id.input_reciept);
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
         remarks = findViewById(R.id.input_remarks);
+        initiliazeDate();
         Bundle b= getIntent().getExtras();
 
         actPerformed = b.getString("CATEGORY");
@@ -142,12 +209,14 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
                         extras.putString("pending", duePayString);
                         extras.putString("last_pay", lastPayString);
                     }
+
                     //extras.putStringArrayList("all_accounts_check_list",allAccountsCheckList);
                     extras.putString("account",customerf.getAccount());
                     extras.putString("name",customerf.getName());
                     extras.putString("dueDateString",duePayString);
                     extras.putString("address",customerf.getAddress());
                     extras.putString("phone",customerf.getPhone());
+                    extras.putString("dateEdit",dateEdit.getText().toString());
                     extras.putString("cif",customerf.getCifno());
                     extras.putString("Mamount", String.valueOf(monthlyAmount));
                     extras.putString("receipt",recieptEdit.getText().toString());
@@ -438,6 +507,12 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         } else {
             amountEdit.setError(null);
         }
+        if(StringToDate(dateEdit.getText().toString(),null).after(new Date())){
+            dateEdit.setError("Date exceeds current Date");
+            valid = false;
+        }else{
+            dateEdit.setError(null);
+        }
 
         return valid;
     }
@@ -649,9 +724,16 @@ public class TransactionEntry extends AppCompatActivity implements AdapterView.O
         return formatter.format(date);
     }
 
-    private String StringToDate(String date,String format){
+    private Date StringToDate(String date,String format){
+        Log.d("ankur test",date);
+        format="dd/MM/yy";
         SimpleDateFormat formatter = new SimpleDateFormat(format);
-        return formatter.format(date);
+        try {
+            return formatter.parse(date);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
     }
 
     ArrayList<Date> listDates;

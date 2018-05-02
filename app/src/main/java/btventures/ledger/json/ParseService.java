@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.PrivateKey;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -402,7 +403,28 @@ public class ParseService {
 
     }
 
+    private String DateToString(Date date,String format){
+        format="dd/MM/yy";
+        Format formatter = new SimpleDateFormat(format);
+        return formatter.format(date);
+    }
+
+    private Date StringToDate(String date,String format){
+        Log.d("ankur test",date);
+        format="dd/MM/yy";
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        try {
+            return formatter.parse(date);
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return new Date();
+    }
+
+
+
     public void saveTransaction(Customer data){
+
         ParseObject newTransaction = new ParseObject("TransactionData");
         newTransaction.put("CIFNO", data.getCifno().toString());
         newTransaction.put("AgentCode",data.getAgentCode());
@@ -413,7 +435,15 @@ public class ParseService {
         newTransaction.put("Remarks",data.getRemarks());
         newTransaction.put("Address",data.getAddress());
         newTransaction.put("Mobile",data.getPhone());
-        newTransaction.put("CreateDate",new Date());
+
+        //herea
+        //SimpleDateFormat formatter = new SimpleDateFormat("MMMyy");
+        //cutomerAdditinalData.put(formatter.format(new Date()),"D");
+        String entryDate = data.getDate();
+        if(entryDate.intern()==DateToString(new Date(),null).intern())
+            newTransaction.put("CreateDate",new Date());
+        else
+            newTransaction.put("CreateDate",StringToDate(entryDate,null));
         newTransaction.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

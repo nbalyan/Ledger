@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,6 +39,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
     private String reciept;
     private String duePayString;
     private String lastPayString;
+    private EditText dateEdit;
 
     private void disableField(EditText editText){
         editText.setFocusable(false);
@@ -58,6 +60,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         addressEdit = findViewById(R.id.input_address);
         phoneEdit = findViewById(R.id.input_mobile);
         recieptEdit = findViewById(R.id.input_reciept);
+        dateEdit = findViewById(R.id.input_date);
         remarksEdit = findViewById(R.id.input_remarks);
         amountEdit = findViewById(R.id.input_amount);
         submitButton = findViewById(R.id.btn_submit);
@@ -77,6 +80,10 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         phoneEdit.setText(b.getString("phone"));
         addressEdit.setText(b.getString("address"));
         remarksEdit.setText(b.getString("remarks"));
+        String dateEditStr= b.getString("dateEdit");
+        if(dateEditStr==null || dateEditStr.trim().intern()=="".intern())
+            dateEditStr = DateToString(new Date(),null);
+        dateEdit.setText(dateEditStr);
         reciept = ParseUser.getCurrentUser().getString("AgentCode")+timeStamp;
         recieptEdit.setText(reciept);
         amountEdit.setText(b.getString("amount"));
@@ -101,6 +108,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
         disableField(recieptEdit);
         disableField(amountEdit);
         disableField(remarksEdit);
+        disableField(dateEdit);
 
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -113,6 +121,7 @@ public class TransactionConfirmActivity extends AppCompatActivity {
             }
         });
 
+        final String finalDateEditStr = dateEditStr;
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,9 +136,16 @@ public class TransactionConfirmActivity extends AppCompatActivity {
                 newTransaction.setAgentCode(ParseUser.getCurrentUser().getUsername());
                 newTransaction.setmAmount(amountEdit.getText().toString());
                 newTransaction.setName(nameEdit.getText().toString());
+                newTransaction.setDate(finalDateEditStr);
+                /*Date tranDate = null;
+                if(finalDateEditStr.intern()==DateToString(new Date(),null)){
+
+                }*/
+                //tranDate = StringToDate(dateEdit.getText().toString());
 
                 service.saveTransaction(newTransaction);
-                if(getIntent().getExtras().getStringArrayList("list_Dates")!=null)
+
+                if(getIntent().getExtras().getStringArrayList("list_Dates")!=null && finalDateEditStr.intern()==DateToString(new Date(),null).intern())
                     service.saveTransactionAdditionalInfo(getIntent().getExtras().getStringArrayList("list_Dates"),getIntent().getExtras().getStringArrayList("list_amounts"),accountEdit.getText().toString());
                 //TODO
             }
@@ -137,6 +153,14 @@ public class TransactionConfirmActivity extends AppCompatActivity {
 
 
     }
+
+    private String DateToString(Date date,String format){
+        format="dd/MM/yy";
+        Format formatter = new SimpleDateFormat(format);
+        return formatter.format(date);
+    }
+
+
 
 
 
