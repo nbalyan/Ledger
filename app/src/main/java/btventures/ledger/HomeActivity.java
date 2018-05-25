@@ -34,6 +34,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         //CustomerModify = findViewById(R.id.CustomerModify);
         showTransactions = findViewById(R.id.ShowRecentTransactions);
 
+        if(ParseUser.getCurrentUser().getUsername().toString().intern() != "caprashantarya@gmail.com" && ParseUser.getCurrentUser().getUsername().toString().intern()!="aryapiush@gmail.com"){
+            BillingButton.setVisibility(View.GONE);
+        }
+
         LICButton.setOnClickListener(this);
         FixDepButton.setOnClickListener(this);
         RecDepButton.setOnClickListener(this);
